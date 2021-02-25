@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TeethHistory</string>
+    <string name="input_unique_name">Please input a unique username</string>
+    <string name="choose_if_you_have_baby_teeth">Choose if you have baby teeth</string>
+    <string name="username">Name</string>
+    <string name="create_user">Create user</string>
+    <string name="name_error">"Max name length was exceeded"</string>
+    <string name="settings">Settings</string>
+    <string name="choose_user">Choose user</string>
+    <string name="edit_user">Edit user</string>
+    <string name="delete_user">Delete user</string>
+</resources>

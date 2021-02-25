@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="user"
+            type="com.appsverse.teethhistory.data.User" />
+
+        <variable
+            name="model"
+            type="com.appsverse.teethhistory.viewModels.CreateNewUserViewModel" />
+        <variable
+            name="errorMessage"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameTIL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameTIET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={user.name}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_if_you_have_baby_teeth"
+            android:checked="@={user.babyTeeth}" />
+
+        <Button
+            android:id="@+id/create_new_user_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_user"
+            android:gravity="center"
+            android:onClick="@{() -> model.onClickSaveButton(user, context)}"
+            android:enabled="false"/>
+
+    </LinearLayout>
+</layout>

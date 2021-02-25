@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TeethHistory</string>
+    <string name="input_unique_name">Введите уникальное имя пользователя</string>
+    <string name="choose_if_you_have_baby_teeth">Выбрать, если имеются молочные зубы</string>
+    <string name="username">Имя пользователя</string>
+    <string name="create_user">Создать пользователя</string>
+    <string name="name_error">Превышена максимальная длина имени</string>
+    <string name="settings">Настройки</string>
+    <string name="choose_user">Выбрать пользователя</string>
+    <string name="edit_user">Редактировать пользователя</string>
+    <string name="delete_user">Удалить пользователя</string>
+</resources>
