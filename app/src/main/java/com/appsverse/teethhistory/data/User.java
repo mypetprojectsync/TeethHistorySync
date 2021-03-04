@@ -11,6 +11,7 @@ public class User extends BaseObservable {
 
     final String TAG = "myLogs";
 
+    private int id;
     private String name;
     private boolean isBabyTeeth = false;
 
@@ -19,15 +20,16 @@ public class User extends BaseObservable {
         setBabyTeeth(isBabyTeeth);
     }
 
+
     @Bindable
     public String getName() {
 
-    Log.d(TAG,"getName user: " + name);
-    return name;
+        Log.d(TAG, "getName user: " + name);
+        return name;
     }
 
     public void setName(String name) {
-        Log.d(TAG,"setName user: " + name);
+        Log.d(TAG, "setName user: " + name);
         this.name = name;
         notifyPropertyChanged(BR.name);
     }
@@ -42,4 +44,11 @@ public class User extends BaseObservable {
         notifyPropertyChanged(BR.babyTeeth);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

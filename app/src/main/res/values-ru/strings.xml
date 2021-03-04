@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TeethHistory</string>
+    <string name="app_name">Teeth History</string>
     <string name="input_unique_name">Введите уникальное имя пользователя</string>
     <string name="choose_if_you_have_baby_teeth">Выбрать, если имеются молочные зубы</string>
     <string name="username">Имя пользователя</string>
@@ -10,4 +10,9 @@
     <string name="choose_user">Выбрать пользователя</string>
     <string name="edit_user">Редактировать пользователя</string>
     <string name="delete_user">Удалить пользователя</string>
+    <string name="question_delete_user">Удалить пользователя?</string>
+    <string name="create_new_user">Создать пользователя</string>
+    <string name="cancel">Отмена</string>
+    <string name="edit_username">Редактировать имя пользователя</string>
+    <string name="ok">ok</string>
 </resources>

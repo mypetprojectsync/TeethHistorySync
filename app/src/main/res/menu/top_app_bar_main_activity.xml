@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-   <!-- <item
-        android:id="@+id/favorite"
-        android:icon="@drawable/ic_baseline_swap_vert_24"
-        android:title="favorite"
-        android:contentDescription="content_description_favorite"
-        app:showAsAction="always"/>
-
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_baseline_swap_vert_24"
-        android:title="search"
-        android:contentDescription="content_description_search"
-        app:showAsAction="ifRoom" />-->
-    <item
-        android:id="@+id/action_settings_menu_item"
+        android:id="@+id/activity_main_settings_menu_item"
         android:title="@string/settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/create_new_user_menu_item"
+        android:title="@string/create_new_user"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/choose_user_menu_item"
         android:title="@string/choose_user"
-        app:showAsAction="never" />
+        app:showAsAction="never">
+        <menu>
+        </menu>
+    </item>
     <item
         android:id="@+id/edit_user_menu_item"
         android:title="@string/edit_user"

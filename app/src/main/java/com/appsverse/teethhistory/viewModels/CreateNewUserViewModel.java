@@ -1,28 +1,40 @@
 package com.appsverse.teethhistory.viewModels;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.ViewModel;
 
+import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.repository.UserModel;
 
-import io.realm.Realm;
+import java.util.List;
 
-import static androidx.databinding.library.baseAdapters.BR.babyTeeth;
+import io.realm.Realm;
 
 public class CreateNewUserViewModel extends ViewModel {
 
     final String TAG = "myLogs";
-    Realm realm = Realm.getDefaultInstance();
+    final Realm realm = Realm.getDefaultInstance();
 
+    private int id;
     private String name = "";
     private boolean isBabyTeeth = false;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -43,6 +55,9 @@ public class CreateNewUserViewModel extends ViewModel {
     public void onClickSaveButton(User user, Context context) {
 
         Number current_id = realm.where(UserModel.class).max("id");
+
+        Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
+
         int next_id;
 
         if (current_id == null) {
@@ -51,17 +66,30 @@ public class CreateNewUserViewModel extends ViewModel {
             next_id = current_id.intValue() + 1;
         }
 
-        if (realm.where(UserModel.class).contains("name", user.getName()).findFirst() != null) {
-            Toast.makeText(context, R.string.input_unique_name, Toast.LENGTH_SHORT).show();
-        } else {
+            Log.d(TAG, "start writing new user to database");
             realm.beginTransaction();
             UserModel userModel = realm.createObject(UserModel.class, next_id);
             userModel.setName(user.getName());
             userModel.setBabyTeeth(user.isBabyTeeth());
             realm.commitTransaction();
-        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("chosen_user_id", next_id);
+        editor.apply();
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+
+        ((Activity) context).finish();
     }
 
+    public void onClickCancelButton(Context context) {
+        ((Activity) context).finish();
+    }
+
+    //todo нужна ли проверка на уникальность?
     private void isUniqueName(User user) {
 
     }

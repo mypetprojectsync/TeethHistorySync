@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <import type="android.text.TextUtils" />
 
         <variable
@@ -13,6 +15,7 @@
         <variable
             name="model"
             type="com.appsverse.teethhistory.viewModels.CreateNewUserViewModel" />
+
         <variable
             name="errorMessage"
             type="String" />
@@ -36,24 +39,41 @@
                 android:id="@+id/nameTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={user.name}"/>
+                android:text="@={user.name}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/choose_if_you_have_baby_teeth"
-            android:checked="@={user.babyTeeth}" />
+            android:checked="@={user.babyTeeth}"
+            android:text="@string/choose_if_you_have_baby_teeth" />
 
-        <Button
-            android:id="@+id/create_new_user_button"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_user"
-            android:gravity="center"
-            android:onClick="@{() -> model.onClickSaveButton(user, context)}"
-            android:enabled="false"/>
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/activity_create_new_user_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:gravity="center"
+                android:onClick="@{() -> model.onClickCancelButton(context)}"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/create_new_user_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:enabled="false"
+                android:gravity="center"
+                android:onClick="@{() -> model.onClickSaveButton(user, context)}"
+                android:text="@string/create_user" />
+
+
+        </LinearLayout>
     </LinearLayout>
 </layout>

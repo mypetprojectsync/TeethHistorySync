@@ -9,4 +9,9 @@
     <string name="choose_user">Choose user</string>
     <string name="edit_user">Edit user</string>
     <string name="delete_user">Delete user</string>
+    <string name="question_delete_user">Delete user?</string>
+    <string name="create_new_user">Create new user</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_username">Edit username</string>
+    <string name="ok">OK</string>
 </resources>

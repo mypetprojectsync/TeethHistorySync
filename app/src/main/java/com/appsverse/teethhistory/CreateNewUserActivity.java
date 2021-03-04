@@ -1,6 +1,8 @@
 package com.appsverse.teethhistory;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -59,5 +61,16 @@ public class CreateNewUserActivity extends AppCompatActivity {
         super.onDestroy();
         model.setName(user.getName());
         model.setBabyTeeth(user.isBabyTeeth());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int user_id = sharedPreferences.getInt("chosen_user_id", -1);
+
+        if (user_id == -1) {
+            finishAffinity();
+        }
     }
 }

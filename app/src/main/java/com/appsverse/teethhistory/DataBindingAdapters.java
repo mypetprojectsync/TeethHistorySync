@@ -1,9 +1,5 @@
 package com.appsverse.teethhistory;
 
-import androidx.databinding.BindingAdapter;
-
-import com.google.android.material.textfield.TextInputLayout;
-
 public class DataBindingAdapters{
 
 /*    @BindingAdapter({"android:errorMessage"})
