@@ -2,6 +2,7 @@ package com.appsverse.teethhistory.repository;
 
 import android.util.Log;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,6 +12,7 @@ public class UserModel extends RealmObject {
     private int id;
     private String name;
     private boolean isBabyTeeth;
+    private RealmList<ToothModel> toothModels;
 
     public int getId() {
         Log.d("myLogs", "realm getID " + id);
@@ -42,4 +44,11 @@ public class UserModel extends RealmObject {
         isBabyTeeth = babyTeeth;
     }
 
+    public RealmList<ToothModel> getToothModels() {
+        return toothModels;
+    }
+
+    public void setToothModels(RealmList<ToothModel> toothModels) {
+        this.toothModels = toothModels;
+    }
 }

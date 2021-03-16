@@ -121,12 +121,9 @@ public class OnClickHandler {
             }
         });
 
-        //todo add error message to TIET
-        //todo ok button must be inactive when TIET length = 0 && > 20
         //todo try another type of TIET layout (more information on material.io)
         //todo sometimes keyboard didn't show when orientation changed
         //todo clear spaces after save
-        //todo implement too large message alert
 
         Activity activity = (Activity) binding.getRoot().getContext();
         Single.fromCallable(() -> requestFocusWithDelay(300, editUsernameBinding, activity)).subscribeOn(Schedulers.io()).subscribe();

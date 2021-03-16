@@ -15,4 +15,13 @@
     <string name="cancel">Отмена</string>
     <string name="edit_username">Редактировать имя пользователя</string>
     <string name="ok">ok</string>
+    <string name="format">%1$td/%1$tm/%1$tY</string>
+
+    <string-array name="tooth_actions">
+        <item>Cleaning</item>
+        <item>Filling</item>
+        <item>Extracting</item>
+        <item>Implanting</item>
+    </string-array>
+
 </resources>

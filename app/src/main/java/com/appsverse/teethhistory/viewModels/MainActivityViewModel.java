@@ -1,6 +1,7 @@
 package com.appsverse.teethhistory.viewModels;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
@@ -26,6 +27,14 @@ public class MainActivityViewModel extends ViewModel {
 
     private AlertDialog editUserDialog;
     private AlertDialog deleteUserDialog;
+
+    private int chosenToothID = -1;
+
+    //private int teethFormulaFragmentVisibility = -1;
+    private int teethFormulaFragmentVisibility = View.VISIBLE;
+    private int newEventFragmentVisibility = View.GONE;
+    private int editEventFragmentVisibilityData = View.GONE;
+    private int eventFragmentVisibilityData = View.GONE;
 
     public int getUser_id() {
         return user_id;
@@ -92,6 +101,14 @@ public class MainActivityViewModel extends ViewModel {
         return realm.where(UserModel.class).findAll();
     }
 
+    public int getChosenToothID() {
+        return chosenToothID;
+    }
+
+    public void setChosenToothID(int chosenToothID) {
+        this.chosenToothID = chosenToothID;
+    }
+
     public void setMainActivityViewModelData(int user_id){
 
         Log.d(TAG, "setMainActivityViewModelData user_id: " + user_id);
@@ -134,4 +151,35 @@ public class MainActivityViewModel extends ViewModel {
 
     }
 
+    public int getTeethFormulaFragmentVisibility() {
+        return teethFormulaFragmentVisibility;
+    }
+
+    public void setTeethFormulaFragmentVisibility(int teethFormulaFragmentVisibility) {
+        this.teethFormulaFragmentVisibility = teethFormulaFragmentVisibility;
+    }
+
+    public int getNewEventFragmentVisibility() {
+        return newEventFragmentVisibility;
+    }
+
+    public void setNewEventFragmentVisibility(int newEventFragmentVisibility) {
+        this.newEventFragmentVisibility = newEventFragmentVisibility;
+    }
+
+    public int getEditEventFragmentVisibilityData() {
+        return editEventFragmentVisibilityData;
+    }
+
+    public void setEditEventFragmentVisibilityData(int editEventFragmentVisibilityData) {
+        this.editEventFragmentVisibilityData = editEventFragmentVisibilityData;
+    }
+
+    public int getEventFragmentVisibilityData() {
+        return eventFragmentVisibilityData;
+    }
+
+    public void setEventFragmentVisibilityData(int eventFragmentVisibilityData) {
+        this.eventFragmentVisibilityData = eventFragmentVisibilityData;
+    }
 }

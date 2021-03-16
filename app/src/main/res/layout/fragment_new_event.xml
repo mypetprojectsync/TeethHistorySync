@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="event"
+            type="com.appsverse.teethhistory.data.Event" />
+
+        <variable
+            name="model"
+            type="com.appsverse.teethhistory.viewModels.NewEventViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_event_date_TIL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Date"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_event_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:text="@{@string/format(event.date)}"
+                android:cursorVisible="false"
+                android:focusable="false"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/event_action_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:hint="Choose action"
+            android:layout_marginTop="10dp">
+
+            <com.appsverse.teethhistory.ExposedDropdownMenu
+                android:id="@+id/toothActionACTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- todo reduce size of TextInputEditText, add error message when > 3 symbols -->
+        <!-- todo maybe textview better -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:hint="Guarantee in months"
+            app:counterEnabled="true"
+            app:counterMaxLength="3"
+            app:errorEnabled="true"
+            android:layout_marginTop="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/guaranteeTIET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={`` + event.guarantee}"
+                android:inputType="number"
+                android:labelFor="@id/guarantee_slider"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/guarantee_slider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:valueFrom="0"
+            android:valueTo="120"
+            android:stepSize="1"
+            android:value="12"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notes"
+            app:counterEnabled="true"
+            app:counterMaxLength="1000"
+            app:errorEnabled="true"
+            android:layout_marginTop="10dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/notesTIET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={event.notes}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/fragment_new_event_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:gravity="center"
+                android:onClick="@{() -> model.onClickCancelButton(context)}"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/fragment_create_new_event_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:gravity="center"
+                android:onClick="@{() -> model.onClickSaveButton(event, context)}"
+                android:text="Create event" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

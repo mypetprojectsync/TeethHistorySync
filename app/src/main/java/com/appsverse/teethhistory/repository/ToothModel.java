@@ -1,4 +1,64 @@
 package com.appsverse.teethhistory.repository;
 
-public class ToothModel {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.RealmClass;
+
+@RealmClass(embedded = true)
+public class ToothModel extends RealmObject {
+
+    private int id;
+    private boolean isExist;
+    private boolean isBabyTooth;
+    private boolean isFilling;
+    private boolean isImplant;
+    private RealmList<EventModel> eventModels;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isExist() {
+        return isExist;
+    }
+
+    public void setExist(boolean exist) {
+        isExist = exist;
+    }
+
+    public boolean isBabyTooth() {
+        return isBabyTooth;
+    }
+
+    public void setBabyTooth(boolean babyTooth) {
+        isBabyTooth = babyTooth;
+    }
+
+    public boolean isFilling() {
+        return isFilling;
+    }
+
+    public void setFilling(boolean filling) {
+        isFilling = filling;
+    }
+
+    public boolean isImplant() {
+        return isImplant;
+    }
+
+    public void setImplant(boolean implant) {
+        isImplant = implant;
+    }
+
+    public RealmList<EventModel> getEventModels() {
+        return eventModels;
+    }
+
+    public void setEventModels(RealmList<EventModel> eventModels) {
+        this.eventModels = eventModels;
+    }
 }

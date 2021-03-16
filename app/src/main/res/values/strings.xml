@@ -14,4 +14,14 @@
     <string name="cancel">Cancel</string>
     <string name="edit_username">Edit username</string>
     <string name="ok">OK</string>
+    <string name="format">%1$td/%1$tm/%1$tY</string>
+
+    <string-array name="tooth_actions">
+        <item>Cleaning</item>
+        <item>Filling</item>
+        <item>Extracting</item>
+        <item>Implanting</item>
+    </string-array>
+
+
 </resources>
