@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -140,6 +142,7 @@ public class TeethFormulaFragment extends Fragment {
 
         }
 
+        //todo hide, when recyclerview start moving
         binding.floatingActionButton.setOnClickListener(v -> {
             Log.d(TAG, "floating button was clicked");
 
@@ -163,6 +166,32 @@ public class TeethFormulaFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new EventsListAdapter(this.getContext(), eventModels);
+        adapter.setClickListener(new EventsListAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (view.getId() == R.id.itemEventOptions) {
+
+                    //todo try to safe in viewmodel when destroy
+                    PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
+                    popupMenu.inflate(R.menu.event_item_options_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.popupEventItemEdit) {
+
+                                Log.d(TAG, "option edit clicked");
+                            } else {
+                                Log.d(TAG, "option delete clicked");
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                } else {
+
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
     }
 

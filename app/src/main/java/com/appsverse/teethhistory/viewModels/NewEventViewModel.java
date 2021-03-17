@@ -134,9 +134,6 @@ public class NewEventViewModel extends ViewModel {
         }
         mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
 
-        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-
-        TeethFormulaFragment fragment = (TeethFormulaFragment) fragmentManager.findFragmentById(R.id.teeth_formula_fragment);
-        fragment.refillEventsList();
+        mainActivity.binding.getTeethFormulaFragment().refillEventsList();
     }
 }

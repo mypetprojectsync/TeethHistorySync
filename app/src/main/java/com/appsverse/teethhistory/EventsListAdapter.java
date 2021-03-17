@@ -3,6 +3,7 @@ package com.appsverse.teethhistory;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     private final List<EventModel> eventModels;
     private final LayoutInflater inflater;
+
+    private ItemClickListener itemClickListener;
 
     public EventsListAdapter(Context context, List<EventModel> eventModels) {
         this.eventModels = eventModels;
@@ -44,13 +47,29 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
          return eventModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView dateTV, actionTV;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView dateTV, actionTV, optionsMenu;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             dateTV = itemView.findViewById(R.id.item_event_date);
             actionTV = itemView.findViewById(R.id.item_event_action);
+            optionsMenu = itemView.findViewById(R.id.itemEventOptions);
+            optionsMenu.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onItemClick(v, getAdapterPosition());
+        }
+    }
+
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

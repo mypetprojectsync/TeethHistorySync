@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
             User user = new User(model.getUsername(), model.isBabyTeeth());
             binding.setUser(user);
 
-
+            TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
+            binding.setTeethFormulaFragment(fragment);
 
             mainActivityViewData = new MainActivityViewData(
                     model.getTeethFormulaFragmentVisibility(),
