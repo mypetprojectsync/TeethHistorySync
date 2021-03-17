@@ -19,6 +19,10 @@
             name="viewData"
             type="com.appsverse.teethhistory.data.MainActivityViewData" />
 
+        <variable
+            name="teethFormulaFragment"
+            type="com.appsverse.teethhistory.fragments.TeethFormulaFragment" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

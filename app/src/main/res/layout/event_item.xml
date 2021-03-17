@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_event_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"/>
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/item_event_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dp"/>
+            android:textSize="14dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/itemEventOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/triple_dots"
+        android:textAppearance="?android:textAppearanceLarge" />
+</RelativeLayout>
