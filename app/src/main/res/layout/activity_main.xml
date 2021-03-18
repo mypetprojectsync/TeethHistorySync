@@ -23,6 +23,10 @@
             name="teethFormulaFragment"
             type="com.appsverse.teethhistory.fragments.TeethFormulaFragment" />
 
+        <variable
+            name="editEventFragment"
+            type="com.appsverse.teethhistory.fragments.EditEventFragment" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

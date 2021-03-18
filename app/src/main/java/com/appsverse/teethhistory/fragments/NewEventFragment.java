@@ -1,17 +1,12 @@
 package com.appsverse.teethhistory.fragments;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,21 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.databinding.FragmentNewEventBinding;
-import com.appsverse.teethhistory.databinding.FragmentTeethFormulaBinding;
 import com.appsverse.teethhistory.viewModels.NewEventViewModel;
-import com.appsverse.teethhistory.viewModels.TeethFormulaFragmentViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.slider.Slider;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 public class NewEventFragment extends Fragment {
@@ -58,7 +47,7 @@ public class NewEventFragment extends Fragment {
         model = new ViewModelProvider(this).get(NewEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getDate(),model.getAction(),model.getGuarantee(),model.getNotes());
+        event = new Event(model.getId(), model.getDate(),model.getAction(),model.getGuarantee(),model.getNotes());
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -71,8 +60,6 @@ public class NewEventFragment extends Fragment {
 
         //todo list lost when chosen some item and orientation changed. Issue https://github.com/material-components/material-components-android/issues/1464
         binding.toothActionACTV.setText(event.getAction(),false);
-       // binding.toothActionACTV.setText(items[0],false);
-       // Log.d(TAG, "binding.toothActionACTV.setText(items[0],false); items: " + items[2]);
         binding.toothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

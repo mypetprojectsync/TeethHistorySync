@@ -2,6 +2,7 @@ package com.appsverse.teethhistory.fragments;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.appsverse.teethhistory.databinding.FragmentTeethFormulaBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.TeethFormulaFragmentViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,8 @@ public class TeethFormulaFragment extends Fragment {
     int user_id;
     List<EventModel> eventModels = new ArrayList<>();
 
+    int orientation;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class TeethFormulaFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
-        int orientation = getResources().getConfiguration().orientation;
+        orientation = getResources().getConfiguration().orientation;
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_teeth_formula, container, false);
 
@@ -81,7 +85,9 @@ public class TeethFormulaFragment extends Fragment {
             List<ToothModel> toothModels = model.getAllToothModelsForUser(user_id);
 
             int chosenToothID = model.getChosenToothID();
-            if (chosenToothID > 0) {refillEventsList();}
+            if (chosenToothID > 0) {
+                refillEventsList();
+            }
 
             for (int i = 0; i < 16; i++) {
                 TextView toothPositionTV = new TextView(this.getContext());
@@ -90,7 +96,7 @@ public class TeethFormulaFragment extends Fragment {
                 if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10,10,10,10);
+                params.setMargins(10, 10, 10, 10);
                 toothPositionTV.setLayoutParams(params);
 
                 toothPositionTV.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +111,8 @@ public class TeethFormulaFragment extends Fragment {
                         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
                         refillEventsList();
+
+                        if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
                     }
                 });
 
@@ -118,7 +126,7 @@ public class TeethFormulaFragment extends Fragment {
                 if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10,10,10,10);
+                params.setMargins(10, 10, 10, 10);
                 toothPositionTV.setLayoutParams(params);
 
                 toothPositionTV.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +141,8 @@ public class TeethFormulaFragment extends Fragment {
                         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
                         refillEventsList();
+
+                        if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
                     }
                 });
 
@@ -152,17 +162,20 @@ public class TeethFormulaFragment extends Fragment {
 
             activityMainBinding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
             activityMainBinding.getViewData().setNewEventFragmentVisibilityData(View.VISIBLE);
+            activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
         });
 
         return binding.getRoot();
     }
 
-    private void createEventsList(){
+    private void createEventsList() {
 
         recyclerView = binding.eventsList;
         //todo implement binding to recyclerView
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation());
+
+
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new EventsListAdapter(this.getContext(), eventModels);
@@ -172,15 +185,35 @@ public class TeethFormulaFragment extends Fragment {
                 if (view.getId() == R.id.itemEventOptions) {
 
                     //todo try to safe in viewmodel when destroy
-                    PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
+                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                     popupMenu.inflate(R.menu.event_item_options_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             if (item.getItemId() == R.id.popupEventItemEdit) {
 
+                                mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+
+                                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                    activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+                                }
+
+                                mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
+                                mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
+                                mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
                                 Log.d(TAG, "option edit clicked");
                             } else {
+
+                                //todo save dialog when orientation changed
+                                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
+                                dialogBuilder.setTitle("Delete event?");
+                                dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
+                                    model.deleteEvent(eventModels.get(position));
+                                    deleteEventAnimation(position);
+                                });
+                                dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {});
+                                dialogBuilder.show();
+
                                 Log.d(TAG, "option delete clicked");
                             }
                             return false;
@@ -188,17 +221,51 @@ public class TeethFormulaFragment extends Fragment {
                     });
                     popupMenu.show();
                 } else {
+                    mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
+                    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+                    }
+
+                    mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
+                    mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
+                    mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
                 }
             }
         });
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(dy > 0 ){
+                    if(binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
+                } else {
+                    if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
+                }
+            }
+        });
     }
+
+
 
     public void refillEventsList() {
         eventModels.clear();
         eventModels.addAll(model.getEventModelsList(user_id));
         adapter.notifyDataSetChanged();
+    }
+
+    public void deleteEventAnimation(int position) {
+        eventModels.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 
     @Override

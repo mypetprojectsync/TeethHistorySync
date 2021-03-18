@@ -13,16 +13,27 @@ public class Event extends BaseObservable {
 
     final String TAG = "myLogs";
 
+    private int id;
     private Date date;
     private String action;
     private int guarantee;
     private String notes;
 
-    public Event(Date date, String action, int guarantee, String notes){
+    public Event(int id, Date date, String action, int guarantee, String notes){
+        setId(id);
         setDate(date);
         setAction(action);
         setGuarantee(guarantee);
         setNotes(notes);
+    }
+    @Bindable
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        notifyPropertyChanged(BR.id);
     }
 
     @Bindable
@@ -65,4 +76,6 @@ public class Event extends BaseObservable {
         this.notes = notes;
         notifyPropertyChanged(BR.notes);
     }
+
+
 }

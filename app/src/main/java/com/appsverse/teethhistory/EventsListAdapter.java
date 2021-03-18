@@ -36,10 +36,10 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        EventModel event = eventModels.get(position);
-        //todo format to dd.MM.yyyy
-        holder.dateTV.setText(event.getDate().toString());
-        holder.actionTV.setText(event.getAction());
+            EventModel event = eventModels.get(position);
+            //todo format to dd.MM.yyyy
+            holder.dateTV.setText(event.getDate().toString());
+            holder.actionTV.setText(event.getAction());
     }
 
     @Override

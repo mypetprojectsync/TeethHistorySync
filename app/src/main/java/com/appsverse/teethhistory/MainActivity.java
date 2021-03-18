@@ -17,6 +17,7 @@ import android.view.View;
 import com.appsverse.teethhistory.data.MainActivityViewData;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
+import com.appsverse.teethhistory.fragments.EditEventFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.handlers.OnClickHandler;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding binding;
     MainActivityViewData mainActivityViewData;
 
+    public int user_id;
+
     //todo добавить проверку на существование user_id в базе, если нет, то загружать первого юзера
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int user_id = sharedPreferences.getInt("chosen_user_id", -1);
+        user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
         model = new ViewModelProvider(this).get(MainActivityViewModel.class);
         if (user_id >= 0 && model.getUsername() == null) {
@@ -56,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
             TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
             binding.setTeethFormulaFragment(fragment);
+
+            EditEventFragment editEventFragment = (EditEventFragment) getSupportFragmentManager().findFragmentById(R.id.edit_event_fragment);
+            binding.setEditEventFragment(editEventFragment);
 
             mainActivityViewData = new MainActivityViewData(
                     model.getTeethFormulaFragmentVisibility(),
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                if (model.getNewEventFragmentVisibility() == View.VISIBLE) {
+                if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
                     mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
                     mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
                 } else {

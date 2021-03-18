@@ -27,6 +27,13 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         this.chosenToothID = chosenToothID;
     }
 
+    public int getLayoutVisibility() {
+        return layoutVisibility;
+    }
+
+    public void setLayoutVisibility(int layoutVisibility) {
+        this.layoutVisibility = layoutVisibility;
+    }
 
     public List<ToothModel> getAllToothModelsForUser(int user_id){
         UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
@@ -42,11 +49,11 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     }
 
-    public int getLayoutVisibility() {
-        return layoutVisibility;
+    public void deleteEvent(EventModel eventModel){
+        realm.beginTransaction();
+        eventModel.deleteFromRealm();
+        realm.commitTransaction();
     }
 
-    public void setLayoutVisibility(int layoutVisibility) {
-        this.layoutVisibility = layoutVisibility;
-    }
+
 }
