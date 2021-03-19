@@ -21,6 +21,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 
+//TODO!!! Crash when create first user
+
 public class CreateNewUserViewModel extends ViewModel {
 
     final String TAG = "myLogs";

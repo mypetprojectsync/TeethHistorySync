@@ -100,19 +100,7 @@ public class TeethFormulaFragment extends Fragment {
                 toothPositionTV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = (TextView) v;
-                        model.setChosenToothID(parseInt(textView.getText().toString()));
-                        tooth.setId(model.getChosenToothID());
-                        Log.d(TAG, "tv clicked, id: " + model.getChosenToothID());
-                        ((TextView) v).setTextSize(30.0f);
-
-                        activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
-
-                        refillEventsList();
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) mainActivity.binding.getEventsListFragment().refillEventsList();
-
-                        /*if (!binding.floatingActionButton.isShown())
-                            binding.floatingActionButton.show();*/
+                        toothClicked((TextView) v, tooth);
                     }
                 });
 
@@ -132,19 +120,7 @@ public class TeethFormulaFragment extends Fragment {
                 toothPositionTV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView textView = (TextView) v;
-                        model.setChosenToothID(parseInt(textView.getText().toString()));
-                        tooth.setId(model.getChosenToothID());
-                        Log.d(TAG, "tv clicked, id: " + model.getChosenToothID());
-                        ((TextView) v).setTextSize(30.0f);
-
-                        activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
-
-                        refillEventsList();
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) mainActivity.binding.getEventsListFragment().refillEventsList();
-
-                        /*if (!binding.floatingActionButton.isShown())
-                            binding.floatingActionButton.show();*/
+                        toothClicked((TextView) v, tooth);
                     }
                 });
 
@@ -172,6 +148,26 @@ public class TeethFormulaFragment extends Fragment {
         }
 
         return binding.getRoot();
+    }
+
+    private void toothClicked(TextView textView, Tooth tooth) {
+        model.setChosenToothID(parseInt(textView.getText().toString()));
+        tooth.setId(model.getChosenToothID());
+        Log.d(TAG, "tv clicked, id: " + model.getChosenToothID());
+        textView.setTextSize(30.0f);
+
+        activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
+
+
+        if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
+            mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+                mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
+        }
+
+        refillEventsList();
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            mainActivity.binding.getEventsListFragment().refillEventsList();
     }
 
     private void createEventsList() {

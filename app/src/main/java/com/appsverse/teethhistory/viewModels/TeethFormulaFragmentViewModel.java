@@ -53,6 +53,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         realm.beginTransaction();
         eventModel.deleteFromRealm();
         realm.commitTransaction();
+        //todo hide editEventFragment if delete event which opened on new event fragment
     }
 
 

@@ -93,19 +93,22 @@ public class MainActivity extends AppCompatActivity {
 
                 mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
                 mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
-                mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
+
+                if (model.getNewEventFragmentVisibility() == View.GONE
+                        && model.getEditEventFragmentVisibilityData() == View.GONE) {
+                    mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
+                }
 
             } else {
 
                 if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
                     mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
                     mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
-                    mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
                 } else {
                     binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
                     mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
-                    mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
                 }
+                mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
             }
 
         } else {
@@ -134,10 +137,12 @@ public class MainActivity extends AppCompatActivity {
         if (model.getEditUserDialog() != null) model.getEditUserDialog().dismiss();
         if (model.getDeleteUserDialog() != null) model.getDeleteUserDialog().dismiss();
 
-        model.setTeethFormulaFragmentVisibility(mainActivityViewData.getTeethFormulaFragmentVisibilityData());
-        model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
-        model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
-        model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
-        model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
+        if (mainActivityViewData != null) {
+            model.setTeethFormulaFragmentVisibility(mainActivityViewData.getTeethFormulaFragmentVisibilityData());
+            model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
+            model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
+            model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
+            model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
+        }
     }
 }
