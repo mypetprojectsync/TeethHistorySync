@@ -35,6 +35,7 @@ public class MainActivityViewModel extends ViewModel {
     private int newEventFragmentVisibility = View.GONE;
     private int editEventFragmentVisibilityData = View.GONE;
     private int eventFragmentVisibilityData = View.GONE;
+    private int eventsListFragmentVisibilityData = View.GONE;
 
     public int getUser_id() {
         return user_id;
@@ -181,5 +182,13 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setEventFragmentVisibilityData(int eventFragmentVisibilityData) {
         this.eventFragmentVisibilityData = eventFragmentVisibilityData;
+    }
+
+    public int getEventsListFragmentVisibilityData() {
+        return eventsListFragmentVisibilityData;
+    }
+
+    public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
+        this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
     }
 }

@@ -2,10 +2,8 @@ package com.appsverse.teethhistory;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -18,6 +16,7 @@ import com.appsverse.teethhistory.data.MainActivityViewData;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
+import com.appsverse.teethhistory.fragments.EventsListFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.handlers.OnClickHandler;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
@@ -63,11 +62,15 @@ public class MainActivity extends AppCompatActivity {
             EditEventFragment editEventFragment = (EditEventFragment) getSupportFragmentManager().findFragmentById(R.id.edit_event_fragment);
             binding.setEditEventFragment(editEventFragment);
 
+            EventsListFragment eventsListFragment = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.events_list_fragment);
+            binding.setEventsListFragment(eventsListFragment);
+
             mainActivityViewData = new MainActivityViewData(
                     model.getTeethFormulaFragmentVisibility(),
                     model.getNewEventFragmentVisibility(),
                     model.getEditEventFragmentVisibilityData(),
-                    model.getEventFragmentVisibilityData());
+                    model.getEventFragmentVisibilityData(),
+                    model.getEventsListFragmentVisibilityData());
             binding.setViewData(mainActivityViewData);
 
             OnClickHandler handler = new OnClickHandler();
@@ -90,15 +93,18 @@ public class MainActivity extends AppCompatActivity {
 
                 mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
                 mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+                mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
 
             } else {
 
                 if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
                     mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
                     mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+                    mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
                 } else {
                     binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
                     mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
+                    mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
                 }
             }
 
@@ -132,5 +138,6 @@ public class MainActivity extends AppCompatActivity {
         model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
         model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
         model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
+        model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
     }
 }

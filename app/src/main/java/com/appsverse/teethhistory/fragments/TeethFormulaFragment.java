@@ -42,7 +42,7 @@ import static java.lang.Integer.parseInt;
 public class TeethFormulaFragment extends Fragment {
 
     TeethFormulaFragmentViewModel model;
-    FragmentTeethFormulaBinding binding;
+    public FragmentTeethFormulaBinding binding;
     final String TAG = "myLogs";
 
     MainActivity mainActivity;
@@ -85,9 +85,7 @@ public class TeethFormulaFragment extends Fragment {
             List<ToothModel> toothModels = model.getAllToothModelsForUser(user_id);
 
             int chosenToothID = model.getChosenToothID();
-            if (chosenToothID > 0) {
-                refillEventsList();
-            }
+
 
             for (int i = 0; i < 16; i++) {
                 TextView toothPositionTV = new TextView(this.getContext());
@@ -111,8 +109,10 @@ public class TeethFormulaFragment extends Fragment {
                         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
                         refillEventsList();
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) mainActivity.binding.getEventsListFragment().refillEventsList();
 
-                        if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
+                        /*if (!binding.floatingActionButton.isShown())
+                            binding.floatingActionButton.show();*/
                     }
                 });
 
@@ -141,8 +141,10 @@ public class TeethFormulaFragment extends Fragment {
                         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
                         refillEventsList();
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) mainActivity.binding.getEventsListFragment().refillEventsList();
 
-                        if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
+                        /*if (!binding.floatingActionButton.isShown())
+                            binding.floatingActionButton.show();*/
                     }
                 });
 
@@ -164,6 +166,10 @@ public class TeethFormulaFragment extends Fragment {
             activityMainBinding.getViewData().setNewEventFragmentVisibilityData(View.VISIBLE);
             activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
         });
+
+        if (model.getChosenToothID() > 0) {
+            refillEventsList();
+        }
 
         return binding.getRoot();
     }
@@ -194,13 +200,7 @@ public class TeethFormulaFragment extends Fragment {
 
                                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
-                                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                    activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
-                                }
-
-                                mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
-                                mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
-                                mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+                                setVisibilities();
                                 Log.d(TAG, "option edit clicked");
                             } else {
 
@@ -211,7 +211,8 @@ public class TeethFormulaFragment extends Fragment {
                                     model.deleteEvent(eventModels.get(position));
                                     deleteEventAnimation(position);
                                 });
-                                dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {});
+                                dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
+                                });
                                 dialogBuilder.show();
 
                                 Log.d(TAG, "option delete clicked");
@@ -223,13 +224,7 @@ public class TeethFormulaFragment extends Fragment {
                 } else {
                     mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
-                    if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
-                    }
-
-                    mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
-                    mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
-                    mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+                    setVisibilities();
                 }
             }
         });
@@ -237,29 +232,42 @@ public class TeethFormulaFragment extends Fragment {
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-            }
-
-            @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if(dy > 0 ){
-                    if(binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
+                if (dy > 0) {
+                    if (binding.floatingActionButton.isShown())
+                        binding.floatingActionButton.hide();
                 } else {
-                    if(!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
+                    if (!binding.floatingActionButton.isShown())
+                        binding.floatingActionButton.show();
                 }
             }
         });
     }
 
+    private void setVisibilities() {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+        }
+
+        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+    }
 
 
     public void refillEventsList() {
         eventModels.clear();
-        eventModels.addAll(model.getEventModelsList(user_id));
+        if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE
+                || orientation == Configuration.ORIENTATION_PORTRAIT) {
+            eventModels.addAll(model.getEventModelsList(user_id));
+            if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
+            Log.d(TAG, "refillEventsList() | if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE");
+        } else {
+            if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
+            Log.d(TAG, "refillEventsList() | else");
+        }
         adapter.notifyDataSetChanged();
     }
 

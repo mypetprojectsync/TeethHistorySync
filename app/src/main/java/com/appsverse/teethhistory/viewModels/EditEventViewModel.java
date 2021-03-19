@@ -69,21 +69,10 @@ public class EditEventViewModel extends ViewModel {
     }
 
     public void onClickCancelButton(Context context) {
-        MainActivity mainActivity = (MainActivity) context;
-
-        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-            mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.GONE);
-            mainActivity.binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-        } else {
-            mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.INVISIBLE);
-        }
-
-        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+          setVisibilities(context);
     }
 
     public void onClickSaveButton(Event event, Context context) {
-
         MainActivity mainActivity = (MainActivity) context;
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
 
@@ -113,16 +102,23 @@ public class EditEventViewModel extends ViewModel {
 
         realm.commitTransaction();
 
+        setVisibilities(context);
+    }
+
+    private void setVisibilities(Context context) {
+        MainActivity mainActivity = (MainActivity) context;
+
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.GONE);
             mainActivity.binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
 
         } else {
-            mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.INVISIBLE);
+            mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
         }
 
         mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
+        mainActivity.binding.getEventsListFragment().refillEventsList();
     }
 }

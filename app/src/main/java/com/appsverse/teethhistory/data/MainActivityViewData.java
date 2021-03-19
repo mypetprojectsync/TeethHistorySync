@@ -11,12 +11,14 @@ public class MainActivityViewData extends BaseObservable {
     private int newEventFragmentVisibilityData;
     private int editEventFragmentVisibilityData;
     private int eventFragmentVisibilityData;
+    private int eventsListFragmentVisibilityData;
 
-    public MainActivityViewData(int teethFormulaFragmentVisibilityData, int newEventFragmentVisibilityData, int editEventFragmentVisibilityData, int eventFragmentVisibilityData){
+    public MainActivityViewData(int teethFormulaFragmentVisibilityData, int newEventFragmentVisibilityData, int editEventFragmentVisibilityData, int eventFragmentVisibilityData, int eventsListFragmentVisibilityData){
         setTeethFormulaFragmentVisibilityData(teethFormulaFragmentVisibilityData);
         setNewEventFragmentVisibilityData(newEventFragmentVisibilityData);
         setEditEventFragmentVisibilityData(editEventFragmentVisibilityData);
         setEventFragmentVisibilityData(eventFragmentVisibilityData);
+        setEventsListFragmentVisibilityData(eventsListFragmentVisibilityData);
     }
 
     @Bindable
@@ -57,5 +59,15 @@ public class MainActivityViewData extends BaseObservable {
     public void setEventFragmentVisibilityData(int eventFragmentVisibilityData) {
         this.eventFragmentVisibilityData = eventFragmentVisibilityData;
         notifyPropertyChanged(BR.eventFragmentVisibilityData);
+    }
+
+    @Bindable
+    public int getEventsListFragmentVisibilityData() {
+        return eventsListFragmentVisibilityData;
+    }
+
+    public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
+        this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
+        notifyPropertyChanged(BR.eventsListFragmentVisibilityData);
     }
 }
