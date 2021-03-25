@@ -43,11 +43,39 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
+        <RadioGroup
+            android:id="@+id/initialTeethStateRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/radio_button_all_permanent">
+
+            <RadioButton
+                android:id="@+id/radio_button_no_teeth_yet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="No teeth yet"
+                android:checked="@={user.noTeeth}"/>
+
+            <RadioButton
+                android:id="@+id/radio_button_have_baby_teeth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Have at least one baby tooth"
+                android:checked="@={user.babyTeeth}"/>
+
+            <RadioButton
+                android:id="@+id/radio_button_all_permanent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="All teeth are permanent"/>
+
+        </RadioGroup>
+
+        <!--<CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="@={user.babyTeeth}"
-            android:text="@string/choose_if_you_have_baby_teeth" />
+            android:text="@string/choose_if_you_have_baby_teeth" />-->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -61,7 +89,7 @@
                 android:layout_marginStart="40dp"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(context)}"
-                android:text="@string/cancel"/>
+                android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/create_new_user_button"

@@ -18,11 +18,34 @@
     <string name="format">%1$td/%1$tm/%1$tY</string>
     <string name="triple_dots">⋮</string>
 
-    <string-array name="tooth_actions">
-        <item>Cleaning</item>
-        <item>Filling</item>
-        <item>Extracting</item>
-        <item>Implanting</item>
+    <string-array name="permanent_tooth_actions">
+        <item>Cleaned</item>
+        <item>Filled</item>
+        <item>Extracted</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="no_grown_tooth_actions">
+        <item>Grown</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="baby_tooth_actions">
+        <item>Cleaned</item>
+        <item>Filled</item>
+        <item>Extracted</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="extracted_permanent_tooth_actions">
+        <item>Implanted</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="implanted_tooth_actions">
+        <item>Served</item>
+        <item>Extracted</item>
+        <item>Other</item>
     </string-array>
 
 </resources>

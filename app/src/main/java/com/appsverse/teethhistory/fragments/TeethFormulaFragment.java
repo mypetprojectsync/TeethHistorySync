@@ -54,6 +54,8 @@ public class TeethFormulaFragment extends Fragment {
     int user_id;
     List<EventModel> eventModels = new ArrayList<>();
 
+    Tooth tooth;
+
     int orientation;
 
     @Nullable
@@ -73,9 +75,6 @@ public class TeethFormulaFragment extends Fragment {
         model = new ViewModelProvider(this).get(TeethFormulaFragmentViewModel.class);
         binding.setModel(model);
 
-        Tooth tooth = new Tooth(model.getChosenToothID());
-        binding.setTooth(tooth);
-
         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
         if (user_id >= 0) {
@@ -86,10 +85,13 @@ public class TeethFormulaFragment extends Fragment {
 
             int chosenToothID = model.getChosenToothID();
 
+            tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
+            binding.setTooth(tooth);
 
             for (int i = 0; i < 16; i++) {
                 TextView toothPositionTV = new TextView(this.getContext());
-                toothPositionTV.setText(String.valueOf(toothModels.get(i).getId()));
+                toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
+                toothPositionTV.setId(toothModels.get(i).getId());
 
                 if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
 
@@ -109,7 +111,8 @@ public class TeethFormulaFragment extends Fragment {
 
             for (int i = 16; i < 32; i++) {
                 TextView toothPositionTV = new TextView(this.getContext());
-                toothPositionTV.setText(String.valueOf(toothModels.get(i).getId()));
+                toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
+                toothPositionTV.setId(toothModels.get(i).getId());
 
                 if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
 
@@ -130,7 +133,6 @@ public class TeethFormulaFragment extends Fragment {
 
         }
 
-        //todo hide, when recyclerview start moving
         binding.floatingActionButton.setOnClickListener(v -> {
             Log.d(TAG, "floating button was clicked");
 
@@ -151,12 +153,15 @@ public class TeethFormulaFragment extends Fragment {
     }
 
     private void toothClicked(TextView textView, Tooth tooth) {
-        model.setChosenToothID(parseInt(textView.getText().toString()));
-        tooth.setId(model.getChosenToothID());
-        Log.d(TAG, "tv clicked, id: " + model.getChosenToothID());
+
+        if (tooth.getId() > 0) ((TextView) binding.getRoot().findViewById(tooth.getId())).setTextSize(14.0f);
+
+        tooth.setId(textView.getId());
+        tooth.setPosition(parseInt(textView.getText().toString()));
+
         textView.setTextSize(30.0f);
 
-        activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
+        activityMainBinding.getModel().setChosenToothID(tooth.getId());
 
 
         if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
@@ -168,6 +173,8 @@ public class TeethFormulaFragment extends Fragment {
         refillEventsList();
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             mainActivity.binding.getEventsListFragment().refillEventsList();
+
+        mainActivity.binding.getNewEventFragment().setTextActionACTV();
     }
 
     private void createEventsList() {
@@ -204,13 +211,12 @@ public class TeethFormulaFragment extends Fragment {
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    model.deleteEvent(eventModels.get(position));
+                                    model.deleteEvent(eventModels.get(position), mainActivity);
                                     deleteEventAnimation(position);
                                 });
                                 dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
                                 });
                                 dialogBuilder.show();
-
                                 Log.d(TAG, "option delete clicked");
                             }
                             return false;
@@ -221,6 +227,8 @@ public class TeethFormulaFragment extends Fragment {
                     mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                     setVisibilities();
+
+                    mainActivity.binding.getEditEventFragment().setTextActionACTV();
                 }
             }
         });
@@ -257,7 +265,7 @@ public class TeethFormulaFragment extends Fragment {
         eventModels.clear();
         if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE
                 || orientation == Configuration.ORIENTATION_PORTRAIT) {
-            eventModels.addAll(model.getEventModelsList(user_id));
+            eventModels.addAll(model.getEventModelsList(user_id, tooth));
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
             Log.d(TAG, "refillEventsList() | if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE");
         } else {
@@ -276,5 +284,7 @@ public class TeethFormulaFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
+        model.setChosenToothID(tooth.getId());
+        model.setChosenToothPosition(tooth.getPosition());
     }
 }

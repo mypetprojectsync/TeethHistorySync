@@ -11,6 +11,7 @@ public class UserModel extends RealmObject {
     @PrimaryKey
     private int id;
     private String name;
+    private boolean isNoTeeth;
     private boolean isBabyTeeth;
     private RealmList<ToothModel> toothModels;
 
@@ -34,6 +35,14 @@ public class UserModel extends RealmObject {
         this.name = name;
     }
 
+    public boolean isNoTeeth() {
+        return isNoTeeth;
+    }
+
+    public void setNoTeeth(boolean noTeeth) {
+        isNoTeeth = noTeeth;
+    }
+
     public boolean isBabyTeeth() {
         Log.d("myLogs", "realm isBabyTeeth " + isBabyTeeth);
         return isBabyTeeth;
@@ -51,4 +60,6 @@ public class UserModel extends RealmObject {
     public void setToothModels(RealmList<ToothModel> toothModels) {
         this.toothModels = toothModels;
     }
+
+
 }

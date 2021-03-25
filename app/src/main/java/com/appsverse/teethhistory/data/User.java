@@ -7,16 +7,19 @@ import androidx.databinding.Bindable;
 
 import com.appsverse.teethhistory.BR;
 
+
 public class User extends BaseObservable {
 
     final String TAG = "myLogs";
 
     private int id;
     private String name;
+    private boolean isNoTeeth = false;
     private boolean isBabyTeeth = false;
 
-    public User(String name, boolean isBabyTeeth) {
+    public User(String name, boolean isNoTeeth, boolean isBabyTeeth) {
         setName(name);
+        setNoTeeth(isNoTeeth);
         setBabyTeeth(isBabyTeeth);
     }
 
@@ -32,6 +35,16 @@ public class User extends BaseObservable {
         Log.d(TAG, "setName user: " + name);
         this.name = name;
         notifyPropertyChanged(BR.name);
+    }
+
+    @Bindable
+    public boolean isNoTeeth() {
+        return isNoTeeth;
+    }
+
+    public void setNoTeeth(boolean noTeeth) {
+        isNoTeeth = noTeeth;
+        notifyPropertyChanged(BR.noTeeth);
     }
 
     @Bindable
@@ -51,4 +64,6 @@ public class User extends BaseObservable {
     public void setId(int id) {
         this.id = id;
     }
+
+
 }

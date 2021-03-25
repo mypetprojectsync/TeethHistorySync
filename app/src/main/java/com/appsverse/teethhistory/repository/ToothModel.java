@@ -8,8 +8,10 @@ import io.realm.annotations.RealmClass;
 public class ToothModel extends RealmObject {
 
     private int id;
+    private int position;
     private boolean isExist;
     private boolean isBabyTooth;
+    private boolean isPermanentTooth;
     private boolean isFilling;
     private boolean isImplant;
     private RealmList<EventModel> eventModels;
@@ -60,5 +62,21 @@ public class ToothModel extends RealmObject {
 
     public void setEventModels(RealmList<EventModel> eventModels) {
         this.eventModels = eventModels;
+    }
+
+    public boolean isPermanentTooth() {
+        return isPermanentTooth;
+    }
+
+    public void setPermanentTooth(boolean permanentTooth) {
+        isPermanentTooth = permanentTooth;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

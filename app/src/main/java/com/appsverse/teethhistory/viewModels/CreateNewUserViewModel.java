@@ -6,22 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmList;
-
-//TODO!!! Crash when create first user
 
 public class CreateNewUserViewModel extends ViewModel {
 
@@ -30,6 +23,7 @@ public class CreateNewUserViewModel extends ViewModel {
 
     private int id;
     private String name = "";
+    private boolean isNoTeeth = false;
     private boolean isBabyTeeth = false;
 
     public int getId() {
@@ -77,7 +71,14 @@ public class CreateNewUserViewModel extends ViewModel {
         userModel.setBabyTeeth(user.isBabyTeeth());
         realm.commitTransaction();
 
-        setToothModels(userModel);
+        if (user.isNoTeeth()) {
+            setNoTeethToothModels(userModel);
+        } else if (user.isBabyTeeth()) {
+            setBabyTeethToothModels(userModel);
+        } else {
+            setPermanentTeethToothModels(userModel);
+        }
+
            Log.d(TAG, ""+ realm.where(ToothModel.class).findAll());
            /*Log.d(TAG, String.format("%s", userModel.getToothModels().get(0)));
             Log.d(TAG, String.format("find by id: %s", userModel.getToothModels().where().equalTo("id", 15).findFirst()));*/
@@ -94,43 +95,187 @@ public class CreateNewUserViewModel extends ViewModel {
         ((Activity) context).finish();
     }
 
+    private void setBabyTeethToothModels(UserModel userModel) {
+        for (int i = 18; i > 15; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 15; i > 10; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 21; i < 26; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 26; i < 29; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+
+        for (int i = 48; i > 45; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 45; i > 40; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 31; i < 36; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 36; i < 39; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+    }
+
+    private void setNoTeethToothModels(UserModel userModel) {
+        for (int i = 18; i > 15; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 15; i > 10; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 21; i < 26; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 26; i < 29; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+
+        for (int i = 48; i > 45; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 45; i > 40; i--) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 31; i < 36; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoBabyToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+        for (int i = 36; i < 39; i++) {
+            realm.beginTransaction();
+            ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
+            setNoPermanentToothModel(toothModel, i);
+            realm.commitTransaction();
+        }
+    }
+
     //todo implement baby teeth
-    private void setToothModels(UserModel userModel) {
+    private void setPermanentTeethToothModels(UserModel userModel) {
 
         for (int i = 18; i > 10; i--) {
             realm.beginTransaction();
             ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
-            setToothModel(toothModel, i);
+            setPermanentToothModel(toothModel, i);
             realm.commitTransaction();
         }
         for (int i = 21; i < 29; i++) {
             realm.beginTransaction();
             ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
-            setToothModel(toothModel, i);
+            setPermanentToothModel(toothModel, i);
             realm.commitTransaction();
         }
         for (int i = 48; i > 40; i--) {
             realm.beginTransaction();
             ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
-            setToothModel(toothModel, i);
+            setPermanentToothModel(toothModel, i);
             realm.commitTransaction();
         }
         for (int i = 31; i < 39; i++) {
             realm.beginTransaction();
             ToothModel toothModel = realm.createEmbeddedObject(ToothModel.class, userModel, "toothModels");
-            setToothModel(toothModel, i);
+            setPermanentToothModel(toothModel, i);
             realm.commitTransaction();
         }
 
     }
 
-    private void setToothModel(ToothModel toothModel, int i) {
+    private void setPermanentToothModel(ToothModel toothModel, int i) {
         toothModel.setId(i);
+        toothModel.setPosition(i);
         toothModel.setExist(true);
         toothModel.setBabyTooth(false);
+        toothModel.setPermanentTooth(true);
         toothModel.setFilling(false);
         toothModel.setImplant(false);
     }
+
+    private void setNoPermanentToothModel(ToothModel toothModel, int i) {
+        toothModel.setId(i);
+        toothModel.setPosition(i);
+        toothModel.setExist(false);
+        toothModel.setBabyTooth(false);
+        toothModel.setPermanentTooth(true);
+        toothModel.setFilling(false);
+        toothModel.setImplant(false);
+    }
+
+
+    private void setBabyToothModel(ToothModel toothModel, int i) {
+        toothModel.setId(i);
+
+        //add 40 to get baby tooth index from permanent tooth index
+        toothModel.setPosition(i+40);
+
+        toothModel.setExist(true);
+        toothModel.setBabyTooth(true);
+        toothModel.setPermanentTooth(false);
+        toothModel.setFilling(false);
+        toothModel.setImplant(false);
+    }
+
+    private void setNoBabyToothModel(ToothModel toothModel, int i) {
+        toothModel.setId(i);
+
+        //add 40 to get baby tooth index from permanent tooth index
+        toothModel.setPosition(i+40);
+
+        toothModel.setExist(false);
+        toothModel.setBabyTooth(true);
+        toothModel.setPermanentTooth(false);
+        toothModel.setFilling(false);
+        toothModel.setImplant(false);
+    }
+
 
     public void onClickCancelButton(Context context) {
         ((Activity) context).finish();
@@ -139,5 +284,13 @@ public class CreateNewUserViewModel extends ViewModel {
     //todo нужна ли проверка на уникальность?
     private void isUniqueName(User user) {
 
+    }
+
+    public boolean isNoTeeth() {
+        return isNoTeeth;
+    }
+
+    public void setNoTeeth(boolean noTeeth) {
+        isNoTeeth = noTeeth;
     }
 }

@@ -203,7 +203,7 @@ public class OnClickHandler {
                 newUserID[0] = model.getFirstUserID();
 
                 model.setMainActivityViewModelData(newUserID[0]);
-                binding.setUser(new User(model.getUsername(), model.isBabyTeeth()));
+                binding.setUser(new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth()));
 
             } else {
                 newUserID[0] = -1;

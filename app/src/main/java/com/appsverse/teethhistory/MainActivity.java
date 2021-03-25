@@ -17,6 +17,7 @@ import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
 import com.appsverse.teethhistory.fragments.EventsListFragment;
+import com.appsverse.teethhistory.fragments.NewEventFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.handlers.OnClickHandler;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
 
-            User user = new User(model.getUsername(), model.isBabyTeeth());
+            User user = new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth());
             binding.setUser(user);
 
             TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
             EventsListFragment eventsListFragment = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.events_list_fragment);
             binding.setEventsListFragment(eventsListFragment);
+
+            NewEventFragment newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
+            binding.setNewEventFragment(newEventFragment);
 
             mainActivityViewData = new MainActivityViewData(
                     model.getTeethFormulaFragmentVisibility(),

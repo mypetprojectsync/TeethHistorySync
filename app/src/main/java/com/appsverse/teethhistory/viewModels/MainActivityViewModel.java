@@ -21,6 +21,7 @@ public class MainActivityViewModel extends ViewModel {
     private int user_id;
     private String username;
     private boolean isBabyTeeth;
+    private boolean isNoTeeth;
 
     private boolean isEditUsernameDialogActive;
     private boolean isDeleteUserDialogActive;
@@ -190,5 +191,13 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
         this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
+    }
+
+    public boolean isNoTeeth() {
+        return isNoTeeth;
+    }
+
+    public void setNoTeeth(boolean noTeeth) {
+        isNoTeeth = noTeeth;
     }
 }

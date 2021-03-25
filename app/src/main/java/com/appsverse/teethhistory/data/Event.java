@@ -8,6 +8,7 @@ import androidx.databinding.Bindable;
 import com.appsverse.teethhistory.BR;
 
 import java.util.Date;
+import java.util.List;
 
 public class Event extends BaseObservable {
 
@@ -19,12 +20,16 @@ public class Event extends BaseObservable {
     private int guarantee;
     private String notes;
 
-    public Event(int id, Date date, String action, int guarantee, String notes){
+    private List<String> actions;
+
+    //public Event(int id, Date date, String action, int guarantee, String notes){
+    public Event(int id, Date date, String action, int guarantee, String notes, List<String> actions){
         setId(id);
         setDate(date);
         setAction(action);
         setGuarantee(guarantee);
         setNotes(notes);
+        setActions(actions);
     }
     @Bindable
     public int getId() {
@@ -77,5 +82,13 @@ public class Event extends BaseObservable {
         notifyPropertyChanged(BR.notes);
     }
 
+   @Bindable
+    public List<String> getActions() {
+        return actions;
+    }
 
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+        notifyPropertyChanged(BR.actions);
+    }
 }

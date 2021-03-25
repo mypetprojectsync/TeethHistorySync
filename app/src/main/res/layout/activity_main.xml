@@ -31,6 +31,10 @@
             name="eventsListFragment"
             type="com.appsverse.teethhistory.fragments.EventsListFragment" />
 
+        <variable
+            name="newEventFragment"
+            type="com.appsverse.teethhistory.fragments.NewEventFragment" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -54,6 +58,7 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:orientation="horizontal">
 
+            <!--todo try to change name to variable-->
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/teeth_formula_fragment"
                 android:name="com.appsverse.teethhistory.fragments.TeethFormulaFragment"

@@ -27,7 +27,7 @@ public class CreateNewUserActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(CreateNewUserViewModel.class);
         binding.setModel(model);
-        user = new User(model.getName(), model.isBabyTeeth());
+        user = new User(model.getName(), model.isNoTeeth(), model.isBabyTeeth());
         binding.setUser(user);
 
         binding.nameTIET.addTextChangedListener(new TextWatcher() {

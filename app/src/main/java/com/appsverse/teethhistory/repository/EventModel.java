@@ -1,7 +1,9 @@
 package com.appsverse.teethhistory.repository;
 
 import java.util.Date;
+import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.RealmClass;
 
@@ -13,6 +15,9 @@ public class EventModel extends RealmObject {
     private String action;
     private int guarantee;
     private String notes;
+
+    //private List<String> actions;
+private RealmList<String> actions;
 
     public int getId() {
         return id;
@@ -53,4 +58,20 @@ public class EventModel extends RealmObject {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    public RealmList<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(RealmList<String> actions) {
+        this.actions = actions;
+    }
+
+    /*public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+    }*/
 }
