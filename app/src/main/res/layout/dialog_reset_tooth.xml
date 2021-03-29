@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+</RelativeLayout>
+<!--
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="tooth"
+            type="com.appsverse.teethhistory.data.Tooth" />
+    </data>
+    <LinearLayout
+        android:id="@+id/activity_main_edit_username_dialog_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="@={tooth.isExist}"
+            android:text="Is tooth exist?"/>
+
+        <RadioGroup
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_is_baby_tooth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@={tooth.isBabyTooth}"
+                android:text="Baby tooth"/>
+
+            <RadioButton
+                android:id="@+id/rb_is_permanent_tooth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@={tooth.isPermanentTooth}"
+                android:text="Permanent tooth"/>
+        </RadioGroup>
+
+    </LinearLayout>
+</layout>-->

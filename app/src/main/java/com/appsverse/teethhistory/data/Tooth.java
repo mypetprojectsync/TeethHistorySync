@@ -11,11 +11,17 @@ public class Tooth extends BaseObservable {
 
     private int id;
     private int position;
+    private boolean isExist = true;
+    private boolean isBabyTooth = false;
+    private boolean isPermanentTooth = true;
 
    // public Tooth(int id) {
     public Tooth(int id, int position) {
         setId(id);
         setPosition(position);
+        setExist(true);
+        setBabyTooth(false);
+        setPermanentTooth(true);
     }
 
     @Bindable
@@ -36,5 +42,36 @@ public class Tooth extends BaseObservable {
     public void setPosition(int position) {
         this.position = position;
         notifyPropertyChanged(BR.position);
+    }
+
+    @Bindable
+    public boolean isExist() {
+        return isExist;
+    }
+
+    public void setExist(boolean isExist) {
+        this.isExist = isExist;
+        notifyPropertyChanged(BR.exist);
+    }
+
+    @Bindable
+    public boolean isBabyTooth() {
+        return isBabyTooth;
+    }
+
+    public void setBabyTooth(boolean isBabyTooth) {
+        this.isBabyTooth = isBabyTooth;
+        notifyPropertyChanged(BR.babyTooth);
+    }
+
+
+    @Bindable
+    public boolean isPermanentTooth() {
+        return isPermanentTooth;
+    }
+
+    public void setPermanentTooth(boolean isPermanentTooth) {
+        this.isPermanentTooth = isPermanentTooth;
+        notifyPropertyChanged(BR.permanentTooth);
     }
 }

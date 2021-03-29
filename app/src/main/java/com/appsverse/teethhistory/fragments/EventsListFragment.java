@@ -30,6 +30,7 @@ import com.appsverse.teethhistory.viewModels.EventsListViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -86,6 +87,7 @@ public class EventsListFragment extends Fragment {
             activityMainBinding.getViewData().setEventsListFragmentVisibilityData(View.GONE);
 
             activityMainBinding.getTeethFormulaFragment().refillEventsList();
+            activityMainBinding.getNewEventFragment().event.setDate(new Date());
         });
 
 
@@ -130,7 +132,8 @@ public class EventsListFragment extends Fragment {
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    model.deleteEvent(eventModels.get(position));
+                                    //model.deleteEvent(eventModels.get(position));
+                                    mainActivity.deleteEvent(eventModels.get(position));
                                     deleteEventAnimation(position);
                                 });
                                 dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
@@ -189,7 +192,8 @@ public class EventsListFragment extends Fragment {
     public void refillEventsList() {
         if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.VISIBLE) {
             eventModels.clear();
-            eventModels.addAll(model.getEventModelsList(userID, binding.getTooth().getId()));
+            //eventModels.addAll(model.getEventModelsList(userID, binding.getTooth().getId()));
+            eventModels.addAll(mainActivity.getSortedEventsList());
             adapter.notifyDataSetChanged();
         }
     }

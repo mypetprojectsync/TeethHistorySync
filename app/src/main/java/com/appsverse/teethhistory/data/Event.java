@@ -1,5 +1,6 @@
 package com.appsverse.teethhistory.data;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.databinding.BaseObservable;
@@ -7,8 +8,12 @@ import androidx.databinding.Bindable;
 
 import com.appsverse.teethhistory.BR;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class Event extends BaseObservable {
 
@@ -47,8 +52,21 @@ public class Event extends BaseObservable {
     }
 
     public void setDate(Date date) {
+
+       if (date != null) date = roundToDay(date);
+
         this.date = date;
+
         notifyPropertyChanged(BR.date);
+    }
+
+    private Date roundToDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        return c.getTime();
     }
 
     @Bindable

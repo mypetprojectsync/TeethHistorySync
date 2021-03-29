@@ -16,6 +16,8 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class TeethFormulaFragmentViewModel extends ViewModel {
     final String TAG = "myLogs";
@@ -59,10 +61,8 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     public  List<EventModel> getEventModelsList(int user_id, Tooth tooth){
 
             UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
-            //ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
             ToothModel toothModel = userModel.getToothModels().where().equalTo("id", tooth.getId()).findFirst();
-            return toothModel.getEventModels();
-
+            return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
     }
 
     public void deleteEvent(EventModel eventModel, MainActivity mainActivity){
@@ -71,18 +71,25 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         UserModel userModel = realm.where(UserModel.class).equalTo("id",mainActivity.user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", mainActivity.binding.getModel().getChosenToothID()).findFirst();
         int maxEventId = 0;
-        for (EventModel eventModel1 : toothModel.getEventModels()){
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+
+        //todo use last date and last position
+        /*for (EventModel eventModel1 : toothModel.getEventModels()){
             if (eventModel1.getId()%1000 > maxEventId%1000) maxEventId = eventModel1.getId();
-        }
+        }*/
 
         if (eventModel.getAction().equals("Filled")) {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
         Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
-        if (maxEventId%1000 == eventModel.getId()%1000) removeToothState(eventModel, toothModel,mainActivity);
+        //if (maxEventId%1000 == eventModel.getId()%1000) removeToothState(eventModel, toothModel,mainActivity);
+        if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel,mainActivity);
 
-        if (toothModel.getEventModels().size() == 1) resetToothState(toothModel);
+        if (toothModel.getEventModels().size() == 1) {
+            resetToothState(userModel, toothModel);
+            ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
+        }
 
         eventModel.deleteFromRealm();
         realm.commitTransaction();
@@ -93,16 +100,38 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         //todo hide editEventFragment if delete event which opened on new event fragment
     }
 
-    private void resetToothState(ToothModel toothModel) {
-        if (toothModel.getPosition() < 50){
+    private void resetToothState(UserModel userModel, ToothModel toothModel) {
 
-            toothModel.setBabyTooth(false);
-            toothModel.setPermanentTooth(true);
-        } else {
-            toothModel.setBabyTooth(true);
+        if (userModel.isNoTeeth()) {
+            toothModel.setExist(false);
             toothModel.setPermanentTooth(false);
+            toothModel.setBabyTooth(true);
+
+            if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
+            || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
+            || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
+            || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
+                toothModel.setPosition(toothModel.getPosition()+40);
+            }
+        } else if (userModel.isBabyTeeth()) {
+            toothModel.setExist(true);
+            toothModel.setPermanentTooth(false);
+            toothModel.setBabyTooth(true);
+
+            if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
+                    || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
+                    || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
+                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
+                toothModel.setPosition(toothModel.getPosition()+40);
+
+            }
+
+        } else {
+            toothModel.setExist(true);
+            toothModel.setPermanentTooth(true);
+            toothModel.setBabyTooth(false);
         }
-        toothModel.setExist(false);
+
         toothModel.setFilling(false);
         toothModel.setImplant(false);
     }

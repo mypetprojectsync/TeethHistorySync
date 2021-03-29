@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.appsverse.teethhistory.data.MainActivityViewData;
+import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
@@ -20,7 +21,12 @@ import com.appsverse.teethhistory.fragments.EventsListFragment;
 import com.appsverse.teethhistory.fragments.NewEventFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.handlers.OnClickHandler;
+import com.appsverse.teethhistory.repository.EventModel;
+import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -126,6 +132,40 @@ public class MainActivity extends AppCompatActivity {
 
     public ActivityMainBinding getBinding() {
         return this.binding;
+    }
+
+    /*public void resetTooth() {
+
+        DialogResetToothBinding dialogResetToothBinding = DataBindingUtil.setContentView(this, R.layout.dialog_reset_tooth);
+
+        Tooth tooth = new Tooth(model.getChosenToothID(), 0);
+        dialogResetToothBinding.setTooth(tooth);
+
+        model.resetTooth(this, tooth);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(this);
+        dialogBuilder.setView(dialogResetToothBinding.getRoot());
+        dialogBuilder.setTitle("Reset tooth #"+ model.getChosenToothID()+" state");
+        dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
+
+            model.resetTooth(this, tooth);
+
+        });
+        dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
+        });
+        dialogBuilder.show();
+    }*/
+
+    public RealmResults<EventModel> getSortedEventsList(){
+        return model.getSortedEventsList(this);
+    }
+
+    public void deleteEvent(EventModel eventModel) {
+        model.deleteEvent(eventModel, this);
+    }
+
+    public void setToothState(){
+       // model.setToothState();
     }
 
     @Override

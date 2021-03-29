@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -20,11 +21,17 @@ import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class NewEventViewModel extends ViewModel {
 
@@ -89,6 +96,8 @@ public class NewEventViewModel extends ViewModel {
 
         //Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
 
+        //todo sort events by date
+
         int next_id = 0;
         String idWithoutToothId = "";
         //todo как работает для разных пользователей? ВРОДЕ НЕ ДОЛЖНО
@@ -98,12 +107,17 @@ public class NewEventViewModel extends ViewModel {
         Log.d(TAG, "mainActivityViewModel.getChosenToothID(): " + mainActivityViewModel.getChosenToothID());
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
 
-        Number current_id = toothModel.getEventModels().where().max("id");
+        //Number current_id = toothModel.getEventModels().where().max("id");
+        //List<EventModel> eventModels = toothModel.getEventModels();
+        int current_id = 0;
+        for (EventModel i : toothModel.getEventModels()) {
+            if (current_id < i.getId()%1000) current_id = i.getId()%1000;
+        }
 
-        if (current_id == null) {
+        if (current_id == 0) {
             next_id = Integer.parseInt(Integer.toString(toothModel.getPosition()) + "000");
         } else {
-            next_id = current_id.intValue()%1000 + 1;
+            next_id = current_id + 1;
             idWithoutToothId = String.format("%03d", next_id);
             next_id = Integer.parseInt(Integer.toString(toothModel.getPosition()) + idWithoutToothId);
         }
@@ -120,42 +134,53 @@ public class NewEventViewModel extends ViewModel {
         realmList.addAll(event.getActions());
         eventModel.setActions(realmList);
 
-        switch (event.getAction()) {
-            case "Extracted":
-                toothModel.setExist(false);
-                toothModel.setFilling(false);
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
 
-                if (toothModel.isBabyTooth()) {
-                    toothModel.setBabyTooth(false);
-                    toothModel.setPermanentTooth(true);
-                    //todo!!! change chosenToothId and toothId
+        if (eventModelsResults.get(0).getId() == eventModel.getId()) {
+            switch (event.getAction()) {
+                case "Extracted":
+                    toothModel.setExist(false);
+                    toothModel.setFilling(false);
 
-                    toothModel.setPosition(toothModel.getPosition()-40);
-                    TextView chosenTV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId());
-                    chosenTV.setText(String.valueOf(toothModel.getPosition()));
+                    if (toothModel.isBabyTooth()) {
+                        toothModel.setBabyTooth(false);
+                        toothModel.setPermanentTooth(true);
 
-                   //mainActivity.binding.getTeethFormulaFragment().binding.getModel().setChosenToothID(toothModel.getId());
-                  // mainActivity.binding.getTeethFormulaFragment().binding.getTooth().setId(toothModel.getId());
-                  // mainActivity.binding.getModel().setChosenToothID(toothModel.getId());
+                        toothModel.setPosition(toothModel.getPosition() - 40);
+                        TextView chosenTV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId());
+                        chosenTV.setText(String.valueOf(toothModel.getPosition()));
 
-                } else if (toothModel.isPermanentTooth()){
-                    toothModel.setPermanentTooth(false);
-                } else if (toothModel.isImplant()) {
-                    toothModel.setImplant(false);
-                }
-                break;
-            case "Filled":
-                toothModel.setFilling(true);
-                break;
-            case "Implanted":
-                toothModel.setExist(true);
-                toothModel.setImplant(true);
-                break;
-            case "Grown":
-                toothModel.setExist(true);
-                break;
+                    } else if (toothModel.isPermanentTooth()) {
+                        toothModel.setPermanentTooth(false);
+                    } else if (toothModel.isImplant()) {
+                        toothModel.setImplant(false);
+                    }
+                    break;
+                case "Filled":
+                    toothModel.setFilling(true);
+                    break;
+                case "Implanted":
+                    toothModel.setExist(true);
+                    toothModel.setImplant(true);
+                    break;
+                case "Grown":
+                    toothModel.setExist(true);
+                    break;
+            }
         }
+        //toothModel.getEventModels(toothModel.getEventModels().sort("date", Sort.DESCENDING));
+
         realm.commitTransaction();
+
+
+
+       //RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+
+        Log.d(TAG, "*******************************************************");
+        for (EventModel i : eventModelsResults) {
+            Log.d(TAG, i.toString());
+        }
+        Log.d(TAG, "*******************************************************");
 
         setVisibilities(context);
 

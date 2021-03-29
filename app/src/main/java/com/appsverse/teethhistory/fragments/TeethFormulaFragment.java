@@ -35,6 +35,7 @@ import com.appsverse.teethhistory.viewModels.TeethFormulaFragmentViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -143,6 +144,8 @@ public class TeethFormulaFragment extends Fragment {
             activityMainBinding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
             activityMainBinding.getViewData().setNewEventFragmentVisibilityData(View.VISIBLE);
             activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+
+            activityMainBinding.getNewEventFragment().event.setDate(new Date());
         });
 
         if (model.getChosenToothID() > 0) {
@@ -211,7 +214,8 @@ public class TeethFormulaFragment extends Fragment {
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    model.deleteEvent(eventModels.get(position), mainActivity);
+                                    //model.deleteEvent(eventModels.get(position), mainActivity);
+                                    mainActivity.deleteEvent(eventModels.get(position));
                                     deleteEventAnimation(position);
                                 });
                                 dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
@@ -227,8 +231,6 @@ public class TeethFormulaFragment extends Fragment {
                     mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                     setVisibilities();
-
-                    mainActivity.binding.getEditEventFragment().setTextActionACTV();
                 }
             }
         });
@@ -263,9 +265,13 @@ public class TeethFormulaFragment extends Fragment {
 
     public void refillEventsList() {
         eventModels.clear();
+
         if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE
                 || orientation == Configuration.ORIENTATION_PORTRAIT) {
-            eventModels.addAll(model.getEventModelsList(user_id, tooth));
+
+            //eventModels.addAll(model.getEventModelsList(user_id, tooth));
+            eventModels.addAll(mainActivity.getSortedEventsList());
+
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
             Log.d(TAG, "refillEventsList() | if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE");
         } else {

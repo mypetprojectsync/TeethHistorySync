@@ -20,6 +20,8 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class EditEventViewModel extends ViewModel {
 
@@ -77,6 +79,7 @@ public class EditEventViewModel extends ViewModel {
         setVisibilities(context);
     }
 
+    //TODO!!!!!!!!!!! баг при сохранении, редактирует неправильный холдер, возможно проблема с position. Скорее всего неправильно находит id
     public void onClickSaveButton(Event event, Context context) {
         MainActivity mainActivity = (MainActivity) context;
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
@@ -100,7 +103,10 @@ public class EditEventViewModel extends ViewModel {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
-        if (toothModel.getEventModels().where().max("id").intValue() == eventModel.getId()
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+
+        //if (toothModel.getEventModels().where().max("id").intValue() == eventModel.getId()
+        if (eventModelsResults.get(0).getId() == eventModel.getId()
                 && oldEventModelAction != newEventModelAction) {
 
             Log.d(TAG, "last event action: " + oldEventModelAction);

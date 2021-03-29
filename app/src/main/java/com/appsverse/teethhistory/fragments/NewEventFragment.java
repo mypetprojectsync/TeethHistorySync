@@ -81,7 +81,7 @@ public class NewEventFragment extends Fragment {
                 event.setGuarantee(Math.round(value));
             }
         });
-
+        setTextActionACTV();
         return binding.getRoot();
     }
 
@@ -114,7 +114,7 @@ public class NewEventFragment extends Fragment {
                     items = getResources().getStringArray(R.array.no_grown_tooth_actions);
                 } else if (toothModel.isPermanentTooth()) {
                     items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-                } else  {
+                } else {
                     items = getResources().getStringArray(R.array.extracted_permanent_tooth_actions);
                 }
 
@@ -129,18 +129,23 @@ public class NewEventFragment extends Fragment {
                     items = new String[0];
                 }
             }
-        } else {
+        /*} else {
             items = new String[0];
+        }*/
+
+            //Log.d(TAG, "setTextActionACTV() toothModel: " + toothModel.toString());
+
+            list.clear();
+            Collections.addAll(list, items);
+
+            Log.d(TAG, "setTextActionACTV() list: " + list.toString());
+
+            binding.toothActionACTV.setText(list.get(0), false);
+            event.setAction(list.get(0));
+            event.setActions(list);
+            //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
+            adapter.notifyDataSetChanged();
         }
-
-        list.clear();
-        Collections.addAll(list, items);
-
-        binding.toothActionACTV.setText(list.get(0), false);
-        event.setAction(list.get(0));
-        event.setActions(list);
-        //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
-        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -68,6 +68,7 @@ public class CreateNewUserViewModel extends ViewModel {
         realm.beginTransaction();
         UserModel userModel = realm.createObject(UserModel.class, next_id);
         userModel.setName(user.getName());
+        userModel.setNoTeeth(user.isNoTeeth());
         userModel.setBabyTeeth(user.isBabyTeeth());
         realm.commitTransaction();
 

@@ -103,7 +103,7 @@ public class EditEventFragment extends Fragment {
                 event.setGuarantee(Math.round(value));
             }
         });
-
+        setTextActionACTV();
         return binding.getRoot();
     }
 
@@ -128,14 +128,17 @@ public class EditEventFragment extends Fragment {
         Log.d(TAG, "setTextActionACTV()");
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
+        if (toothModel != null) {
+            list.clear();
+            if (event.getActions() != null) {
+                list.addAll(event.getActions());
 
-        list.clear();
-        list.addAll(event.getActions());
-
-        binding.editToothActionACTV.setText(event.getAction(), false);
-        event.setAction(list.get(0));
-        //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
-        adapter.notifyDataSetChanged();
+                binding.editToothActionACTV.setText(event.getAction(), false);
+                event.setAction(list.get(0));
+                //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public void setEvent(EventModel event){
@@ -147,6 +150,8 @@ public class EditEventFragment extends Fragment {
         this.event.setActions(event.getActions());
 
         binding.editToothActionACTV.setText(event.getAction(),false);
+        setTextActionACTV();
+
     }
 
     @Override
