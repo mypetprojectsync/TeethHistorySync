@@ -29,6 +29,7 @@ public class EditEventViewModel extends ViewModel {
     final Realm realm = Realm.getDefaultInstance();
 
     private int id;
+    private int position;
     private Date date;
     private String action;
     private int guarantee;
@@ -79,7 +80,6 @@ public class EditEventViewModel extends ViewModel {
         setVisibilities(context);
     }
 
-    //TODO!!!!!!!!!!! баг при сохранении, редактирует неправильный холдер, возможно проблема с position. Скорее всего неправильно находит id
     public void onClickSaveButton(Event event, Context context) {
         MainActivity mainActivity = (MainActivity) context;
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
@@ -242,5 +242,13 @@ public class EditEventViewModel extends ViewModel {
 
     public void setActions(List<String> actions) {
         this.actions = actions;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

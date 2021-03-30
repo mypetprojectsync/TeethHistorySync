@@ -20,6 +20,7 @@ public class Event extends BaseObservable {
     final String TAG = "myLogs";
 
     private int id;
+    private int position;
     private Date date;
     private String action;
     private int guarantee;
@@ -28,8 +29,9 @@ public class Event extends BaseObservable {
     private List<String> actions;
 
     //public Event(int id, Date date, String action, int guarantee, String notes){
-    public Event(int id, Date date, String action, int guarantee, String notes, List<String> actions){
+    public Event(int id, int position, Date date, String action, int guarantee, String notes, List<String> actions){
         setId(id);
+        setPosition(position);
         setDate(date);
         setAction(action);
         setGuarantee(guarantee);
@@ -66,6 +68,7 @@ public class Event extends BaseObservable {
         c.set(Calendar.HOUR, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
         return c.getTime();
     }
 
@@ -108,5 +111,13 @@ public class Event extends BaseObservable {
     public void setActions(List<String> actions) {
         this.actions = actions;
         notifyPropertyChanged(BR.actions);
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

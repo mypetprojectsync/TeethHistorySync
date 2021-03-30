@@ -56,7 +56,7 @@ public class NewEventFragment extends Fragment {
         model = new ViewModelProvider(this).get(NewEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions());
         //event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes());
         binding.setEvent(event);
 
@@ -152,6 +152,7 @@ public class NewEventFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
+        model.setPosition(event.getPosition());
         model.setDate(event.getDate());
         model.setAction(event.getAction());
         model.setGuarantee(event.getGuarantee());

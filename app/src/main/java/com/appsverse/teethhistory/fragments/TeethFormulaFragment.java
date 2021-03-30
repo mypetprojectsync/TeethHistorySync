@@ -146,6 +146,7 @@ public class TeethFormulaFragment extends Fragment {
             activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
 
             activityMainBinding.getNewEventFragment().event.setDate(new Date());
+            activityMainBinding.getNewEventFragment().event.setPosition(tooth.getPosition());
         });
 
         if (model.getChosenToothID() > 0) {
@@ -194,6 +195,9 @@ public class TeethFormulaFragment extends Fragment {
         adapter.setClickListener(new EventsListAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
+                Log.d(TAG, "rv clicked position: " + position);
+
                 if (view.getId() == R.id.itemEventOptions) {
 
                     //todo try to safe in viewmodel when destroy

@@ -11,6 +11,7 @@ import io.realm.annotations.RealmClass;
 public class EventModel extends RealmObject {
 
     private int id;
+    private int position;
     private Date date;
     private String action;
     private int guarantee;
@@ -65,6 +66,14 @@ private RealmList<String> actions;
 
     public void setActions(RealmList<String> actions) {
         this.actions = actions;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     /*public List<String> getActions() {

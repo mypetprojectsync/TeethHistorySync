@@ -39,6 +39,7 @@ public class NewEventViewModel extends ViewModel {
     final Realm realm = Realm.getDefaultInstance();
 
     private int id;
+    private int position;
     private Date date = new Date();
     private String action;
     private int guarantee = 12;
@@ -99,7 +100,8 @@ public class NewEventViewModel extends ViewModel {
         //todo sort events by date
 
         int next_id = 0;
-        String idWithoutToothId = "";
+        int current_id = 0;
+        //String idWithoutToothId = "";
         //todo как работает для разных пользователей? ВРОДЕ НЕ ДОЛЖНО
         MainActivity mainActivity = (MainActivity) context;
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
@@ -107,24 +109,30 @@ public class NewEventViewModel extends ViewModel {
         Log.d(TAG, "mainActivityViewModel.getChosenToothID(): " + mainActivityViewModel.getChosenToothID());
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
 
-        //Number current_id = toothModel.getEventModels().where().max("id");
+        if (toothModel.getEventModels().size()>0) current_id = toothModel.getEventModels().where().max("id").intValue();
+
         //List<EventModel> eventModels = toothModel.getEventModels();
-        int current_id = 0;
-        for (EventModel i : toothModel.getEventModels()) {
+        //int current_id = 0;
+        /*for (EventModel i : toothModel.getEventModels()) {
             if (current_id < i.getId()%1000) current_id = i.getId()%1000;
-        }
+        }*/
 
         if (current_id == 0) {
-            next_id = Integer.parseInt(Integer.toString(toothModel.getPosition()) + "000");
+           // next_id = Integer.parseInt("1"+Integer.toString(toothModel.getPosition()));
+            next_id = 1;
         } else {
-            next_id = current_id + 1;
-            idWithoutToothId = String.format("%03d", next_id);
-            next_id = Integer.parseInt(Integer.toString(toothModel.getPosition()) + idWithoutToothId);
+            //next_id = current_id + 1;
+            //idWithoutToothId = String.format("%03d", next_id);
+            //idWithoutToothId = String.format("%03d", next_id);
+            //next_id = Integer.parseInt(current_id%100+Integer.toString(toothModel.getPosition()));
+            next_id = current_id+1;
         }
 
         realm.beginTransaction();
         EventModel eventModel = realm.createEmbeddedObject(EventModel.class, toothModel, "eventModels");
         eventModel.setId(next_id);
+        //eventModel.setPosition(event.getPosition());
+        eventModel.setPosition(toothModel.getPosition());
         eventModel.setDate(event.getDate());
         eventModel.setAction(event.getAction());
         eventModel.setGuarantee(event.getGuarantee());
@@ -178,6 +186,7 @@ public class NewEventViewModel extends ViewModel {
 
         Log.d(TAG, "*******************************************************");
         for (EventModel i : eventModelsResults) {
+            Log.d(TAG, "date in long: " + i.getDate().getTime());
             Log.d(TAG, i.toString());
         }
         Log.d(TAG, "*******************************************************");
@@ -222,5 +231,13 @@ public class NewEventViewModel extends ViewModel {
 
     public void setActions(List<String> actions) {
         this.actions = actions;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

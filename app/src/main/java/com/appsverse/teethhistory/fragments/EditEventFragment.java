@@ -49,7 +49,7 @@ public class EditEventFragment extends Fragment {
         model = new ViewModelProvider(this).get(EditEventViewModel.class);
         binding.setModel(model);
 
-       event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions());
+       event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions());
         //event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes());
         binding.setEvent(event);
 
@@ -159,6 +159,7 @@ public class EditEventFragment extends Fragment {
         super.onDestroy();
 
         model.setId(event.getId());
+        model.setPosition(event.getPosition());
         model.setDate(event.getDate());
         model.setAction(event.getAction());
         model.setGuarantee(event.getGuarantee());
