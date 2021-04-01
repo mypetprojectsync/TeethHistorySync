@@ -17,6 +17,7 @@
     <string name="ok">ok</string>
     <string name="format">%1$td/%1$tm/%1$tY</string>
     <string name="triple_dots">⋮</string>
+    <string name="share">Поделиться</string>
 
     <string-array name="permanent_tooth_actions">
         <item>Cleaned</item>

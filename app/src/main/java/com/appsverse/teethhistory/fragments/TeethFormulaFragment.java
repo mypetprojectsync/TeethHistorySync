@@ -2,7 +2,12 @@ package com.appsverse.teethhistory.fragments;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -10,12 +15,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -89,6 +98,7 @@ public class TeethFormulaFragment extends Fragment {
             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
             binding.setTooth(tooth);
 
+            int counter = 0;
             for (int i = 0; i < 16; i++) {
                 TextView toothPositionTV = new TextView(this.getContext());
                 toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
@@ -96,9 +106,11 @@ public class TeethFormulaFragment extends Fragment {
 
                 if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 10, 10, 10);
-                toothPositionTV.setLayoutParams(params);
+                LinearLayout linearLayout = new LinearLayout(this.getContext());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+
+                linearLayout.setLayoutParams(params);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
 
                 toothPositionTV.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -107,7 +119,47 @@ public class TeethFormulaFragment extends Fragment {
                     }
                 });
 
-                binding.llTeethFirstRow.addView(toothPositionTV);
+                ImageView toothIV = new ImageView(this.getContext());
+                toothIV.setScaleType(ImageView.ScaleType.FIT_START);
+
+                if (counter == 0) {
+                    toothIV.setImageResource(R.drawable.ic_11g);
+                    counter++;
+                } else if (counter == 1) {
+                    toothIV.setImageResource(R.drawable.ic_12g);
+                    counter++;
+                } else{
+                    toothIV.setImageResource(R.drawable.ic_13g);
+                    counter = 0;
+                }
+
+                toothIV.setAdjustViewBounds(true);
+                toothIV.setTag(i);
+
+
+
+                ImageView toothPositionIV = new ImageView(this.getContext());
+                toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
+
+                String toothNumber = "ic_11";
+                int id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
+                toothPositionIV.setImageResource(id);
+                //toothPositionIV.setImageResource(R.drawable.ic_11);
+
+                toothIV.setAdjustViewBounds(true);
+
+                linearLayout.addView(toothIV);
+                linearLayout.addView(toothPositionIV);
+
+                toothIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "tooth clicked position: " + toothModels.get((int) v.getTag()).getPosition());
+                            ((ImageView) v).setImageResource(R.drawable.ic_11g_selected);
+                    }
+                });
+
+                binding.llTeethFirstRow.addView(linearLayout);
             }
 
             for (int i = 16; i < 32; i++) {
@@ -158,7 +210,8 @@ public class TeethFormulaFragment extends Fragment {
 
     private void toothClicked(TextView textView, Tooth tooth) {
 
-        if (tooth.getId() > 0) ((TextView) binding.getRoot().findViewById(tooth.getId())).setTextSize(14.0f);
+        if (tooth.getId() > 0)
+            ((TextView) binding.getRoot().findViewById(tooth.getId())).setTextSize(14.0f);
 
         tooth.setId(textView.getId());
         tooth.setPosition(parseInt(textView.getText().toString()));

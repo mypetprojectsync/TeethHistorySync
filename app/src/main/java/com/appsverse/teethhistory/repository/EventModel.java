@@ -12,7 +12,8 @@ public class EventModel extends RealmObject {
 
     private int id;
     private int position;
-    private Date date;
+    //private Date date;
+    private long date;
     private String action;
     private int guarantee;
     private String notes;
@@ -29,11 +30,11 @@ private RealmList<String> actions;
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date);
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = date.getTime();
     }
 
     public String getAction() {

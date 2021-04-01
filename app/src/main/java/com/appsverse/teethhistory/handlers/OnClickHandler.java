@@ -32,7 +32,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 public class OnClickHandler {
 
@@ -44,6 +45,9 @@ public class OnClickHandler {
             Log.d(TAG, "Clicked on submenu item id: " + item.getItemId() + " name: " + item.getTitle());
 
             switch (item.getItemId()) {
+                case R.id.share_database_menu_item:
+                    shareDatabase(binding, model);
+                    break;
                 case R.id.activity_main_settings_menu_item:
                     break;
                 case R.id.create_new_user_menu_item:
@@ -65,6 +69,21 @@ public class OnClickHandler {
             }
             return false;
         });
+    }
+
+    private void shareDatabase(ActivityMainBinding binding, MainActivityViewModel model) {
+        //model.getDatabaseInJson(binding);
+
+        //todo save json to file and send file
+
+        model.copyJsonToRealm(model.getDatabaseInJson(binding));
+
+        /*Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        //intent.putExtra(Intent.EXTRA_TEXT, model.getDatabaseInJson(binding));
+        intent.putExtra(Intent.EXTRA_STREAM, model.getDatabaseInJson(binding));
+        intent.setType("text/plain");
+        binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Поделиться"));*/
     }
 
     private void createNewUserActivityStart(ActivityMainBinding binding) {

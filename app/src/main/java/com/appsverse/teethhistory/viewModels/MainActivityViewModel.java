@@ -9,9 +9,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.data.Tooth;
+import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -350,6 +356,58 @@ public class MainActivityViewModel extends ViewModel {
         } else if (!toothModel.isBabyTooth()) {
             toothModel.setBabyTooth(false);
         }
+    }
+
+    public String getDatabaseInJson(ActivityMainBinding binding) {
+        //UserModel userModel = realm.where(UserModel.class).equalTo("id", binding.getUser().getId()).findFirst();
+        List<UserModel> userModels = realm.where(UserModel.class).findAll();
+        String json = new Gson().toJson(realm.copyFromRealm(userModels));
+        //Log.d(TAG, "Json:\n" + json);
+        //Log.d(TAG, "Json size: " + json);
+        return "{\"userModels\":"+json+"}";
+    }
+
+    public void copyJsonToRealm(String databaseInJson) {
+        try {
+            JSONObject jsonObject = new JSONObject(databaseInJson);
+
+            JSONArray jsonArray = jsonObject.getJSONArray("userModels");
+
+            int current_id = realm.where(UserModel.class).max("id").intValue();
+
+            for(int i=0; i < jsonArray.length();i++){
+                setPrimaryKey(jsonArray,i, current_id);
+                current_id++;
+            }
+            realm.beginTransaction();
+
+            realm.createAllFromJson(UserModel.class, jsonArray);
+            realm.commitTransaction();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setPrimaryKey(JSONArray jsonArray, int i, int current_id) {
+        try {
+            JSONObject arrayItem = jsonArray.getJSONObject(i);
+
+
+            Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
+
+            int next_id;
+
+           // if (current_id == 0) {
+          //      next_id = 0;
+           // } else {
+                next_id = current_id + 1;
+           // }
+
+            arrayItem.put("id", String.valueOf(next_id));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

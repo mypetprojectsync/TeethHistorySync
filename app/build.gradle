@@ -16,6 +16,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -51,4 +52,6 @@ dependencies {
 
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava_version"
+
+    implementation "com.google.code.gson:gson:$gson_version"
 }
