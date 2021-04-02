@@ -367,24 +367,28 @@ public class MainActivityViewModel extends ViewModel {
         return "{\"userModels\":"+json+"}";
     }
 
+
+
     public void copyJsonToRealm(String databaseInJson) {
-        try {
-            JSONObject jsonObject = new JSONObject(databaseInJson);
+        if (databaseInJson.length()>0) {
+            try {
+                JSONObject jsonObject = new JSONObject(databaseInJson);
 
-            JSONArray jsonArray = jsonObject.getJSONArray("userModels");
+                JSONArray jsonArray = jsonObject.getJSONArray("userModels");
 
-            int current_id = realm.where(UserModel.class).max("id").intValue();
+                int current_id = realm.where(UserModel.class).max("id").intValue();
 
-            for(int i=0; i < jsonArray.length();i++){
-                setPrimaryKey(jsonArray,i, current_id);
-                current_id++;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    setPrimaryKey(jsonArray, i, current_id);
+                    current_id++;
+                }
+                realm.beginTransaction();
+
+                realm.createAllFromJson(UserModel.class, jsonArray);
+                realm.commitTransaction();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            realm.beginTransaction();
-
-            realm.createAllFromJson(UserModel.class, jsonArray);
-            realm.commitTransaction();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

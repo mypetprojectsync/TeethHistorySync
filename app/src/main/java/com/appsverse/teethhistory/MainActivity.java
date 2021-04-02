@@ -1,5 +1,9 @@
 package com.appsverse.teethhistory;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -7,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,6 +31,14 @@ import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +50,53 @@ public class MainActivity extends AppCompatActivity {
     MainActivityViewData mainActivityViewData;
 
     public int user_id;
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    // Handle the returned Uri
+                    if (uri != null) {
+                        Log.d(TAG, "uri: " + uri);
+                        File file = new File(uri.getPath());
+                        if (file.exists()) {
+                            FileInputStream fin = null;
+                            try {
+                                fin = new FileInputStream(file);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            String ret = "";
+                            try {
+                                ret = convertStreamToString(fin);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            //Make sure you close all streams.
+                            try {
+                                fin.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            Log.d(TAG,ret);
+
+                            model.copyJsonToRealm(ret);
+                        }
+                    }
+                }
+            });
+
+    public String convertStreamToString(InputStream is) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
+    }
 
     //todo добавить проверку на существование user_id в базе, если нет, то загружать первого юзера
     @Override
@@ -84,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             binding.setViewData(mainActivityViewData);
 
             OnClickHandler handler = new OnClickHandler();
-            handler.onMainActivityClick(binding, model);
+            handler.onMainActivityClick(binding, model, mGetContent);
 
 
             if (model.isEditUsernameDialogActive()) {
@@ -188,5 +248,14 @@ public class MainActivity extends AppCompatActivity {
             model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
             model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
         }
+
+        //todo clear cash after deleting app
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult");
+        if (data != null) Log.d(TAG, data.toString());
     }
 }

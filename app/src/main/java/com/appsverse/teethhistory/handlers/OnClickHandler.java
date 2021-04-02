@@ -1,5 +1,6 @@
 package com.appsverse.teethhistory.handlers;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
@@ -7,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -18,6 +21,11 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
 import com.appsverse.teethhistory.CreateNewUserActivity;
@@ -30,9 +38,18 @@ import com.appsverse.teethhistory.repository.UserModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
+import static androidx.core.content.ContextCompat.getNoBackupFilesDir;
 import static androidx.core.content.ContextCompat.startActivity;
 
 public class OnClickHandler {
@@ -40,13 +57,17 @@ public class OnClickHandler {
     final String TAG = "myLogs";
 
     @SuppressLint("NonConstantResourceId")
-    public void onMainActivityClick(ActivityMainBinding binding, MainActivityViewModel model) {
+    public void onMainActivityClick(ActivityMainBinding binding, MainActivityViewModel model, ActivityResultLauncher<String> mGetContent) {
         binding.toolbar.setOnMenuItemClickListener(item -> {
             Log.d(TAG, "Clicked on submenu item id: " + item.getItemId() + " name: " + item.getTitle());
 
             switch (item.getItemId()) {
                 case R.id.share_database_menu_item:
                     shareDatabase(binding, model);
+                    break;
+                case R.id.import_menu_item:
+                    verifyStoragePermissions((MainActivity) binding.getRoot().getContext(), mGetContent);
+
                     break;
                 case R.id.activity_main_settings_menu_item:
                     break;
@@ -71,19 +92,62 @@ public class OnClickHandler {
         });
     }
 
+    public void verifyStoragePermissions(Activity activity, ActivityResultLauncher<String> mGetContent) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            String[] PERMISSIONS_STORAGE = {
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    1
+            );
+        } else {
+            //todo! bug in toolbar menu (choose user) when file imported
+            importFile(mGetContent);
+        }
+    }
+
+    private void importFile(ActivityResultLauncher<String> mGetContent) {
+        mGetContent.launch("text/*");
+    }
+
+
+
     private void shareDatabase(ActivityMainBinding binding, MainActivityViewModel model) {
-        //model.getDatabaseInJson(binding);
 
-        //todo save json to file and send file
 
-        model.copyJsonToRealm(model.getDatabaseInJson(binding));
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new OutputStreamWriter(
+                            binding.getRoot().getContext().openFileOutput("fileForShare.txt", Context.MODE_PRIVATE)));
+            bufferedWriter.write(model.getDatabaseInJson(binding));
+            bufferedWriter.close();
 
-        /*Intent intent = new Intent();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File tempFile = new File(binding.getRoot().getContext().getFilesDir(),"fileForShare.txt");
+        Uri uri = FileProvider.getUriForFile(binding.getRoot().getContext(),"com.appsverse.teethhistory.fileprovider",tempFile);
+
+        Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        //intent.putExtra(Intent.EXTRA_TEXT, model.getDatabaseInJson(binding));
-        intent.putExtra(Intent.EXTRA_STREAM, model.getDatabaseInJson(binding));
-        intent.setType("text/plain");
-        binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Поделиться"));*/
+intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
+        intent.setType("text/*");
+
+        binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Поделиться"));
+
     }
 
     private void createNewUserActivityStart(ActivityMainBinding binding) {

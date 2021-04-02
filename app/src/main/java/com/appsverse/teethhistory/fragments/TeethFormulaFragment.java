@@ -141,9 +141,11 @@ public class TeethFormulaFragment extends Fragment {
                 ImageView toothPositionIV = new ImageView(this.getContext());
                 toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
 
-                String toothNumber = "ic_11";
+                String toothNumber = "ic_"+toothModels.get(i).getPosition();
                 int id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
                 toothPositionIV.setImageResource(id);
+                //toothPositionIV.setBackgroundColor(ContextCompat.getColor(this.getContext(),R.color.purple_700));
+                toothPositionIV.setAdjustViewBounds(true);
                 //toothPositionIV.setImageResource(R.drawable.ic_11);
 
                 toothIV.setAdjustViewBounds(true);
