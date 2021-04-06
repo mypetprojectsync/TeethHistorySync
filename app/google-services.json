@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "37905071507",
+    "project_id": "teethhistory",
+    "storage_bucket": "teethhistory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37905071507:android:79ba1c12f7690110fa7c66",
+        "android_client_info": {
+          "package_name": "com.appsverse.teethhistory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37905071507-4o9kc6snsp1cv8rf4q1a3ftvsletg6q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA9oB3gRkAoH35jvIBE-SbaBwsBtRVArI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37905071507-4o9kc6snsp1cv8rf4q1a3ftvsletg6q4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,6 +29,9 @@ import com.appsverse.teethhistory.handlers.OnClickHandler;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.BufferedReader;
@@ -98,12 +101,13 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+    private AdView mAdView;
+
     //todo добавить проверку на существование user_id в базе, если нет, то загружать первого юзера
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPreferences.getInt("chosen_user_id", -1);
@@ -119,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
+
+            mAdView = binding.adView;
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
 
             User user = new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth());
             binding.setUser(user);
