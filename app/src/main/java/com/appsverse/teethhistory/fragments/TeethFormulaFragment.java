@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Slide;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import com.appsverse.teethhistory.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
@@ -97,6 +101,8 @@ public class TeethFormulaFragment extends Fragment {
 
             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
             binding.setTooth(tooth);
+
+            //todo hide teeth layout when recyclerview scroll down and show whe scroll up
 
             int counter = 0;
             for (int i = 0; i < 16; i++) {
@@ -307,9 +313,11 @@ public class TeethFormulaFragment extends Fragment {
                     if (!binding.floatingActionButton.isShown())
                         binding.floatingActionButton.show();
                 }
+
             }
         });
     }
+
 
     private void setVisibilities() {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {

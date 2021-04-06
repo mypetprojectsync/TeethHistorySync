@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
 
+            //todo close ads banner when activity paused() or destroy()
             mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
