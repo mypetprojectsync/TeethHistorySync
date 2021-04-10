@@ -2,10 +2,12 @@ package com.appsverse.teethhistory.viewModels;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -250,5 +252,27 @@ public class EditEventViewModel extends ViewModel {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void addNewPhotoUri(MainActivity activity, Event event, Uri photoUri) {
+
+        ToothModel toothModel = getToothModel(activity);
+        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
+        RealmList<String> uriRealmList = eventModel.getPhotosUri();
+        realm.beginTransaction();
+        uriRealmList.add(photoUri.toString());
+        realm.commitTransaction();
+    }
+
+    public List<String> getPhotosUri(MainActivity activity, Event event) {
+
+        ToothModel toothModel = getToothModel(activity);
+        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
+
+        if (eventModel != null) {
+            return eventModel.getPhotosUri();
+        }
+
+        return new ArrayList<>();
     }
 }

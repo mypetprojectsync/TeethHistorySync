@@ -1,5 +1,7 @@
 package com.appsverse.teethhistory.repository;
 
+import android.net.Uri;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class EventModel extends RealmObject {
     private String action;
     private int guarantee;
     private String notes;
+    private RealmList<String> photosUri;
 
     //private List<String> actions;
 private RealmList<String> actions;
@@ -75,6 +78,14 @@ private RealmList<String> actions;
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public RealmList<String> getPhotosUri() {
+        return photosUri;
+    }
+
+    public void setPhotosUri(RealmList<String> photosUri) {
+        this.photosUri = photosUri;
     }
 
     /*public List<String> getActions() {

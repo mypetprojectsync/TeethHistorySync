@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             //todo close ads banner when activity paused() or destroy()
             mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
+
 
             User user = new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth());
             binding.setUser(user);
@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             } else {
+                mAdView.loadAd(adRequest);
 
                 if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
                     mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
