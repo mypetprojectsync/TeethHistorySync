@@ -1,8 +1,10 @@
 package com.appsverse.teethhistory.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -55,6 +58,7 @@ public class EditEventFragment extends Fragment {
 
     File directory;
 
+    Uri nonpublicUri;
     Uri publicPhotoUri;
 
     ActivityResultLauncher<Uri> mGetContent = registerForActivityResult(new ActivityResultContracts.TakePicture(),
@@ -64,17 +68,33 @@ public class EditEventFragment extends Fragment {
                     if (result) {
 
                         model.addNewPhotoUri(((MainActivity) getActivity()), event, publicPhotoUri);
-                        getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, publicPhotoUri));
+                        //getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, publicPhotoUri));
+                        //getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, publicPhotoUri));
+
+                        MediaScannerConnection.scanFile(getContext(), new String[]{publicPhotoUri.toString()}, null, null);
+
                         Log.d(TAG, "event photos Uri: " + model.getPhotosUri(((MainActivity) getActivity()), event));
 
                         refillPhotosUriList();
 
                     } else {
-                        Log.d(TAG, "photo canceled");
+                        Log.d(TAG, "mGetContent photo canceled");
                     }
                 }
             });
 
+ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Log.d(TAG, "mGetGalleryContent result: " + data.toString());
+                }
+            }
+        }
+);
 
     RecyclerView recyclerView;
     EventPhotosListAdapter eventPhotosListAdapter;
@@ -153,10 +173,28 @@ public class EditEventFragment extends Fragment {
             }
         });
 
+        binding.galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                galleryButtonClicked();
+            }
+        });
+        createDirectory();
         createEventPhotosList();
         // refillPhotosUriList();
 
         return binding.getRoot();
+    }
+
+    private void galleryButtonClicked() {
+        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+       // intent.setType("image/*");
+       // intent.setAction(Intent.ACTION_GET_CONTENT);
+        //intent.setAction(Intent.ACTION_PICK);
+       /* intent.setAction(Intent.ACTION_VIEW);
+        intent.setType("image/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+        mGetGalleryContent.launch(intent);
     }
 
     private void refillPhotosUriList() {
@@ -196,7 +234,10 @@ public class EditEventFragment extends Fragment {
     public void verifyCameraPermissions() {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.CAMERA);
+        int permission2 = ActivityCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+        Log.d(TAG, "permission CAMERA: " + permission);
+        Log.d(TAG, "permission WRITE STORAGE: " + permission2);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             String[] PERMISSIONS_STORAGE = {
@@ -208,34 +249,49 @@ public class EditEventFragment extends Fragment {
                     PERMISSIONS_STORAGE,
                     1
             );
+
+        } else if (permission2 != PackageManager.PERMISSION_GRANTED) {
+                String[] WRITE_PERMISSIONS_STORAGE = {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                };
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(
+                        ((MainActivity) binding.getRoot().getContext()),
+                        WRITE_PERMISSIONS_STORAGE,
+                        1
+                );
+
         } else {
 
-            mGetContent.launch(generateFileUri());
+            nonpublicUri = generateFileUri();
+            mGetContent.launch(nonpublicUri);
         }
     }
 
     private void createDirectory() {
-        /*directory = new File(
+        directory = new File(
                 Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
                // binding.getRoot().getContext().getFilesDir(),
-                "TeethHistory");*/
-        directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                "TeethHistory");
+        //directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!directory.exists())
+            Log.d(TAG, "create directory");
             directory.mkdirs();
     }
 
     private Uri generateFileUri() {
 
-        createDirectory();
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File file = new File(directory.getAbsolutePath(), "/IMG_" + timeStamp + ".jpg");
 
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File file = new File(directory.getAbsolutePath(), "IMG_" + timeStamp + ".jpg");
+
+        //Uri imageUri = FileProvider.getUriForFile(this.getContext(), "com.appsverse.teethhistory.fileprovider", file);
         Uri imageUri = FileProvider.getUriForFile(this.getContext(), "com.appsverse.teethhistory.fileprovider", file);
 
         publicPhotoUri = Uri.parse(file.getAbsolutePath());
         Log.d(TAG, "publicUri: " + publicPhotoUri);
-
+        Log.d(TAG, "nonpublicUri: " + imageUri);
         return imageUri;
     }
 

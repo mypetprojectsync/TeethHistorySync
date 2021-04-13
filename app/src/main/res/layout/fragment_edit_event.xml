@@ -22,31 +22,30 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_event_date_TIL"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Date"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:hint="Date">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_event_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:text="@{@string/format(event.date)}"
                 android:cursorVisible="false"
                 android:focusable="false"
-                />
+                android:inputType="date"
+                android:text="@{@string/format(event.date)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_event_action_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="Choose action"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:hint="Choose action">
 
             <com.appsverse.teethhistory.ExposedDropdownMenu
                 android:id="@+id/edit_toothActionACTV"
@@ -58,22 +57,22 @@
         <!-- todo reduce size of TextInputEditText, add error message when > 3 symbols -->
         <!-- todo maybe textview better -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="Guarantee in months"
             app:counterEnabled="true"
             app:counterMaxLength="3"
-            app:errorEnabled="true"
-            android:layout_marginTop="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editGuaranteeTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={`` + event.guarantee}"
                 android:inputType="number"
-                android:labelFor="@id/guarantee_slider"/>
+                android:labelFor="@id/guarantee_slider"
+                android:text="@={`` + event.guarantee}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,34 +80,46 @@
             android:id="@+id/edit_guarantee_slider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:valueFrom="0"
-            android:valueTo="120"
             android:stepSize="1"
-            android:value="@{event.guarantee}"/>
+            android:value="@{event.guarantee}"
+            android:valueFrom="0"
+            android:valueTo="120" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="Notes"
             app:counterEnabled="true"
             app:counterMaxLength="1000"
-            app:errorEnabled="true"
-            android:layout_marginTop="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNotesTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={event.notes}"/>
+                android:text="@={event.notes}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/photoButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_a_photo_24"/>
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/photoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_add_a_photo_24" />
+
+            <ImageButton
+                android:id="@+id/galleryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_collections_24" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_event_photos"
@@ -121,8 +132,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/fragment_edit_event_cancel_button"
