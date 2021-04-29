@@ -127,8 +127,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:scrollbars="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
+            />
+       <!-- app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:gravity="center"
-                android:onClick="@{() -> model.onClickCancelButton(context)}"
+                android:onClick="@{() -> model.onClickCancelButton(event, context)}"
                 android:text="@string/cancel" />
 
             <Button

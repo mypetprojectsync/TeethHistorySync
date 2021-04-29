@@ -27,9 +27,10 @@ public class Event extends BaseObservable {
     private String notes;
 
     private List<String> actions;
+    private List<String> photosUri;
 
     //public Event(int id, Date date, String action, int guarantee, String notes){
-    public Event(int id, int position, Date date, String action, int guarantee, String notes, List<String> actions){
+    public Event(int id, int position, Date date, String action, int guarantee, String notes, List<String> actions, List<String> photosUri){
         setId(id);
         setPosition(position);
         setDate(date);
@@ -37,6 +38,7 @@ public class Event extends BaseObservable {
         setGuarantee(guarantee);
         setNotes(notes);
         setActions(actions);
+        setPhotosUri(photosUri);
     }
     @Bindable
     public int getId() {
@@ -113,11 +115,23 @@ public class Event extends BaseObservable {
         notifyPropertyChanged(BR.actions);
     }
 
+    @Bindable
     public int getPosition() {
         return position;
     }
 
     public void setPosition(int position) {
         this.position = position;
+        notifyPropertyChanged(BR.position);
+    }
+
+    @Bindable
+    public List<String> getPhotosUri() {
+        return photosUri;
+    }
+
+    public void setPhotosUri(List<String> photosUri) {
+        this.photosUri = photosUri;
+        notifyPropertyChanged(BR.photosUri);
     }
 }

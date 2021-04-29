@@ -2,14 +2,20 @@ package com.appsverse.teethhistory.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,14 +27,25 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.view.ActionMode;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.OnContextClickListener;
+import androidx.recyclerview.selection.OnDragInitiatedListener;
+import androidx.recyclerview.selection.OnItemActivatedListener;
+import androidx.recyclerview.selection.SelectionPredicates;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
+import com.appsverse.teethhistory.adapters.PhotoItemDetailsLookup;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.adapters.EventPhotosListAdapter;
 import com.appsverse.teethhistory.data.Event;
@@ -43,8 +60,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EditEventFragment extends Fragment {
 
@@ -54,12 +73,18 @@ public class EditEventFragment extends Fragment {
 
     Event event;
     ArrayAdapter adapter;
+    //todo rename list below
     List<String> list = new ArrayList<>();
 
     File directory;
 
-    Uri nonpublicUri;
     Uri publicPhotoUri;
+
+    RecyclerView recyclerView;
+    EventPhotosListAdapter eventPhotosListAdapter;
+    List<String> photosUri = new ArrayList<>();
+    private ActionMode actionMode;
+    SelectionTracker<Long> tracker;
 
     ActivityResultLauncher<Uri> mGetContent = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             new ActivityResultCallback<Boolean>() {
@@ -67,38 +92,49 @@ public class EditEventFragment extends Fragment {
                 public void onActivityResult(Boolean result) {
                     if (result) {
 
-                        model.addNewPhotoUri(((MainActivity) getActivity()), event, publicPhotoUri);
-                        //getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, publicPhotoUri));
-                        //getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, publicPhotoUri));
+                        photosUri.add(publicPhotoUri.toString());
+                        event.setPhotosUri(photosUri);
 
                         MediaScannerConnection.scanFile(getContext(), new String[]{publicPhotoUri.toString()}, null, null);
 
-                        Log.d(TAG, "event photos Uri: " + model.getPhotosUri(((MainActivity) getActivity()), event));
-
-                        refillPhotosUriList();
-
+                        eventPhotosListAdapter.notifyDataSetChanged();
                     } else {
                         Log.d(TAG, "mGetContent photo canceled");
                     }
                 }
             });
 
-ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    Log.d(TAG, "mGetGalleryContent result: " + data.toString());
+    ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+
+                        Uri uri = result.getData().getData();
+
+                        photosUri.add(getPathFromUri(uri));
+                        event.setPhotosUri(photosUri);
+                        eventPhotosListAdapter.notifyDataSetChanged();
+                    }
                 }
             }
-        }
-);
+    );
 
-    RecyclerView recyclerView;
-    EventPhotosListAdapter eventPhotosListAdapter;
-    List<String> photosUri = new ArrayList<>();
+    ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+        @Override
+        public void onActivityResult(Map<String, Boolean> result) {
+            Log.d(TAG, "permission result: " + result);
+
+            final boolean[] permission = {true};
+
+            result.forEach((k, v) -> {
+                if (!v) permission[0] = false;
+            });
+
+            if (permission[0]) mGetContent.launch(generateFileUri());
+        }
+    });
 
     @Nullable
     @Override
@@ -108,8 +144,7 @@ ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
         model = new ViewModelProvider(this).get(EditEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions());
-        //event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -164,8 +199,6 @@ ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
         });
         setTextActionACTV();
 
-//        createDirectory();
-
         binding.photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,112 +214,310 @@ ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
         });
         createDirectory();
         createEventPhotosList();
-        // refillPhotosUriList();
 
         return binding.getRoot();
     }
 
+    private String getPathFromUri(Uri data) {
+        Context context = getContext();
+        Cursor cursor = context.getContentResolver().query(data, null, null, null, null);
+        cursor.moveToFirst();
+        String image_id = cursor.getString(0);
+        image_id = image_id.substring(image_id.lastIndexOf(":") + 1);
+        cursor.close();
+        cursor = context.getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
+    }
+
+    private void verifyCameraPermissions() {
+
+        if (android.os.Build.VERSION.SDK_INT <= 29) {
+            permissionLauncher.launch(new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            });
+        } else {
+            permissionLauncher.launch(new String[]{
+                    Manifest.permission.CAMERA
+            });
+        }
+    }
+
     private void galleryButtonClicked() {
-        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-       // intent.setType("image/*");
-       // intent.setAction(Intent.ACTION_GET_CONTENT);
-        //intent.setAction(Intent.ACTION_PICK);
-       /* intent.setAction(Intent.ACTION_VIEW);
-        intent.setType("image/*");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mGetGalleryContent.launch(intent);
     }
 
     private void refillPhotosUriList() {
-        photosUri.clear();
-        if (model.getPhotosUri(((MainActivity) getActivity()), event).size() > 0) {
-            photosUri.addAll(model.getPhotosUri(((MainActivity) getActivity()), event));
-            Log.d(TAG, "refillPhotosUriList() photosUri: " + photosUri);
-        }
-        eventPhotosListAdapter.notifyDataSetChanged();
+        Log.d(TAG, "refillPhotosUriList()");
 
+        photosUri.clear();
+
+        if (event.getPhotosUri().size() > 0) {
+            photosUri.addAll(event.getPhotosUri());
+        }
+
+        eventPhotosListAdapter.notifyDataSetChanged();
     }
 
     private void createEventPhotosList() {
 
         recyclerView = binding.listEventPhotos;
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+       // recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        eventPhotosListAdapter = new EventPhotosListAdapter(this.getContext(), photosUri);
+        eventPhotosListAdapter = new EventPhotosListAdapter(photosUri);
+        eventPhotosListAdapter.setHasStableIds(true);
+//todo implement selection
 
-        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
+        /*eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.d(TAG, "photo uri: " + photosUri.get(position));
 
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
-                startActivity(intent);
+               // boolean hasSelected = hasSelected();
+
+              //  if (recyclerView.findViewHolderForAdapterPosition(position).itemView.isSelected()) {
+                //    recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(false);
+               // } else if (hasSelected) {
+               //     recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(true);
+             //   } else {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+                    startActivity(intent);
+              //  }
+               // checkSelection();
+               // eventPhotosListAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
+
+        /*eventPhotosListAdapter.setLongClickListener(new EventPhotosListAdapter.ItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+                Log.d(TAG, "eventPhotosListAdapter.setLongClickListener started");
+
+                if (actionMode == null)
+                    actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
+
+                //recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(true);
+               // checkSelection();
+                eventPhotosListAdapter.notifyDataSetChanged();
+            }
+        });*/
 
         recyclerView.setAdapter(eventPhotosListAdapter);
 
-        //todo implement click listener
+        /*tracker = new SelectionTracker.Builder<Long>(
+                "photosSelection",
+                recyclerView,
+                new StableIdKeyProvider(recyclerView),
+                new PhotoItemDetailsLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+        ).build();*/
+
+        tracker = new SelectionTracker.Builder<Long>(
+                "photosSelection",
+                recyclerView,
+               // new PhotoItemKeyProvider(1,photosUri),
+                new StableIdKeyProvider(recyclerView),
+                new PhotoItemDetailsLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        /*).withOnItemActivatedListener(new OnItemActivatedListener<Long>() {
+            @Override
+            public boolean onItemActivated(@NonNull ItemDetailsLookup.ItemDetails<Long> item, @NonNull MotionEvent e) {
+                Log.d(TAG, "Selected ItemId: " + item.toString());
+                return true;
+            }
+        }
+        ).withOnDragInitiatedListener(new OnDragInitiatedListener() {
+            @Override
+            public boolean onDragInitiated(@NonNull MotionEvent e) {
+                Log.d(TAG, "onDragInitiated");
+                return true;
+            }
+        }
+        ).withOnContextClickListener(new OnContextClickListener() {
+            @Override
+            public boolean onContextClick(@NonNull MotionEvent e) {
+                Log.d(TAG, "onContextClick");
+                return true;
+            }
+        }*/
+        ).withSelectionPredicate(SelectionPredicates.createSelectAnything()
+        ).build();
+
+        eventPhotosListAdapter.setSelectionTracker(tracker);
+
+
+        tracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
+            @Override
+            public void onItemStateChanged(@NonNull Long key, boolean selected) {
+                Log.d(TAG, "onItemStateChanged() started");
+/*                if (!tracker.hasSelection()) {
+                    eventPhotosListAdapter.notifyDataSetChanged();
+                }*/
+
+                super.onItemStateChanged(key, selected);
+            }
+
+            @Override
+            public void onSelectionRefresh() {
+                super.onSelectionRefresh();
+            }
+
+            @Override
+            public void onSelectionChanged() {
+                super.onSelectionChanged();
+
+                Log.d(TAG, "onSelectionChanged() started");
+
+                if (tracker.hasSelection() && actionMode == null) {
+                    actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
+                    //((MainActivity) getActivity()).getSupportActionBar().setTitle(String.valueOf(tracker.getSelection().size()));
+                    actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                    Log.d(TAG, "tracker.hasSelection() tracker.getSelection(): " + tracker.getSelection());
+
+                    //todo разобраться с getSelection, можно ли получить position последнего выбранного элемента для eventPhotosListAdapter.notifyItemChanged(position)
+                } else if (!tracker.hasSelection() && actionMode != null) {
+                    actionMode.finish();
+                    actionMode = null;
+                } else {
+                    //((MainActivity) getActivity()).getSupportActionBar().setTitle(String.valueOf(tracker.getSelection().size()));
+                    if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                    Log.d(TAG, "!tracker.hasSelection() tracker.getSelection(): " + tracker.getSelection());
+                    //eventPhotosListAdapter.notifyDataSetChanged();
+
+                }
+
+
+
+                //
+                //eventPhotosListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onSelectionRestored() {
+                super.onSelectionRestored();
+            }
+        });
+
+
     }
 
-    public void verifyCameraPermissions() {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.CAMERA);
-        int permission2 = ActivityCompat.checkSelfPermission(binding.getRoot().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.action_bar_photo_selected, menu);
+            return true;
+        }
 
-        Log.d(TAG, "permission CAMERA: " + permission);
-        Log.d(TAG, "permission WRITE STORAGE: " + permission2);
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            String[] PERMISSIONS_STORAGE = {
-                    Manifest.permission.CAMERA,
-            };
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    ((MainActivity) binding.getRoot().getContext()),
-                    PERMISSIONS_STORAGE,
-                    1
-            );
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Log.d(TAG, "Action menu clicked: " + item.getTitle());
+            //Log.d(TAG, "Action menu : tracker.getSelection() " + tracker.getSelection().iterator());
 
-        } else if (permission2 != PackageManager.PERMISSION_GRANTED) {
-                String[] WRITE_PERMISSIONS_STORAGE = {
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                };
-                // We don't have permission so prompt the user
-                ActivityCompat.requestPermissions(
-                        ((MainActivity) binding.getRoot().getContext()),
-                        WRITE_PERMISSIONS_STORAGE,
-                        1
-                );
+           // List<Integer> selectedItemsIndex = getSelectedItemsIndexList();
+           // Log.d(TAG, "Action menu, selectedItemsIndex: " + selectedItemsIndex.toString());
+           model.deleteSelectedPhotos(getSelectedItemsIndexList(), getContext(), event);
 
-        } else {
+            /*for (Iterator<String> iterator = photosUri.listIterator(); iterator.hasNext(); ) {
+                String a = iterator.next();
+                Log.d(TAG, "check file: " + a);
+                File file = new File(a);
+                //if (selectedItemsIndexList.contains(photosUri.indexOf(a))) {
+                if (!file.exists()) {
+                    iterator.remove();
+                    Log.d(TAG, a + " was deleted");
+                } else {
+                    Log.d(TAG, a + " exist");
+                }
+            }*/
 
-            nonpublicUri = generateFileUri();
-            mGetContent.launch(nonpublicUri);
+
+
+            photosUri.clear();
+            photosUri.addAll(model.getPhotosUri());
+            Log.d(TAG, "onActionItemClicked photosUri after removing items: " + photosUri.toString());
+
+            actionMode.finish();
+           // actionMode = null;
+
+
+
+            eventPhotosListAdapter.notifyDataSetChanged();
+
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            tracker.clearSelection();
+        }
+    };
+
+    private List<Integer> getSelectedItemsIndexList() {
+        List<Integer> selectedIdList = new ArrayList<>();
+        Iterator<Long> iterator = tracker.getSelection().iterator();
+
+        while (iterator.hasNext()) {
+            long selectedId = iterator.next();
+            selectedIdList.add((int) selectedId);
+        }
+        return selectedIdList;
+    }
+
+    private boolean hasSelected() {
+        for (int i = 0; i < eventPhotosListAdapter.getItemCount(); i++) {
+            if (recyclerView.findViewHolderForAdapterPosition(i).itemView.isSelected()) return true;
+        }
+        return false;
+    }
+
+    private void checkSelection() {
+        for (int i = 0; i < eventPhotosListAdapter.getItemCount(); i++) {
+            Log.d(TAG, "hasSelected() i: " + i + ", adapter position: " + eventPhotosListAdapter.getItemCount());
+            Log.d(TAG, "Is item #" + i + " selected? " + recyclerView.findViewHolderForAdapterPosition(i).itemView.isSelected());
         }
     }
+
 
     private void createDirectory() {
         directory = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-               // binding.getRoot().getContext().getFilesDir(),
                 "TeethHistory");
-        //directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        if (!directory.exists())
-            Log.d(TAG, "create directory");
-            directory.mkdirs();
+
+        if (!directory.exists()) directory.mkdirs();
     }
 
     private Uri generateFileUri() {
 
+        MainActivity mainActivity = (MainActivity) getActivity();
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File file = new File(directory.getAbsolutePath(), "IMG_" + timeStamp + ".jpg");
 
-        //Uri imageUri = FileProvider.getUriForFile(this.getContext(), "com.appsverse.teethhistory.fileprovider", file);
+        File file = new File(directory.getAbsolutePath(),
+                mainActivity.binding.getUser().getName() + "_"
+                        + mainActivity.binding.getModel().getChosenToothID() + "_"
+                        + event.getId() + "_"
+                        + timeStamp + ".jpg");
+
         Uri imageUri = FileProvider.getUriForFile(this.getContext(), "com.appsverse.teethhistory.fileprovider", file);
 
         publicPhotoUri = Uri.parse(file.getAbsolutePath());
@@ -336,6 +567,7 @@ ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
         this.event.setGuarantee(event.getGuarantee());
         this.event.setNotes(event.getNotes());
         this.event.setActions(event.getActions());
+        this.event.setPhotosUri(event.getPhotosUri());
 
         binding.editToothActionACTV.setText(event.getAction(), false);
         setTextActionACTV();
@@ -354,5 +586,6 @@ ActivityResultLauncher<Intent> mGetGalleryContent = registerForActivityResult(
         model.setGuarantee(event.getGuarantee());
         model.setNotes(event.getNotes());
         model.setActions(event.getActions());
+        model.setPhotosUri(event.getPhotosUri());
     }
 }

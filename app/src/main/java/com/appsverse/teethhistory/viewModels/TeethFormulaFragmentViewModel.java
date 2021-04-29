@@ -3,6 +3,7 @@ package com.appsverse.teethhistory.viewModels;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -200,5 +201,28 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         } else if (!toothModel.isBabyTooth()) {
             toothModel.setBabyTooth(false);
         }
+    }
+
+    public ToothModel getToothModel(MainActivity mainActivity){
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
+        MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
+        Log.d(TAG, "getToothModel() user_id: " + mainActivity.user_id + " chosen_tooth: " + mainActivityViewModel.getChosenToothID());
+        return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
+    }
+
+
+
+    public Tooth setTooth(Tooth tooth, MainActivity activity) {
+        ToothModel toothModel = getToothModel(activity);
+
+        tooth.setId(toothModel.getId());
+        tooth.setPosition(toothModel.getPosition());
+        tooth.setExist(toothModel.isExist());
+        tooth.setBabyTooth(toothModel.isBabyTooth());
+        tooth.setPermanentTooth(toothModel.isPermanentTooth());
+        tooth.setFilling(toothModel.isFilling());
+        tooth.setImplant(toothModel.isImplant());
+
+        return tooth;
     }
 }

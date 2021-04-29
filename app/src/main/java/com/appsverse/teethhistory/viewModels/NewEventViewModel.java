@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
@@ -16,11 +18,13 @@ import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
+import com.appsverse.teethhistory.fragments.NewEventFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,6 +50,7 @@ public class NewEventViewModel extends ViewModel {
     private String notes;
 
     private List<String> actions;
+    private List<String> photosUri;
 
     public int getId() {
         return id;
@@ -87,51 +92,68 @@ public class NewEventViewModel extends ViewModel {
         this.notes = notes;
     }
 
-    public void onClickCancelButton(Context context) {
+    public void onClickCancelButton(Event event, Context context) {
+
+        List<String> photosUri = event.getPhotosUri();
+
+        if (photosUri != null) {
+            for (int i = 1; i <= photosUri.size(); i++) {
+                File file = new File(photosUri.get(photosUri.size() - i));
+                boolean isDeleted = file.delete();
+                if (isDeleted) {
+                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " deleted");
+                    MediaScannerConnection.scanFile(context, new String[]{photosUri.get(photosUri.size() - i)}, null, null);
+                } else {
+                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " doesn't deleted");
+                }
+            }
+        }
+        if (photosUri != null) {
+            photosUri.clear();
+        }
 
         setVisibilities(context);
+
+        MainActivity mainActivity = (MainActivity) context;
+
+        //todo перенести во фрагмент
+
+        setDate(new Date());
+        setGuarantee(12);
+        setNotes("");
+        setPhotosUri(photosUri);
+
+        event.setDate(getDate());
+        event.setGuarantee(getGuarantee());
+        event.setNotes(getNotes());
+
+        mainActivity.binding.getNewEventFragment().setTextActionACTV();
+        mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
+        mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
     }
 
     public void onClickSaveButton(Event event, Context context) {
-//        Number current_id = realm.where(EventModel.class).max("id");
-
-        //Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
-
-        //todo sort events by date
 
         int next_id = 0;
         int current_id = 0;
-        //String idWithoutToothId = "";
+
         //todo как работает для разных пользователей? ВРОДЕ НЕ ДОЛЖНО
         MainActivity mainActivity = (MainActivity) context;
-        UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
-        MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
-        Log.d(TAG, "mainActivityViewModel.getChosenToothID(): " + mainActivityViewModel.getChosenToothID());
-        ToothModel toothModel = userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
 
-        if (toothModel.getEventModels().size()>0) current_id = toothModel.getEventModels().where().max("id").intValue();
+        ToothModel toothModel = getToothModel(mainActivity);
 
-        //List<EventModel> eventModels = toothModel.getEventModels();
-        //int current_id = 0;
-        /*for (EventModel i : toothModel.getEventModels()) {
-            if (current_id < i.getId()%1000) current_id = i.getId()%1000;
-        }*/
+        if (toothModel.getEventModels().size() > 0)
+            current_id = toothModel.getEventModels().where().max("id").intValue();
 
         if (current_id == 0) {
-           // next_id = Integer.parseInt("1"+Integer.toString(toothModel.getPosition()));
             next_id = 1;
         } else {
-            //next_id = current_id + 1;
-            //idWithoutToothId = String.format("%03d", next_id);
-            //idWithoutToothId = String.format("%03d", next_id);
-            //next_id = Integer.parseInt(current_id%100+Integer.toString(toothModel.getPosition()));
-            next_id = current_id+1;
+            next_id = current_id + 1;
         }
 
         realm.beginTransaction();
         EventModel eventModel = realm.createEmbeddedObject(EventModel.class, toothModel, "eventModels");
         eventModel.setId(next_id);
-        //eventModel.setPosition(event.getPosition());
         eventModel.setPosition(toothModel.getPosition());
         eventModel.setDate(event.getDate());
         eventModel.setAction(event.getAction());
@@ -142,7 +164,16 @@ public class NewEventViewModel extends ViewModel {
         realmList.addAll(event.getActions());
         eventModel.setActions(realmList);
 
-        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+        RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
+        //todo crash if no photos
+        int amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
+
+        for (int i = 0; i < amountOfNewPhotos; i++) {
+            Log.d(TAG, "eventModelRealmList.add");
+            eventModelRealmList.add(event.getPhotosUri().get(eventModelRealmList.size()));
+        }
+
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         if (eventModelsResults.get(0).getId() == eventModel.getId()) {
             switch (event.getAction()) {
@@ -181,8 +212,7 @@ public class NewEventViewModel extends ViewModel {
         realm.commitTransaction();
 
 
-
-       //RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+        //RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
 
         Log.d(TAG, "*******************************************************");
         for (EventModel i : eventModelsResults) {
@@ -194,6 +224,7 @@ public class NewEventViewModel extends ViewModel {
         setVisibilities(context);
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
+        mainActivity.binding.getTeethFormulaFragment().setTooth();
 
         Log.d(TAG, "Tooth condition: " + toothModel.toString());
         for (EventModel i : toothModel.getEventModels()) {
@@ -218,7 +249,7 @@ public class NewEventViewModel extends ViewModel {
         mainActivity.binding.getEventsListFragment().refillEventsList();
     }
 
-    public ToothModel getToothModel(MainActivity mainActivity){
+    public ToothModel getToothModel(MainActivity mainActivity) {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
         Log.d(TAG, "getToothModel() user_id: " + mainActivity.user_id + " chosen_tooth: " + mainActivityViewModel.getChosenToothID());
@@ -239,5 +270,24 @@ public class NewEventViewModel extends ViewModel {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public List<String> getPhotosUri() {
+        return photosUri;
+    }
+
+    public void setPhotosUri(List<String> photosUri) {
+        this.photosUri = photosUri;
+    }
+
+    public String newEventViewModelState(){
+        return " id: " + getId()
+                + ", position: " + getPosition()
+                + ", date: " + getDate()
+                + ", action: " + getAction()
+                + ", guarantee: " + getGuarantee()
+                + ", notes: " + getNotes()
+                + ", actions: " + getActions()
+                + ", photosUri: " + getPhotosUri();
     }
 }

@@ -1,19 +1,14 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="60dp"
-    android:height="130dp"
+    android:height="96dp"
     android:viewportWidth="60"
-    android:viewportHeight="130">
+    android:viewportHeight="96">
   <path
-      android:pathData="M0,77.8l11,-0.3c0,0 7.8,-10 20.4,-10.2c0,0 9,-1.8 19.1,9.1l9.5,0.1V0H0V77.8z"
-      android:fillColor="#E6332A"/>
+      android:pathData="M-0.1,0h60.1v54h-60.1z"
+      android:fillColor="#F37372"/>
   <path
-      android:pathData="M0.4,114c0,0 -1.5,-23.4 11.1,-37.2c4.5,-4.9 10.9,-8.6 19.8,-9.5c0,0 17.2,-2.4 23.8,18.7s4.3,36.5 2.8,39.4c-1.5,2.9 -17,5.1 -24.9,3.9C26.2,128.4 2,123.1 0.4,114z"
+      android:pathData="M0.7,72c0,0 -4,-24.1 8.5,-37.8c4.5,-4.9 11.8,-10.1 20.7,-11c0,0 19.3,-1.1 25.8,20s3.4,37.4 1.9,40.3c-1.5,2.9 -16.8,5.1 -24.6,3.9C26.2,86.4 2.2,81.1 0.7,72z"
       android:strokeWidth="0.5"
       android:fillColor="@color/selected_tooth"
-      android:strokeColor="#000000"/>
-  <path
-      android:pathData="M50.5,76.4c-7.8,-10.7 -19.1,-9.1 -19.1,-9.1c-8.9,0.9 -15.3,4.6 -19.8,9.5c-0.2,0.2 -0.4,0.4 -0.6,0.7c0.7,-11.3 2.1,-30.3 4.4,-47C18.9,4.5 30,0.7 30,0.7C36.7,1.7 43.1,26 44.2,33.1C45,38.1 48.4,62.2 50.5,76.4z"
-      android:strokeWidth="0.5"
-      android:fillColor="#00000000"
       android:strokeColor="#000000"/>
 </vector>

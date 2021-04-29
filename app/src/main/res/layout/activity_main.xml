@@ -44,23 +44,18 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar_main_activity"
-            app:title='@{TextUtils.isEmpty(user.name) ? @string/app_name : user.name}' />
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--android:layout_marginTop="?attr/actionBarSize"-->
     <LinearLayout
         android:id="@+id/main_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:layout_marginTop="?attr/actionBarSize"
+
 
         android:orientation="horizontal"
         android:layout_above="@+id/adView">

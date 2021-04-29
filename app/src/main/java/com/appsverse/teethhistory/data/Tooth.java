@@ -14,6 +14,8 @@ public class Tooth extends BaseObservable {
     private boolean isExist = true;
     private boolean isBabyTooth = false;
     private boolean isPermanentTooth = true;
+    private boolean isFilling = false;
+    private boolean isImplant = false;
 
    // public Tooth(int id) {
     public Tooth(int id, int position) {
@@ -22,6 +24,8 @@ public class Tooth extends BaseObservable {
         setExist(true);
         setBabyTooth(false);
         setPermanentTooth(true);
+        setFilling(false);
+        setImplant(false);
     }
 
     @Bindable
@@ -73,5 +77,35 @@ public class Tooth extends BaseObservable {
     public void setPermanentTooth(boolean isPermanentTooth) {
         this.isPermanentTooth = isPermanentTooth;
         notifyPropertyChanged(BR.permanentTooth);
+    }
+
+    @Bindable
+    public boolean isFilling() {
+        return isFilling;
+    }
+
+    public void setFilling(boolean filling) {
+        this.isFilling = filling;
+        notifyPropertyChanged(BR.filling);
+    }
+
+    @Bindable
+    public boolean isImplant() {
+        return isImplant;
+    }
+
+    public void setImplant(boolean implant) {
+        this.isImplant = implant;
+        notifyPropertyChanged(BR.implant);
+    }
+
+    public String getToothState(){
+        return " id: " + getId()
+                + ", position: " + getPosition()
+                + ", isExist: " + isExist()
+                + ", isBabyTooth: " + isBabyTooth()
+                + ", isPermanentTooth: " + isPermanentTooth()
+                + ", isFilled" + isFilling()
+                + ", isImplant" + isImplant();
     }
 }

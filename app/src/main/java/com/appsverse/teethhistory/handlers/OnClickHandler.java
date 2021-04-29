@@ -57,9 +57,11 @@ public class OnClickHandler {
     final String TAG = "myLogs";
 
     @SuppressLint("NonConstantResourceId")
-    public void onMainActivityClick(ActivityMainBinding binding, MainActivityViewModel model, ActivityResultLauncher<String> mGetContent) {
-        binding.toolbar.setOnMenuItemClickListener(item -> {
+    public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
+       // binding.toolbar.setOnMenuItemClickListener(item -> {
             Log.d(TAG, "Clicked on submenu item id: " + item.getItemId() + " name: " + item.getTitle());
+
+        MainActivityViewModel model = binding.getModel();
 
             switch (item.getItemId()) {
                 case R.id.share_database_menu_item:
@@ -88,8 +90,8 @@ public class OnClickHandler {
                     restartMainActivity(binding);
                     break;
             }
-            return false;
-        });
+          //  return false;
+       // });
     }
 
     public void verifyStoragePermissions(Activity activity, ActivityResultLauncher<String> mGetContent) {
@@ -151,14 +153,14 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
     }
 
     private void createNewUserActivityStart(ActivityMainBinding binding) {
-        Intent intent = new Intent(binding.toolbar.getContext(), CreateNewUserActivity.class);
-        binding.toolbar.getContext().startActivity(intent);
+        Intent intent = new Intent(binding.getRoot().getContext(), CreateNewUserActivity.class);
+        binding.getRoot().getContext().startActivity(intent);
     }
 
     //todo найти способ добыть контекст из menuitem
     public void createChooseUserSubmenu(MenuItem item, MainActivityViewModel model, ActivityMainBinding binding) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.toolbar.getContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.getRoot().getContext());
         int user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
         SubMenu subMenu = item.getSubMenu();
@@ -170,16 +172,16 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
     }
 
     private void setChosenUser(MenuItem item, ActivityMainBinding binding) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.toolbar.getContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.getRoot().getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("chosen_user_id", item.getItemId());
         editor.apply();
     }
 
     private void restartMainActivity(ActivityMainBinding binding) {
-        Intent intent = new Intent(binding.toolbar.getContext(), MainActivity.class);
+        Intent intent = new Intent(binding.getRoot().getContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        binding.toolbar.getContext().startActivity(intent);
+        binding.getRoot().getContext().startActivity(intent);
     }
 
 
@@ -239,7 +241,10 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
             }
         });
 
-        dialog.setPositiveButton(R.string.ok, (dialog1, which) -> model.updateUsername(user.getName()));
+        dialog.setPositiveButton(R.string.ok, (dialog1, which) -> {
+            model.updateUsername(user.getName());
+            ((MainActivity) activity).getSupportActionBar().setTitle(model.getUsername());
+        });
 
         dialog.setNegativeButton(R.string.cancel, (dialog12, which) -> {});
 
@@ -287,6 +292,8 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
 
                 model.setMainActivityViewModelData(newUserID[0]);
                 binding.setUser(new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth()));
+
+                ((MainActivity) binding.getRoot().getContext()).getSupportActionBar().setTitle(model.getUsername());
 
             } else {
                 newUserID[0] = -1;

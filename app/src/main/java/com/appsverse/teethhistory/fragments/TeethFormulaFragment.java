@@ -2,39 +2,25 @@ package com.appsverse.teethhistory.fragments;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Slide;
-import androidx.transition.Transition;
-import androidx.transition.TransitionManager;
 
 import com.appsverse.teethhistory.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
@@ -69,6 +55,7 @@ public class TeethFormulaFragment extends Fragment {
     List<EventModel> eventModels = new ArrayList<>();
 
     Tooth tooth;
+    List<ToothModel> toothModels;
 
     int orientation;
 
@@ -95,7 +82,7 @@ public class TeethFormulaFragment extends Fragment {
 
             createEventsList();
 
-            List<ToothModel> toothModels = model.getAllToothModelsForUser(user_id);
+            toothModels = model.getAllToothModelsForUser(user_id);
 
             int chosenToothID = model.getChosenToothID();
 
@@ -104,74 +91,15 @@ public class TeethFormulaFragment extends Fragment {
 
             //todo hide teeth layout when recyclerview scroll down and show whe scroll up
 
-            int counter = 0;
+
             for (int i = 0; i < 16; i++) {
-                TextView toothPositionTV = new TextView(this.getContext());
-                toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
-                toothPositionTV.setId(toothModels.get(i).getId());
-
-                if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
-
-                LinearLayout linearLayout = new LinearLayout(this.getContext());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-
-                linearLayout.setLayoutParams(params);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-                toothPositionTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toothClicked((TextView) v, tooth);
-                    }
-                });
-
-                ImageView toothIV = new ImageView(this.getContext());
-                toothIV.setScaleType(ImageView.ScaleType.FIT_START);
-
-                if (counter == 0) {
-                    toothIV.setImageResource(R.drawable.ic_11g);
-                    counter++;
-                } else if (counter == 1) {
-                    toothIV.setImageResource(R.drawable.ic_12g);
-                    counter++;
-                } else{
-                    toothIV.setImageResource(R.drawable.ic_13g);
-                    counter = 0;
-                }
-
-                toothIV.setAdjustViewBounds(true);
-                toothIV.setTag(i);
-
-
-
-                ImageView toothPositionIV = new ImageView(this.getContext());
-                toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
-
-                String toothNumber = "ic_"+toothModels.get(i).getPosition();
-                int id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
-                toothPositionIV.setImageResource(id);
-                //toothPositionIV.setBackgroundColor(ContextCompat.getColor(this.getContext(),R.color.purple_700));
-                toothPositionIV.setAdjustViewBounds(true);
-                //toothPositionIV.setImageResource(R.drawable.ic_11);
-
-                toothIV.setAdjustViewBounds(true);
-
-                linearLayout.addView(toothIV);
-                linearLayout.addView(toothPositionIV);
-
-                toothIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "tooth clicked position: " + toothModels.get((int) v.getTag()).getPosition());
-                            ((ImageView) v).setImageResource(R.drawable.ic_11g_selected);
-                    }
-                });
-
-                binding.llTeethFirstRow.addView(linearLayout);
+                binding.llTeethFirstRow.addView(setToothImage(i));
+                //setToothImage(i);
             }
 
             for (int i = 16; i < 32; i++) {
-                TextView toothPositionTV = new TextView(this.getContext());
+                binding.llTeethSecondRow.addView(setToothImage(i));
+                /*TextView toothPositionTV = new TextView(this.getContext());
                 toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
                 toothPositionTV.setId(toothModels.get(i).getId());
 
@@ -189,7 +117,7 @@ public class TeethFormulaFragment extends Fragment {
                 });
 
 
-                binding.llTeethSecondRow.addView(toothPositionTV);
+                binding.llTeethSecondRow.addView(toothPositionTV);*/
             }
 
         }
@@ -216,18 +144,102 @@ public class TeethFormulaFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void toothClicked(TextView textView, Tooth tooth) {
+    private LinearLayout setToothImage(int i) {
 
-        if (tooth.getId() > 0)
-            ((TextView) binding.getRoot().findViewById(tooth.getId())).setTextSize(14.0f);
+        LinearLayout linearLayout = new LinearLayout(this.getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-        tooth.setId(textView.getId());
-        tooth.setPosition(parseInt(textView.getText().toString()));
+        linearLayout.setLayoutParams(params);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        textView.setTextSize(30.0f);
+        ImageView toothIV = getToothImageView(i);
+        int id;
 
-        activityMainBinding.getModel().setChosenToothID(tooth.getId());
+        ImageView toothPositionIV = new ImageView(this.getContext());
+        toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
 
+        String toothNumber = "ic_" + toothModels.get(i).getPosition();
+        id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
+        toothPositionIV.setImageResource(id);
+        toothPositionIV.setAdjustViewBounds(true);
+
+        linearLayout.addView(toothIV);
+        linearLayout.addView(toothPositionIV);
+
+        toothIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toothClicked(v);
+            }
+        });
+
+        return linearLayout;
+    }
+
+    private ImageView getToothImageView(int i) {
+        ImageView toothIV = new ImageView(this.getContext());
+        toothIV.setScaleType(ImageView.ScaleType.FIT_START);
+
+
+        if (toothModels.get(i).isExist()) {
+            String toothIcon = "ic_" + toothModels.get(i).getPosition() + chooseToothState(i);
+            int id = getResources().getIdentifier(toothIcon, "drawable", getActivity().getPackageName());
+            toothIV.setImageResource(id);
+        } else {
+            setGum(toothIV,toothModels.get(i).getId());
+        }
+        toothIV.setAdjustViewBounds(true);
+        toothIV.setTag(toothModels.get(i).getPosition());
+        toothIV.setId(toothModels.get(i).getId());
+        return toothIV;
+    }
+
+    private String chooseToothState() {
+
+        if (tooth.isImplant()) {
+            return "i";
+        } else if (tooth.isFilling()) {
+            return "f";
+        } else {
+            return "g";
+        }
+
+    }
+
+    private String chooseToothState(int i) {
+        if (toothModels.get(i).isImplant()) {
+            return "i";
+        } else if (toothModels.get(i).isFilling()) {
+            return "f";
+        } else {
+            return "g";
+        }
+    }
+
+    private void toothClicked(View view) {
+
+        if (activityMainBinding.getModel().getChosenToothID() > 0) {
+            Log.d(TAG, "previous tooth condition: " + tooth.getToothState());
+
+            ImageView toothIV = (ImageView) binding.getRoot().findViewById(tooth.getPosition());
+
+            if (tooth.isExist()) {
+                String toothDrawableId = "ic_" + tooth.getPosition() + chooseToothState();
+                int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
+                toothIV.setImageResource(id);
+            } else {
+                setGum(toothIV, tooth.getId());
+            }
+        }
+
+        activityMainBinding.getModel().setChosenToothID((Integer) view.getTag());
+        setTooth();
+
+        String toothDrawableId = "ic_" + tooth.getPosition() + "g_selected";
+        int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
+        ((ImageView) binding.getRoot().findViewById(tooth.getPosition())).setImageResource(id);
+
+        Log.d(TAG, "chosen tooth condition: " + tooth.getToothState());
 
         if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
             mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
@@ -240,6 +252,18 @@ public class TeethFormulaFragment extends Fragment {
             mainActivity.binding.getEventsListFragment().refillEventsList();
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
+    }
+
+    private void setGum(ImageView toothIV, int toothId) {
+        if (toothId > 10 && toothId < 30) {
+            toothIV.setImageResource(R.drawable.ic_gum_top);
+        } else {
+            toothIV.setImageResource(R.drawable.ic_gum_bottom);
+        }
+    }
+
+    public void setTooth() {
+        tooth = model.setTooth(tooth, ((MainActivity) getActivity()));
     }
 
     private void createEventsList() {

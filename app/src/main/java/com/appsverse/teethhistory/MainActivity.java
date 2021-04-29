@@ -3,9 +3,13 @@ package com.appsverse.teethhistory;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -15,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.appsverse.teethhistory.data.MainActivityViewData;
@@ -152,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
                     model.getEventsListFragmentVisibilityData());
             binding.setViewData(mainActivityViewData);
 
-            OnClickHandler handler = new OnClickHandler();
-            handler.onMainActivityClick(binding, model, mGetContent);
-
-
             if (model.isEditUsernameDialogActive()) {
                 OnClickHandler onClickHandler = new OnClickHandler();
                 onClickHandler.createEditUserNameDialog(binding);
@@ -191,6 +193,20 @@ public class MainActivity extends AppCompatActivity {
                 mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
             }
 
+           // Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar);
+
+        // setSupportActionBar(toolbar);
+
+            /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Log.d(TAG, "clicked item:" + item.getTitle());
+                    return false;
+                }
+            });*/
+
+            getSupportActionBar().setTitle(user.getName());
+
         } else {
             Log.d(TAG, "model.isUserExist() == false");
             Intent intent = new Intent(this, CreateNewUserActivity.class);
@@ -198,6 +214,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    //todo implement toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        OnClickHandler handler = new OnClickHandler();
+        handler.onMainActivityClick(binding, mGetContent, item);
+
+        return super.onOptionsItemSelected(item);
     }
 
     public ActivityMainBinding getBinding() {
@@ -238,6 +270,25 @@ public class MainActivity extends AppCompatActivity {
        // model.setToothState();
     }
 
+    public void resetNewEventFragment(){
+        NewEventFragment newEventFragment = binding.getNewEventFragment();
+
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        ft.replace(R.id.new_event_fragment, newEventFragment);
+
+        ft.commit();
+        /*ft.remove(newEventFragment);
+        ft.commit();
+
+        newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
+        binding.setNewEventFragment(newEventFragment);
+
+        final FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+        ft2.attach(newEventFragment);
+*/       // ft2.commit();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -265,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult");
-        if (data != null) Log.d(TAG, data.toString());
+        //Log.d(TAG, "onActivityResult");
+        //if (data != null) Log.d(TAG, data.toString());
     }
 }
