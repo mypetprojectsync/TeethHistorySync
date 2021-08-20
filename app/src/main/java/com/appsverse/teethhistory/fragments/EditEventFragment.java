@@ -11,15 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -32,22 +31,17 @@ import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.selection.ItemDetailsLookup;
-import androidx.recyclerview.selection.OnContextClickListener;
-import androidx.recyclerview.selection.OnDragInitiatedListener;
-import androidx.recyclerview.selection.OnItemActivatedListener;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StableIdKeyProvider;
 import androidx.recyclerview.selection.StorageStrategy;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.adapters.PhotoItemDetailsLookup;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.adapters.EventPhotosListAdapter;
+import com.appsverse.teethhistory.adapters.PhotoItemDetailsLookup;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.databinding.FragmentEditEventBinding;
 import com.appsverse.teethhistory.repository.EventModel;
@@ -111,11 +105,15 @@ public class EditEventFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
 
-                        Uri uri = result.getData().getData();
+                        String uri = getPathFromUri(result.getData().getData());
 
-                        photosUri.add(getPathFromUri(uri));
-                        event.setPhotosUri(photosUri);
-                        eventPhotosListAdapter.notifyDataSetChanged();
+                        if (photosUri.contains(uri)) {
+                            Toast.makeText(getActivity().getBaseContext(), R.string.photo_already_added, Toast.LENGTH_SHORT).show();
+                        } else {
+                            photosUri.add(uri);
+                            event.setPhotosUri(photosUri);
+                            eventPhotosListAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -356,7 +354,7 @@ public class EditEventFragment extends Fragment {
         ).withSelectionPredicate(SelectionPredicates.createSelectAnything()
         ).build();
 
-        eventPhotosListAdapter.setSelectionTracker(tracker);
+
 
 
         tracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
@@ -400,7 +398,6 @@ public class EditEventFragment extends Fragment {
                 }
 
 
-
                 //
                 //eventPhotosListAdapter.notifyDataSetChanged();
             }
@@ -410,7 +407,7 @@ public class EditEventFragment extends Fragment {
                 super.onSelectionRestored();
             }
         });
-
+        eventPhotosListAdapter.setSelectionTracker(tracker);
 
     }
 
@@ -429,35 +426,25 @@ public class EditEventFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             Log.d(TAG, "Action menu clicked: " + item.getTitle());
-            //Log.d(TAG, "Action menu : tracker.getSelection() " + tracker.getSelection().iterator());
 
-           // List<Integer> selectedItemsIndex = getSelectedItemsIndexList();
-           // Log.d(TAG, "Action menu, selectedItemsIndex: " + selectedItemsIndex.toString());
-           model.deleteSelectedPhotos(getSelectedItemsIndexList(), getContext(), event);
+            //model.deleteSelectedPhotos(getSelectedItemsIndexList(), getContext(), event);
+           // model.deleteSelectedPhotosWithoutSavingChanges(getSelectedItemsIndexList(), getContext(), event);
 
-            /*for (Iterator<String> iterator = photosUri.listIterator(); iterator.hasNext(); ) {
-                String a = iterator.next();
-                Log.d(TAG, "check file: " + a);
-                File file = new File(a);
-                //if (selectedItemsIndexList.contains(photosUri.indexOf(a))) {
-                if (!file.exists()) {
-                    iterator.remove();
-                    Log.d(TAG, a + " was deleted");
-                } else {
-                    Log.d(TAG, a + " exist");
+            //photosUri.clear();
+//todo удалять список во viewmodel?
+                List<String> listForRemove = new ArrayList<>();
+
+                for (int i : getSelectedItemsIndexList()) {
+                    listForRemove.add(photosUri.get(i));
                 }
-            }*/
+
+                photosUri.removeAll(listForRemove);
 
 
-
-            photosUri.clear();
-            photosUri.addAll(model.getPhotosUri());
+            //photosUri.addAll(model.getPhotosUri());
             Log.d(TAG, "onActionItemClicked photosUri after removing items: " + photosUri.toString());
 
             actionMode.finish();
-           // actionMode = null;
-
-
 
             eventPhotosListAdapter.notifyDataSetChanged();
 

@@ -40,7 +40,9 @@ public class EditEventViewModel extends ViewModel {
     private String notes;
     private List<String> actions;
     private List<String> photosUri;
-
+    private List<String> photosListForDeleting;
+    //git test
+    //git test2
 
     public int getId() {
         return id;
@@ -198,7 +200,6 @@ public class EditEventViewModel extends ViewModel {
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
         //todo optimize this method
-        //toothModel.setFilling(false);
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
         if (toothModel.isBabyTooth()) {
@@ -311,13 +312,10 @@ public class EditEventViewModel extends ViewModel {
     public void deleteSelectedPhotos(List<Integer> selectedItemsIndexList, Context context, Event event) {
 
         Log.d(TAG, "deleteSelectedPhotos selectedItemsIndexList: " + selectedItemsIndexList.toString());
-        //Log.d(TAG, "deleteSelectedPhotos photosUri: " + photosUri.toString());
 
         //todo сделать как в onClickCancelButton, photos uri надо брать из event и eventModel
 
         for (int i = 0; i < selectedItemsIndexList.size(); i++) {
-
-           // Log.d(TAG, "deleteSelectedPhotos removed Uri: " + photosUri.get(selectedItemsIndexList.get(i)));
 
             File file = new File(event.getPhotosUri().get(selectedItemsIndexList.get(i)));
             boolean isDeleted = file.delete();
@@ -355,7 +353,43 @@ public class EditEventViewModel extends ViewModel {
 
         Log.d(TAG, "deleteSelectedPhotos event.getPhotosUri() after removing items: " + event.getPhotosUri().toString());
 
-        getPhotosUri().clear();
+       if (getPhotosUri() != null) getPhotosUri().clear();
+        setPhotosUri(event.getPhotosUri());
+
+        eventModelRealmList.clear();
+        eventModelRealmList.addAll(event.getPhotosUri());
+
+        eventModel.setPhotosUri(eventModelRealmList);
+
+        realm.commitTransaction();
+    }
+
+    public void deleteSelectedPhotosWithoutSavingChanges(List<Integer> selectedItemsIndexList, Context context, Event event) {
+        Log.d(TAG, "deleteSelectedPhotosWithoutSavingChanges selectedItemsIndexList: " + selectedItemsIndexList.toString());
+
+
+        ToothModel toothModel = getToothModel((MainActivity) context);
+        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
+
+        realm.beginTransaction();
+        RealmList<String>  eventModelRealmList = eventModel.getPhotosUri();
+
+        for (Iterator<String> iterator = event.getPhotosUri().iterator(); iterator.hasNext(); ) {
+            String a = iterator.next();
+            Log.d(TAG, "check file: " + a);
+            File file = new File(a);
+            //if (selectedItemsIndexList.contains(photosUri.indexOf(a))) {
+            if (!file.exists()) {
+                iterator.remove();
+                Log.d(TAG, a + " was deleted");
+            } else {
+                Log.d(TAG, a + " exist");
+            }
+        }
+
+        Log.d(TAG, "deleteSelectedPhotos event.getPhotosUri() after removing items: " + event.getPhotosUri().toString());
+
+        if (getPhotosUri() != null) getPhotosUri().clear();
         setPhotosUri(event.getPhotosUri());
 
         eventModelRealmList.clear();

@@ -29,7 +29,7 @@
         android:value="ca-app-pub-7134894477715486~7052396222"/>
 
         <activity android:name=".MainActivity" >
-            <!--android:configChanges="orientation|screenSize"-->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +53,7 @@
                 android:resource="@xml/filepaths">
             </meta-data>
         </provider>
-        <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+
     </application>
 
 </manifest>

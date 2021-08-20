@@ -18,6 +18,7 @@
     <string name="triple_dots">⋮</string>
     <string name="share">Share</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="photo_already_added">The photo has already added</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="permanent_tooth_actions">

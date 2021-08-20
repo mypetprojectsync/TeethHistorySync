@@ -165,8 +165,9 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setActions(realmList);
 
         RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
-        //todo crash if no photos
-        int amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
+
+        int amountOfNewPhotos = 0;
+        if (event.getPhotosUri() != null) amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
 
         for (int i = 0; i < amountOfNewPhotos; i++) {
             Log.d(TAG, "eventModelRealmList.add");

@@ -28,8 +28,8 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
     private final List<String> photosUri;
     //private final LayoutInflater inflater;
 
-    //private EventPhotosListAdapter.ItemClickListener itemClickListener;
-   // private EventPhotosListAdapter.ItemLongClickListener itemLongClickListener;
+    private EventPhotosListAdapter.ItemClickListener itemClickListener;
+    private EventPhotosListAdapter.ItemLongClickListener itemLongClickListener;
 
     SelectionTracker tracker;
 
@@ -101,6 +101,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
         @Override
         public ItemDetailsLookup.ItemDetails getItemDetails(){
             Log.d("myLogs", "ItemDetailsLookup.ItemDetails getItemDetails()");
+            Log.d("myLogs", "BindingAdapterPosition(): " + getBindingAdapterPosition());
             return new PhotoItemDetail(getBindingAdapterPosition(), (long) getBindingAdapterPosition() );
         }
 
@@ -142,16 +143,16 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
         this.itemClickListener = itemClickListener;
     }*/
 
-/*    public  void setLongClickListener(EventPhotosListAdapter.ItemLongClickListener itemLongClickListener){
+    public  void setLongClickListener(EventPhotosListAdapter.ItemLongClickListener itemLongClickListener){
         this.itemLongClickListener = itemLongClickListener;
-    }*/
+    }
 
-    /*public interface ItemClickListener {
+    public interface ItemClickListener {
         void onItemClick(View view, int position);
-    }*/
+    }
 
- /*   public interface ItemLongClickListener {
+   public interface ItemLongClickListener {
         void onItemLongClick(View view, int position);
-    }*/
+    }
 
 }
