@@ -42,6 +42,7 @@ public class EditEventViewModel extends ViewModel {
     private List<String> photosUri;
     private List<String> photosListForDeleting;
     //git test
+    //git test2
 
     public int getId() {
         return id;
