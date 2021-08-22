@@ -41,9 +41,6 @@ public class EditEventViewModel extends ViewModel {
     private List<String> actions;
     private List<String> photosUri;
     private List<String> photosListForDeleting;
-    //git test
-    //git test2
-    //git test 3
 
     public int getId() {
         return id;
@@ -85,6 +82,42 @@ public class EditEventViewModel extends ViewModel {
         this.notes = notes;
     }
 
+    public void setPhotosListForDeleting(List<String> photosListForDeleting) {
+        this.photosListForDeleting = photosListForDeleting;
+    }
+
+    public void addListToPhotosListToDeleting(List<String> photosListForDeleting){
+        this.photosListForDeleting.addAll(photosListForDeleting);
+    }
+
+    public List<String> getPhotosListForDeleting() {
+        return photosListForDeleting;
+    }
+
+    public List<String> getPhotosUri() {
+        return photosUri;
+    }
+
+    public void setPhotosUri(List<String> photosUri) {
+        this.photosUri = photosUri;
+    }
+
+    public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public void onClickCancelButton(Event event, Context context) {
 
         ToothModel toothModel = getToothModel((MainActivity) context);
@@ -105,6 +138,8 @@ public class EditEventViewModel extends ViewModel {
             }
         }
 
+        if (photosListForDeleting != null) photosListForDeleting.clear();
+
         setVisibilities(context);
     }
 
@@ -117,6 +152,8 @@ public class EditEventViewModel extends ViewModel {
 
         String oldEventModelAction = eventModel.getAction();
         String newEventModelAction = event.getAction();
+
+
 
         realm.beginTransaction();
 
@@ -187,6 +224,8 @@ public class EditEventViewModel extends ViewModel {
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getTeethFormulaFragment().setTooth();
+
+        if (photosListForDeleting != null) photosListForDeleting.clear();
     }
 
     private void returnToothModelStateIfLastActionGrown(ToothModel toothModel) {
@@ -263,22 +302,6 @@ public class EditEventViewModel extends ViewModel {
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
-    public List<String> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<String> actions) {
-        this.actions = actions;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public void addNewPhotoUri(MainActivity activity, Event event, String photoUri) {
 
         //todo!!! делать в EditEventFragment (возможно добавить в event) список uri и сохранять в реалм только по нажатию save button
@@ -300,14 +323,6 @@ public class EditEventViewModel extends ViewModel {
         }
 
         return new ArrayList<>();
-    }
-
-    public List<String> getPhotosUri() {
-        return photosUri;
-    }
-
-    public void setPhotosUri(List<String> photosUri) {
-        this.photosUri = photosUri;
     }
 
     public void deleteSelectedPhotos(List<Integer> selectedItemsIndexList, Context context, Event event) {
@@ -400,4 +415,5 @@ public class EditEventViewModel extends ViewModel {
 
         realm.commitTransaction();
     }
+
 }

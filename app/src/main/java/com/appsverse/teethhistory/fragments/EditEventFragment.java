@@ -180,7 +180,7 @@ public class EditEventFragment extends Fragment {
 
         binding.editToothActionACTV.setAdapter(adapter);
 
-        //todo list lost when chosen some item and orientation changed. Issue https://github.com/material-components/material-components-android/issues/1464
+        //todo list lost when chosen some item and orientation changed. Issue
         // binding.editToothActionACTV.setText(event.getAction(),false);
         binding.editToothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -210,8 +210,11 @@ public class EditEventFragment extends Fragment {
                 galleryButtonClicked();
             }
         });
+
         createDirectory();
         createEventPhotosList();
+
+        refillPhotosUriList();
 
         return binding.getRoot();
     }
@@ -254,11 +257,16 @@ public class EditEventFragment extends Fragment {
 
         photosUri.clear();
 
-        if (event.getPhotosUri().size() > 0) {
+        if (event.getPhotosUri() != null) {
             photosUri.addAll(event.getPhotosUri());
         }
 
-        eventPhotosListAdapter.notifyDataSetChanged();
+        if (model.getPhotosListForDeleting() != null) {
+            Log.d(TAG,  "if (model.getPhotosListForDeleting() != null) { : " + model.getPhotosListForDeleting());
+            photosUri.removeAll(model.getPhotosListForDeleting());
+        }
+
+        if (!photosUri.isEmpty()) eventPhotosListAdapter.notifyDataSetChanged();
     }
 
     private void createEventPhotosList() {
@@ -268,94 +276,20 @@ public class EditEventFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-       // recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         eventPhotosListAdapter = new EventPhotosListAdapter(photosUri);
         eventPhotosListAdapter.setHasStableIds(true);
-//todo implement selection
-
-        /*eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-               // boolean hasSelected = hasSelected();
-
-              //  if (recyclerView.findViewHolderForAdapterPosition(position).itemView.isSelected()) {
-                //    recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(false);
-               // } else if (hasSelected) {
-               //     recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(true);
-             //   } else {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
-                    startActivity(intent);
-              //  }
-               // checkSelection();
-               // eventPhotosListAdapter.notifyDataSetChanged();
-            }
-        });*/
-
-        /*eventPhotosListAdapter.setLongClickListener(new EventPhotosListAdapter.ItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-                Log.d(TAG, "eventPhotosListAdapter.setLongClickListener started");
-
-                if (actionMode == null)
-                    actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
-
-                //recyclerView.findViewHolderForAdapterPosition(position).itemView.setSelected(true);
-               // checkSelection();
-                eventPhotosListAdapter.notifyDataSetChanged();
-            }
-        });*/
 
         recyclerView.setAdapter(eventPhotosListAdapter);
-
-        /*tracker = new SelectionTracker.Builder<Long>(
-                "photosSelection",
-                recyclerView,
-                new StableIdKeyProvider(recyclerView),
-                new PhotoItemDetailsLookup(recyclerView),
-                StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-        ).build();*/
 
         tracker = new SelectionTracker.Builder<Long>(
                 "photosSelection",
                 recyclerView,
-               // new PhotoItemKeyProvider(1,photosUri),
                 new StableIdKeyProvider(recyclerView),
                 new PhotoItemDetailsLookup(recyclerView),
                 StorageStrategy.createLongStorage()
-        /*).withOnItemActivatedListener(new OnItemActivatedListener<Long>() {
-            @Override
-            public boolean onItemActivated(@NonNull ItemDetailsLookup.ItemDetails<Long> item, @NonNull MotionEvent e) {
-                Log.d(TAG, "Selected ItemId: " + item.toString());
-                return true;
-            }
-        }
-        ).withOnDragInitiatedListener(new OnDragInitiatedListener() {
-            @Override
-            public boolean onDragInitiated(@NonNull MotionEvent e) {
-                Log.d(TAG, "onDragInitiated");
-                return true;
-            }
-        }
-        ).withOnContextClickListener(new OnContextClickListener() {
-            @Override
-            public boolean onContextClick(@NonNull MotionEvent e) {
-                Log.d(TAG, "onContextClick");
-                return true;
-            }
-        }*/
         ).withSelectionPredicate(SelectionPredicates.createSelectAnything()
         ).build();
-
-
-
 
         tracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
             @Override
@@ -438,11 +372,14 @@ public class EditEventFragment extends Fragment {
                     listForRemove.add(photosUri.get(i));
                 }
 
+                if (model.getPhotosListForDeleting() == null) {
+                    model.setPhotosListForDeleting(listForRemove);
+                    Log.d(TAG, "model.setPhotosListForDeleting: " + model.getPhotosListForDeleting());
+                } else {
+                    model.addListToPhotosListToDeleting(listForRemove);
+                    Log.d(TAG, "model.addListToPhotosListForDeleting: " + model.getPhotosListForDeleting());
+                }
                 photosUri.removeAll(listForRemove);
-
-
-            //photosUri.addAll(model.getPhotosUri());
-            Log.d(TAG, "onActionItemClicked photosUri after removing items: " + photosUri.toString());
 
             actionMode.finish();
 
@@ -556,6 +493,7 @@ public class EditEventFragment extends Fragment {
         this.event.setActions(event.getActions());
         this.event.setPhotosUri(event.getPhotosUri());
 
+
         binding.editToothActionACTV.setText(event.getAction(), false);
         setTextActionACTV();
 
@@ -574,5 +512,6 @@ public class EditEventFragment extends Fragment {
         model.setNotes(event.getNotes());
         model.setActions(event.getActions());
         model.setPhotosUri(event.getPhotosUri());
+
     }
 }
