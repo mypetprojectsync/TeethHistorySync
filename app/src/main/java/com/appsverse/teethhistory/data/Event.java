@@ -29,7 +29,6 @@ public class Event extends BaseObservable {
     private List<String> actions;
     private List<String> photosUri;
 
-    //public Event(int id, Date date, String action, int guarantee, String notes){
     public Event(int id, int position, Date date, String action, int guarantee, String notes, List<String> actions, List<String> photosUri){
         setId(id);
         setPosition(position);
@@ -39,6 +38,7 @@ public class Event extends BaseObservable {
         setNotes(notes);
         setActions(actions);
         setPhotosUri(photosUri);
+
     }
     @Bindable
     public int getId() {
@@ -134,4 +134,5 @@ public class Event extends BaseObservable {
         this.photosUri = photosUri;
         notifyPropertyChanged(BR.photosUri);
     }
+
 }

@@ -40,7 +40,7 @@ public class EditEventViewModel extends ViewModel {
     private String notes;
     private List<String> actions;
     private List<String> photosUri;
-
+    private List<String> photosListForDeleting;
 
     public int getId() {
         return id;
@@ -82,6 +82,46 @@ public class EditEventViewModel extends ViewModel {
         this.notes = notes;
     }
 
+    public void setPhotosListForDeleting(List<String> photosListForDeleting) {
+        this.photosListForDeleting = photosListForDeleting;
+    }
+
+    public void addListToPhotosListToDeleting(List<String> photosListForDeleting){
+        this.photosListForDeleting.addAll(photosListForDeleting);
+    }
+
+    public void removeItemFromListToPhotosListToDeleting(String uri) {
+        this.photosListForDeleting.remove(uri);
+    }
+
+    public List<String> getPhotosListForDeleting() {
+        return photosListForDeleting;
+    }
+
+    public List<String> getPhotosUri() {
+        return photosUri;
+    }
+
+    public void setPhotosUri(List<String> photosUri) {
+        this.photosUri = photosUri;
+    }
+
+    public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public void onClickCancelButton(Event event, Context context) {
 
         ToothModel toothModel = getToothModel((MainActivity) context);
@@ -102,6 +142,8 @@ public class EditEventViewModel extends ViewModel {
             }
         }
 
+        if (photosListForDeleting != null) photosListForDeleting.clear();
+
         setVisibilities(context);
     }
 
@@ -115,6 +157,11 @@ public class EditEventViewModel extends ViewModel {
         String oldEventModelAction = eventModel.getAction();
         String newEventModelAction = event.getAction();
 
+        List<String> clearList = new ArrayList<>();
+        clearList.addAll(event.getPhotosUri());
+        if (photosListForDeleting != null) clearList.removeAll(photosListForDeleting);
+        event.setPhotosUri(clearList);
+
         realm.beginTransaction();
 
         eventModel.setDate(event.getDate());
@@ -123,12 +170,9 @@ public class EditEventViewModel extends ViewModel {
         eventModel.setNotes(event.getNotes());
 
         RealmList<String>  eventModelRealmList = eventModel.getPhotosUri();
-        int amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
 
-        for (int i = 0; i < amountOfNewPhotos; i++) {
-            Log.d(TAG, "eventModelRealmList.add");
-            eventModelRealmList.add(event.getPhotosUri().get(eventModelRealmList.size()));
-        }
+        eventModelRealmList.deleteAllFromRealm();
+        eventModelRealmList.addAll(event.getPhotosUri());
 
         if (newEventModelAction.equals("Filled") || oldEventModelAction.equals("Filled")) {
             returnToothModelStateIfLastActionFilled(toothModel);
@@ -184,6 +228,13 @@ public class EditEventViewModel extends ViewModel {
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getTeethFormulaFragment().setTooth();
+
+
+
+        if (photosListForDeleting != null) {
+            deleteSelectedPhotos(context, event);
+        }
+
     }
 
     private void returnToothModelStateIfLastActionGrown(ToothModel toothModel) {
@@ -198,7 +249,6 @@ public class EditEventViewModel extends ViewModel {
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
         //todo optimize this method
-        //toothModel.setFilling(false);
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
         if (toothModel.isBabyTooth()) {
@@ -261,108 +311,35 @@ public class EditEventViewModel extends ViewModel {
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
-    public List<String> getActions() {
-        return actions;
-    }
+    public void deleteSelectedPhotos(Context context, Event event) {
 
-    public void setActions(List<String> actions) {
-        this.actions = actions;
-    }
+        //todo check and delete in not main thread?
 
-    public int getPosition() {
-        return position;
-    }
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", ((MainActivity) context).user_id).findFirst();
+        RealmList<ToothModel> toothModels = userModel.getToothModels();
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
+        int coincidenceCounter = 0;
+        for (String uri : photosListForDeleting) {
+        for (ToothModel toothModel : toothModels) {
 
-    public void addNewPhotoUri(MainActivity activity, Event event, String photoUri) {
+            RealmList<EventModel> eventModels = toothModel.getEventModels();
 
-        //todo!!! делать в EditEventFragment (возможно добавить в event) список uri и сохранять в реалм только по нажатию save button
-        ToothModel toothModel = getToothModel(activity);
-        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
-        RealmList<String> uriRealmList = eventModel.getPhotosUri();
-        realm.beginTransaction();
-        uriRealmList.add(photoUri);
-        realm.commitTransaction();
-    }
+            for (EventModel eventModel : eventModels) {
 
-    public List<String> getmPhotosUri(MainActivity activity, Event event) {
-
-        ToothModel toothModel = getToothModel(activity);
-        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
-
-        if (eventModel != null) {
-            return eventModel.getPhotosUri();
+                    if (eventModel.getPhotosUri().contains(uri)) {
+                        coincidenceCounter++;
+                        break;
+                    }
+                }
+            if (coincidenceCounter>1) break;
         }
-
-        return new ArrayList<>();
-    }
-
-    public List<String> getPhotosUri() {
-        return photosUri;
-    }
-
-    public void setPhotosUri(List<String> photosUri) {
-        this.photosUri = photosUri;
-    }
-
-    public void deleteSelectedPhotos(List<Integer> selectedItemsIndexList, Context context, Event event) {
-
-        Log.d(TAG, "deleteSelectedPhotos selectedItemsIndexList: " + selectedItemsIndexList.toString());
-        //Log.d(TAG, "deleteSelectedPhotos photosUri: " + photosUri.toString());
-
-        //todo сделать как в onClickCancelButton, photos uri надо брать из event и eventModel
-
-        for (int i = 0; i < selectedItemsIndexList.size(); i++) {
-
-           // Log.d(TAG, "deleteSelectedPhotos removed Uri: " + photosUri.get(selectedItemsIndexList.get(i)));
-
-            File file = new File(event.getPhotosUri().get(selectedItemsIndexList.get(i)));
-            boolean isDeleted = file.delete();
-            Log.d(TAG, "file deleted: " + isDeleted);
-
-            if (isDeleted) {
-                Log.d(TAG, "file " + event.getPhotosUri().get(selectedItemsIndexList.get(i)) + " deleted");
-            } else {
-                Log.d(TAG, "file " + event.getPhotosUri().get(selectedItemsIndexList.get(i)) + " doesn't deleted");
+            if (coincidenceCounter<2) {
+                File file = new File(uri);
+                boolean isDeleted = file.delete();
+                Log.d(TAG, "file deleted: " + isDeleted + " uri: " + uri);
             }
         }
-
-       /* for (int i = 0; i <= selectedItemsIndexList.size(); i++) {
-            photosUri.remove(selectedItemsIndexList.get(i));
-        }*/
-
-        ToothModel toothModel = getToothModel((MainActivity) context);
-        EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
-
-        realm.beginTransaction();
-        RealmList<String>  eventModelRealmList = eventModel.getPhotosUri();
-
-        for (Iterator<String> iterator = event.getPhotosUri().iterator(); iterator.hasNext(); ) {
-            String a = iterator.next();
-            Log.d(TAG, "check file: " + a);
-            File file = new File(a);
-            //if (selectedItemsIndexList.contains(photosUri.indexOf(a))) {
-            if (!file.exists()) {
-                iterator.remove();
-                Log.d(TAG, a + " was deleted");
-            } else {
-                Log.d(TAG, a + " exist");
-            }
-        }
-
-        Log.d(TAG, "deleteSelectedPhotos event.getPhotosUri() after removing items: " + event.getPhotosUri().toString());
-
-        getPhotosUri().clear();
-        setPhotosUri(event.getPhotosUri());
-
-        eventModelRealmList.clear();
-        eventModelRealmList.addAll(event.getPhotosUri());
-
-        eventModel.setPhotosUri(eventModelRealmList);
-
-        realm.commitTransaction();
+        photosListForDeleting.clear();
     }
+
 }
