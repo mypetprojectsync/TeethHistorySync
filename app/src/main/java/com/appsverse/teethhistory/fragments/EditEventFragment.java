@@ -114,7 +114,7 @@ public class EditEventFragment extends Fragment {
                             event.setPhotosUri(photosUri);
                             eventPhotosListAdapter.notifyDataSetChanged();
 
-                            model.removeItemFromListToPhotosListToDeleting(uri);
+                            if (model.getPhotosListForDeleting() != null) model.removeItemFromListToPhotosListToDeleting(uri);
                         }
                     }
                 }
@@ -385,21 +385,6 @@ public class EditEventFragment extends Fragment {
         }
         return selectedIdList;
     }
-
-    private boolean hasSelected() {
-        for (int i = 0; i < eventPhotosListAdapter.getItemCount(); i++) {
-            if (recyclerView.findViewHolderForAdapterPosition(i).itemView.isSelected()) return true;
-        }
-        return false;
-    }
-
-    private void checkSelection() {
-        for (int i = 0; i < eventPhotosListAdapter.getItemCount(); i++) {
-            Log.d(TAG, "hasSelected() i: " + i + ", adapter position: " + eventPhotosListAdapter.getItemCount());
-            Log.d(TAG, "Is item #" + i + " selected? " + recyclerView.findViewHolderForAdapterPosition(i).itemView.isSelected());
-        }
-    }
-
 
     private void createDirectory() {
         directory = new File(
