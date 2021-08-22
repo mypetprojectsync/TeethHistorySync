@@ -153,7 +153,10 @@ public class EditEventViewModel extends ViewModel {
         String oldEventModelAction = eventModel.getAction();
         String newEventModelAction = event.getAction();
 
-
+        List<String> clearList = new ArrayList<>();
+        clearList.addAll(event.getPhotosUri());
+        clearList.removeAll(photosListForDeleting);
+        event.setPhotosUri(clearList);
 
         realm.beginTransaction();
 
@@ -163,12 +166,9 @@ public class EditEventViewModel extends ViewModel {
         eventModel.setNotes(event.getNotes());
 
         RealmList<String>  eventModelRealmList = eventModel.getPhotosUri();
-        int amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
 
-        for (int i = 0; i < amountOfNewPhotos; i++) {
-            Log.d(TAG, "eventModelRealmList.add");
-            eventModelRealmList.add(event.getPhotosUri().get(eventModelRealmList.size()));
-        }
+        eventModelRealmList.deleteAllFromRealm();
+        eventModelRealmList.addAll(event.getPhotosUri());
 
         if (newEventModelAction.equals("Filled") || oldEventModelAction.equals("Filled")) {
             returnToothModelStateIfLastActionFilled(toothModel);

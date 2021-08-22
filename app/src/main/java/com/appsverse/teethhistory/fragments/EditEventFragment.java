@@ -266,7 +266,7 @@ public class EditEventFragment extends Fragment {
             photosUri.removeAll(model.getPhotosListForDeleting());
         }
 
-        if (!photosUri.isEmpty()) eventPhotosListAdapter.notifyDataSetChanged();
+        eventPhotosListAdapter.notifyDataSetChanged();
     }
 
     private void createEventPhotosList() {
