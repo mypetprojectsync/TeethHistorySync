@@ -113,6 +113,8 @@ public class EditEventFragment extends Fragment {
                             photosUri.add(uri);
                             event.setPhotosUri(photosUri);
                             eventPhotosListAdapter.notifyDataSetChanged();
+
+                            model.removeItemFromListToPhotosListToDeleting(uri);
                         }
                     }
                 }
@@ -262,7 +264,6 @@ public class EditEventFragment extends Fragment {
         }
 
         if (model.getPhotosListForDeleting() != null) {
-            Log.d(TAG,  "if (model.getPhotosListForDeleting() != null) { : " + model.getPhotosListForDeleting());
             photosUri.removeAll(model.getPhotosListForDeleting());
         }
 
@@ -294,11 +295,6 @@ public class EditEventFragment extends Fragment {
         tracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
             @Override
             public void onItemStateChanged(@NonNull Long key, boolean selected) {
-                Log.d(TAG, "onItemStateChanged() started");
-/*                if (!tracker.hasSelection()) {
-                    eventPhotosListAdapter.notifyDataSetChanged();
-                }*/
-
                 super.onItemStateChanged(key, selected);
             }
 
@@ -315,25 +311,15 @@ public class EditEventFragment extends Fragment {
 
                 if (tracker.hasSelection() && actionMode == null) {
                     actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
-                    //((MainActivity) getActivity()).getSupportActionBar().setTitle(String.valueOf(tracker.getSelection().size()));
-                    actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-                    Log.d(TAG, "tracker.hasSelection() tracker.getSelection(): " + tracker.getSelection());
 
-                    //todo разобраться с getSelection, можно ли получить position последнего выбранного элемента для eventPhotosListAdapter.notifyItemChanged(position)
+                    actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+
                 } else if (!tracker.hasSelection() && actionMode != null) {
                     actionMode.finish();
                     actionMode = null;
                 } else {
-                    //((MainActivity) getActivity()).getSupportActionBar().setTitle(String.valueOf(tracker.getSelection().size()));
                     if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-                    Log.d(TAG, "!tracker.hasSelection() tracker.getSelection(): " + tracker.getSelection());
-                    //eventPhotosListAdapter.notifyDataSetChanged();
-
                 }
-
-
-                //
-                //eventPhotosListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -342,7 +328,6 @@ public class EditEventFragment extends Fragment {
             }
         });
         eventPhotosListAdapter.setSelectionTracker(tracker);
-
     }
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -361,11 +346,6 @@ public class EditEventFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             Log.d(TAG, "Action menu clicked: " + item.getTitle());
 
-            //model.deleteSelectedPhotos(getSelectedItemsIndexList(), getContext(), event);
-           // model.deleteSelectedPhotosWithoutSavingChanges(getSelectedItemsIndexList(), getContext(), event);
-
-            //photosUri.clear();
-//todo удалять список во viewmodel?
                 List<String> listForRemove = new ArrayList<>();
 
                 for (int i : getSelectedItemsIndexList()) {

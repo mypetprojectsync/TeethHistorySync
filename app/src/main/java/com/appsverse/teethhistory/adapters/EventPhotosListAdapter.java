@@ -84,7 +84,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
     public class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails {
 
         ImageButton photoImageButton;
-
+//TODO implement onclicklistener. Open photo in gallery(?) when it was clicked
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             photoImageButton = itemView.findViewById(R.id.image_button_photo);
