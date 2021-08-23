@@ -11,8 +11,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.appsverse.teethhistory.data.User;
-import com.appsverse.teethhistory.viewModels.CreateNewUserViewModel;
 import com.appsverse.teethhistory.databinding.ActivityCreateNewUserBinding;
+import com.appsverse.teethhistory.viewModels.CreateNewUserViewModel;
 
 public class CreateNewUserActivity extends AppCompatActivity {
 

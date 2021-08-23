@@ -81,8 +81,6 @@ public class CreateNewUserViewModel extends ViewModel {
         }
 
            Log.d(TAG, ""+ realm.where(ToothModel.class).findAll());
-           /*Log.d(TAG, String.format("%s", userModel.getToothModels().get(0)));
-            Log.d(TAG, String.format("find by id: %s", userModel.getToothModels().where().equalTo("id", 15).findFirst()));*/
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();

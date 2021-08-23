@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.RenderProcessGoneDetail;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,8 +31,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 public class EventsListFragment extends Fragment {
     EventsListViewModel model;
@@ -195,7 +192,6 @@ public class EventsListFragment extends Fragment {
     public void refillEventsList() {
         if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.VISIBLE) {
             eventModels.clear();
-            //eventModels.addAll(model.getEventModelsList(userID, binding.getTooth().getId()));
             eventModels.addAll(mainActivity.getSortedEventsList());
             adapter.notifyDataSetChanged();
         }

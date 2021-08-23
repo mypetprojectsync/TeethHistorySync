@@ -1,6 +1,5 @@
 package com.appsverse.teethhistory.data;
 
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.databinding.BaseObservable;
@@ -8,8 +7,6 @@ import androidx.databinding.Bindable;
 
 import com.appsverse.teethhistory.BR;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

@@ -1,34 +1,21 @@
 package com.appsverse.teethhistory.viewModels;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaScannerConnection;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
-import com.appsverse.teethhistory.databinding.ActivityMainBinding;
-import com.appsverse.teethhistory.fragments.NewEventFragment;
-import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -208,12 +195,8 @@ public class NewEventViewModel extends ViewModel {
                     break;
             }
         }
-        //toothModel.getEventModels(toothModel.getEventModels().sort("date", Sort.DESCENDING));
 
         realm.commitTransaction();
-
-
-        //RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
 
         Log.d(TAG, "*******************************************************");
         for (EventModel i : eventModelsResults) {

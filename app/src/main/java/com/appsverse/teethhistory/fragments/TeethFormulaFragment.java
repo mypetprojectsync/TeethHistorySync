@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 public class TeethFormulaFragment extends Fragment {
 
     TeethFormulaFragmentViewModel model;
@@ -84,9 +82,7 @@ public class TeethFormulaFragment extends Fragment {
 
             toothModels = model.getAllToothModelsForUser(user_id);
 
-            int chosenToothID = model.getChosenToothID();
-
-            tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
+             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
             binding.setTooth(tooth);
 
             //todo hide teeth layout when recyclerview scroll down and show whe scroll up
@@ -94,30 +90,10 @@ public class TeethFormulaFragment extends Fragment {
 
             for (int i = 0; i < 16; i++) {
                 binding.llTeethFirstRow.addView(setToothImage(i));
-                //setToothImage(i);
             }
 
             for (int i = 16; i < 32; i++) {
                 binding.llTeethSecondRow.addView(setToothImage(i));
-                /*TextView toothPositionTV = new TextView(this.getContext());
-                toothPositionTV.setText(String.valueOf(toothModels.get(i).getPosition()));
-                toothPositionTV.setId(toothModels.get(i).getId());
-
-                if (toothModels.get(i).getId() == chosenToothID) toothPositionTV.setTextSize(30.0f);
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 10, 10, 10);
-                toothPositionTV.setLayoutParams(params);
-
-                toothPositionTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toothClicked((TextView) v, tooth);
-                    }
-                });
-
-
-                binding.llTeethSecondRow.addView(toothPositionTV);*/
             }
 
         }
@@ -303,14 +279,12 @@ public class TeethFormulaFragment extends Fragment {
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    //model.deleteEvent(eventModels.get(position), mainActivity);
                                     mainActivity.deleteEvent(eventModels.get(position));
                                     deleteEventAnimation(position);
                                 });
                                 dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
                                 });
                                 dialogBuilder.show();
-                                Log.d(TAG, "option delete clicked");
                             }
                             return false;
                         }
@@ -360,7 +334,6 @@ public class TeethFormulaFragment extends Fragment {
         if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE
                 || orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            //eventModels.addAll(model.getEventModelsList(user_id, tooth));
             eventModels.addAll(mainActivity.getSortedEventsList());
 
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();

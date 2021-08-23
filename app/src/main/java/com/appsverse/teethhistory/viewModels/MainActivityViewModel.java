@@ -8,7 +8,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -45,7 +44,6 @@ public class MainActivityViewModel extends ViewModel {
 
     private int chosenToothID = -1;
 
-    //private int teethFormulaFragmentVisibility = -1;
     private int teethFormulaFragmentVisibility = View.VISIBLE;
     private int newEventFragmentVisibility = View.GONE;
     private int editEventFragmentVisibilityData = View.GONE;
@@ -230,16 +228,13 @@ public class MainActivityViewModel extends ViewModel {
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
 
         //todo use last date and last position
-        /*for (EventModel eventModel1 : toothModel.getEventModels()){
-            if (eventModel1.getId()%1000 > maxEventId%1000) maxEventId = eventModel1.getId();
-        }*/
 
         if (eventModel.getAction().equals("Filled")) {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
         Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
-        //if (maxEventId%1000 == eventModel.getId()%1000) removeToothState(eventModel, toothModel,mainActivity);
+
         if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel, mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
@@ -318,7 +313,7 @@ public class MainActivityViewModel extends ViewModel {
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
         //todo optimize this method
-        //toothModel.setFilling(false);
+
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
         if (toothModel.isBabyTooth()) {
@@ -359,11 +354,8 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public String getDatabaseInJson(ActivityMainBinding binding) {
-        //UserModel userModel = realm.where(UserModel.class).equalTo("id", binding.getUser().getId()).findFirst();
         List<UserModel> userModels = realm.where(UserModel.class).findAll();
         String json = new Gson().toJson(realm.copyFromRealm(userModels));
-        //Log.d(TAG, "Json:\n" + json);
-        //Log.d(TAG, "Json size: " + json);
         return "{\"userModels\":"+json+"}";
     }
 
@@ -401,11 +393,7 @@ public class MainActivityViewModel extends ViewModel {
 
             int next_id;
 
-           // if (current_id == 0) {
-          //      next_id = 0;
-           // } else {
                 next_id = current_id + 1;
-           // }
 
             arrayItem.put("id", String.valueOf(next_id));
         } catch (JSONException e) {
@@ -414,61 +402,4 @@ public class MainActivityViewModel extends ViewModel {
 
     }
 
-
-    /*public void setToothState() {
-        UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
-        ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
-
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) {
-            switch (event.getAction()) {
-                case "Extracted":
-                    toothModel.setExist(false);
-                    toothModel.setFilling(false);
-
-                    if (toothModel.isBabyTooth()) {
-                        toothModel.setBabyTooth(false);
-                        toothModel.setPermanentTooth(true);
-                        //todo!!! change chosenToothId and toothId
-
-                        toothModel.setPosition(toothModel.getPosition() - 40);
-                        TextView chosenTV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId());
-                        chosenTV.setText(String.valueOf(toothModel.getPosition()));
-
-                    } else if (toothModel.isPermanentTooth()) {
-                        toothModel.setPermanentTooth(false);
-                    } else if (toothModel.isImplant()) {
-                        toothModel.setImplant(false);
-                    }
-                    break;
-                case "Filled":
-                    toothModel.setFilling(true);
-                    break;
-                case "Implanted":
-                    toothModel.setExist(true);
-                    toothModel.setImplant(true);
-                    break;
-                case "Grown":
-                    toothModel.setExist(true);
-                    break;
-            }
-        }
-    }*/
-
-   /* public ToothModel getChosenTooth(MainActivity mainActivity){
-        UserModel userModel = realm.where(UserModel.class).equalTo("id",mainActivity.user_id).findFirst();
-        return userModel.getToothModels().where().equalTo("id", mainActivity.binding.getModel().getChosenToothID()).findFirst();
-    }
-*/
-    /*public void resetTooth(MainActivity mainActivity, Tooth tooth) {
-        ToothModel toothModel = getChosenTooth(mainActivity);
-        realm.beginTransaction();
-
-        toothModel.setFilling(false);
-        toothModel.setExist(tooth.isExist());
-        toothModel.setBabyTooth(tooth.isBabyTooth());
-        toothModel.setPermanentTooth(tooth.isPermanentTooth());
-        toothModel.setImplant(false);
-        toothModel.getEventModels().clear();
-        realm.commitTransaction();
-    }*/
 }

@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.TimeUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.repository.EventModel;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

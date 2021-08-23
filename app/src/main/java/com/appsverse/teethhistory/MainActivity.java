@@ -1,17 +1,5 @@
 package com.appsverse.teethhistory;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -23,8 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.appsverse.teethhistory.data.MainActivityViewData;
-import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
@@ -33,12 +30,9 @@ import com.appsverse.teethhistory.fragments.NewEventFragment;
 import com.appsverse.teethhistory.fragments.TeethFormulaFragment;
 import com.appsverse.teethhistory.handlers.OnClickHandler;
 import com.appsverse.teethhistory.repository.EventModel;
-import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -193,18 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
             }
 
-           // Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar);
-
-        // setSupportActionBar(toolbar);
-
-            /*toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Log.d(TAG, "clicked item:" + item.getTitle());
-                    return false;
-                }
-            });*/
-
             getSupportActionBar().setTitle(user.getName());
 
         } else {
@@ -236,57 +218,12 @@ public class MainActivity extends AppCompatActivity {
         return this.binding;
     }
 
-    /*public void resetTooth() {
-
-        DialogResetToothBinding dialogResetToothBinding = DataBindingUtil.setContentView(this, R.layout.dialog_reset_tooth);
-
-        Tooth tooth = new Tooth(model.getChosenToothID(), 0);
-        dialogResetToothBinding.setTooth(tooth);
-
-        model.resetTooth(this, tooth);
-
-        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(this);
-        dialogBuilder.setView(dialogResetToothBinding.getRoot());
-        dialogBuilder.setTitle("Reset tooth #"+ model.getChosenToothID()+" state");
-        dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-
-            model.resetTooth(this, tooth);
-
-        });
-        dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
-        });
-        dialogBuilder.show();
-    }*/
-
     public RealmResults<EventModel> getSortedEventsList(){
         return model.getSortedEventsList(this);
     }
 
     public void deleteEvent(EventModel eventModel) {
         model.deleteEvent(eventModel, this);
-    }
-
-    public void setToothState(){
-       // model.setToothState();
-    }
-
-    public void resetNewEventFragment(){
-        NewEventFragment newEventFragment = binding.getNewEventFragment();
-
-        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        ft.replace(R.id.new_event_fragment, newEventFragment);
-
-        ft.commit();
-        /*ft.remove(newEventFragment);
-        ft.commit();
-
-        newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
-        binding.setNewEventFragment(newEventFragment);
-
-        final FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-        ft2.attach(newEventFragment);
-*/       // ft2.commit();
     }
 
     @Override
@@ -316,7 +253,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Log.d(TAG, "onActivityResult");
-        //if (data != null) Log.d(TAG, data.toString());
     }
 }
