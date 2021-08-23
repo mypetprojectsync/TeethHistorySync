@@ -42,15 +42,12 @@ import com.google.android.material.slider.Slider;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static java.lang.Integer.parseInt;
 
 public class NewEventFragment extends Fragment {
 
@@ -156,7 +153,7 @@ public class NewEventFragment extends Fragment {
         binding.toothActionACTV.setAdapter(adapter);
 
         //todo list lost when chosen some item and orientation changed. Issue https://github.com/material-components/material-components-android/issues/1464
-       // binding.toothActionACTV.setText(event.getAction(), false);
+
         binding.toothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -217,21 +214,6 @@ public class NewEventFragment extends Fragment {
         recyclerView = binding.listEventPhotos;
 
         eventPhotosListAdapter = new EventPhotosListAdapter(photosUri);
-        //eventPhotosListAdapter = new EventPhotosListAdapter(this.getContext(), photosUri);
-
-        /*eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.d(TAG, "photo uri: " + photosUri.get(position));
-
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
-                startActivity(intent);
-            }
-        });*/
-
         recyclerView.setAdapter(eventPhotosListAdapter);
     }
 
@@ -325,11 +307,6 @@ public class NewEventFragment extends Fragment {
                     items = new String[0];
                 }
             }
-        /*} else {
-            items = new String[0];
-        }*/
-
-            //Log.d(TAG, "setTextActionACTV() toothModel: " + toothModel.toString());
 
             list.clear();
             Collections.addAll(list, items);

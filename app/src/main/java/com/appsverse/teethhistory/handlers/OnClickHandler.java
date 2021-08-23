@@ -3,7 +3,6 @@ package com.appsverse.teethhistory.handlers;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,9 +20,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
@@ -38,19 +35,14 @@ import com.appsverse.teethhistory.repository.UserModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-
-import static androidx.core.content.ContextCompat.getNoBackupFilesDir;
-import static androidx.core.content.ContextCompat.startActivity;
 
 public class OnClickHandler {
 
@@ -58,7 +50,7 @@ public class OnClickHandler {
 
     @SuppressLint("NonConstantResourceId")
     public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
-       // binding.toolbar.setOnMenuItemClickListener(item -> {
+
             Log.d(TAG, "Clicked on submenu item id: " + item.getItemId() + " name: " + item.getTitle());
 
         MainActivityViewModel model = binding.getModel();
@@ -90,8 +82,6 @@ public class OnClickHandler {
                     restartMainActivity(binding);
                     break;
             }
-          //  return false;
-       // });
     }
 
     public void verifyStoragePermissions(Activity activity, ActivityResultLauncher<String> mGetContent) {

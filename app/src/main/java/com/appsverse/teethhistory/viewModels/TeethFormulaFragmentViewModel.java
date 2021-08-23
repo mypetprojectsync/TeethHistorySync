@@ -3,9 +3,7 @@ package com.appsverse.teethhistory.viewModels;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.data.Tooth;
@@ -75,9 +73,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
 
         //todo use last date and last position
-        /*for (EventModel eventModel1 : toothModel.getEventModels()){
-            if (eventModel1.getId()%1000 > maxEventId%1000) maxEventId = eventModel1.getId();
-        }*/
 
         if (eventModel.getAction().equals("Filled")) {
             returnToothModelStateIfLastActionFilled(toothModel);
@@ -163,7 +158,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
         //todo optimize this method
-        //toothModel.setFilling(false);
+
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
         if (toothModel.isBabyTooth()) {

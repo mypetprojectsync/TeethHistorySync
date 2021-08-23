@@ -151,33 +151,6 @@ public class EditEventFragment extends Fragment {
 
 
         //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
-        /*String[] items;
-        ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
-        if (toothModel != null) {
-        if (!toothModel.isExist()) {
-            if (toothModel.isBabyTooth()) {
-                items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-            } else if (toothModel.isPermanentTooth()) {
-                items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-            } else  if (toothModel.isImplant()) {
-                items = getResources().getStringArray(R.array.extracted_permanent_tooth_actions);
-            }else {
-                items = new String[0];
-            }
-        } else {
-            if (toothModel.isBabyTooth()) {
-                items = getResources().getStringArray(R.array.baby_tooth_actions);
-            } else if (toothModel.isPermanentTooth()) {
-                items = getResources().getStringArray(R.array.permanent_tooth_actions);
-            } else  if (toothModel.isImplant()) {
-                items = getResources().getStringArray(R.array.implanted_tooth_actions);
-            } else {
-                items = new String[0];
-            }
-        }
-        } else {
-            items = new String[0];
-        }*/
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, list);
 
         binding.editToothActionACTV.setAdapter(adapter);
@@ -328,6 +301,18 @@ public class EditEventFragment extends Fragment {
             }
         });
         eventPhotosListAdapter.setSelectionTracker(tracker);
+
+        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+                startActivity(intent);
+            }
+        });
     }
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {

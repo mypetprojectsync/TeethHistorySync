@@ -2,12 +2,10 @@ package com.appsverse.teethhistory.viewModels;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -19,7 +17,6 @@ import com.appsverse.teethhistory.repository.UserModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Realm;

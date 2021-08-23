@@ -8,8 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsverse.teethhistory.adapters.EventPhotosListAdapter;
-
 public class PhotoItemDetailsLookup extends ItemDetailsLookup {
 
     RecyclerView recyclerView;
