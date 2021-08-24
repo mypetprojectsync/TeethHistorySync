@@ -142,7 +142,7 @@ public class NewEventFragment extends Fragment {
        Log.d(TAG, model.newEventViewModelState());
 
         event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
-        //event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes());
+
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -215,6 +215,18 @@ public class NewEventFragment extends Fragment {
 
         eventPhotosListAdapter = new EventPhotosListAdapter(photosUri);
         recyclerView.setAdapter(eventPhotosListAdapter);
+
+        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+                startActivity(intent);
+            }
+        });
     }
 
     private void galleryButtonClicked() {

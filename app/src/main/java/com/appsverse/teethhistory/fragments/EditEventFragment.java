@@ -59,6 +59,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+//TODO When EditEventFragment open in vertical orientation after press back button app is closing. Change action to change visibility of fragment or close fragment. Make sure that photos recyclerview update correctly after deleting some photos
+
 public class EditEventFragment extends Fragment {
 
     EditEventViewModel model;
