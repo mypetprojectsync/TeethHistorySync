@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+//TODO When in some reason photo was deleted, don't show it in rv. Reduce size, etc.
 
 public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosListAdapter.ViewHolder> {
 
@@ -41,8 +42,10 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
 
     @Override
     public void onBindViewHolder(@NonNull EventPhotosListAdapter.ViewHolder holder, int position) {
+        Log.d("myLogs", "onBindViewHolder() started");
         Picasso.get().load("file://" + photosUri.get(position)).resize(200, 200).into(holder.photoImageButton);
        if (tracker != null)  holder.bind(photosUri.get(position), tracker.isSelected((long) position));
+        Log.d("myLogs", "onBindViewHolder() ended");
     }
 
     @Override
