@@ -229,7 +229,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        Log.d(TAG, "onBackPressed()");
+        /*int orientation = getResources().getConfiguration().orientation;
+               if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                   finish();
+               } else {
+                   if (mainActivityViewData.getNewEventFragmentVisibilityData() == View.VISIBLE) {
+                       mainActivityViewData.setNewEventFragmentVisibilityData(View.GONE);
+                       mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+                   } else if (mainActivityViewData.getEditEventFragmentVisibilityData() == View.VISIBLE) {
+                       mainActivityViewData.setEditEventFragmentVisibilityData(View.GONE);
+                       mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+                   } else {
+                       finish();
+                   }
+
+               }*/
     }
 
     @Override
