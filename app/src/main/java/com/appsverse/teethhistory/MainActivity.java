@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            Log.d(TAG,ret);
+                            Log.d(TAG, ret);
 
                             model.copyJsonToRealm(ret);
                         }
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         return this.binding;
     }
 
-    public RealmResults<EventModel> getSortedEventsList(){
+    public RealmResults<EventModel> getSortedEventsList() {
         return model.getSortedEventsList(this);
     }
 
@@ -228,23 +228,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         Log.d(TAG, "onBackPressed()");
-        /*int orientation = getResources().getConfiguration().orientation;
-               if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                   finish();
-               } else {
-                   if (mainActivityViewData.getNewEventFragmentVisibilityData() == View.VISIBLE) {
-                       mainActivityViewData.setNewEventFragmentVisibilityData(View.GONE);
-                       mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-                   } else if (mainActivityViewData.getEditEventFragmentVisibilityData() == View.VISIBLE) {
-                       mainActivityViewData.setEditEventFragmentVisibilityData(View.GONE);
-                       mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-                   } else {
-                       finish();
-                   }
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+        } else {
+            if (mainActivityViewData.getNewEventFragmentVisibilityData() == View.VISIBLE || mainActivityViewData.getEditEventFragmentVisibilityData() == View.VISIBLE) {
 
-               }*/
+                Log.d(TAG, "onBackPressed() visibility data: " +
+                        "\nNewEvent: " + mainActivityViewData.getNewEventFragmentVisibilityData() +
+                        "\nEditEvent: " + mainActivityViewData.getEditEventFragmentVisibilityData());
+
+                mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
+                mainActivityViewData.setNewEventFragmentVisibilityData(View.GONE);
+                mainActivityViewData.setEditEventFragmentVisibilityData(View.GONE);
+                mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+            } else {
+                finish();
+            }
+
+        }
     }
 
     @Override
