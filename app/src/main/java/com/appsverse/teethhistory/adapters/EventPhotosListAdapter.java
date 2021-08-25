@@ -42,10 +42,12 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
 
     @Override
     public void onBindViewHolder(@NonNull EventPhotosListAdapter.ViewHolder holder, int position) {
-        Log.d("myLogs", "onBindViewHolder() started");
+
         Picasso.get().load("file://" + photosUri.get(position)).resize(200, 200).into(holder.photoImageButton);
-       if (tracker != null)  holder.bind(photosUri.get(position), tracker.isSelected((long) position));
-        Log.d("myLogs", "onBindViewHolder() ended");
+
+        if (tracker != null)
+            holder.bind(photosUri.get(position), tracker.isSelected((long) position));
+
     }
 
     @Override
@@ -58,7 +60,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
         return (long) position;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails,View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails, View.OnClickListener {
 
         ImageButton photoImageButton;
 
@@ -66,23 +68,24 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
             super(itemView);
             photoImageButton = itemView.findViewById(R.id.image_button_photo);
             photoImageButton.setOnClickListener(this);
-   }
+        }
 
-   public final void bind(String item, boolean isActive) {
-       Log.d("myLogs", "bind isActive: " + isActive);
+        public final void bind(String item, boolean isActive) {
+            Log.d("myLogs", "bind isActive: " + isActive);
             itemView.setActivated(isActive);
         }
 
         @Override
-        public ItemDetailsLookup.ItemDetails getItemDetails(){
+        public ItemDetailsLookup.ItemDetails getItemDetails() {
             Log.d("myLogs", "ItemDetailsLookup.ItemDetails getItemDetails()");
             Log.d("myLogs", "BindingAdapterPosition(): " + getBindingAdapterPosition());
-            return new PhotoItemDetail(getBindingAdapterPosition(), (long) getBindingAdapterPosition() );
+            return new PhotoItemDetail(getBindingAdapterPosition(), (long) getBindingAdapterPosition());
         }
 
-         @Override
+        @Override
         public void onClick(View v) {
-            if (itemClickListener != null) itemClickListener.onItemClick(v, getBindingAdapterPosition());
+            if (itemClickListener != null)
+                itemClickListener.onItemClick(v, getBindingAdapterPosition());
         }
 
     }
