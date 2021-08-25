@@ -242,6 +242,8 @@ public class EditEventFragment extends Fragment {
             photosUri.removeAll(model.getPhotosListForDeleting());
         }
 
+        clearPhotosUriFromDeletedItems();
+
         eventPhotosListAdapter.notifyDataSetChanged();
     }
 
@@ -315,6 +317,22 @@ public class EditEventFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private void clearPhotosUriFromDeletedItems() {
+
+        List<String> tempList = new ArrayList<>();
+
+        for (String uri : photosUri) {
+            File file = new File(uri);
+            if (file.exists()) {
+                tempList.add(uri);
+            }
+        }
+
+        photosUri.clear();
+        photosUri.addAll(tempList);
+
     }
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {

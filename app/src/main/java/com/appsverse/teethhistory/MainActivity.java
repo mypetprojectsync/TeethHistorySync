@@ -230,23 +230,20 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed()");
         int orientation = getResources().getConfiguration().orientation;
+
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
         } else {
             if (mainActivityViewData.getNewEventFragmentVisibilityData() == View.VISIBLE || mainActivityViewData.getEditEventFragmentVisibilityData() == View.VISIBLE) {
 
-                Log.d(TAG, "onBackPressed() visibility data: " +
-                        "\nNewEvent: " + mainActivityViewData.getNewEventFragmentVisibilityData() +
-                        "\nEditEvent: " + mainActivityViewData.getEditEventFragmentVisibilityData());
-
                 mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
                 mainActivityViewData.setNewEventFragmentVisibilityData(View.GONE);
                 mainActivityViewData.setEditEventFragmentVisibilityData(View.GONE);
                 mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+
             } else {
                 finish();
             }
-
         }
     }
 
