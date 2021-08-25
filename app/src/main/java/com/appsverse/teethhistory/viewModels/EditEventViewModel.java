@@ -91,6 +91,10 @@ public class EditEventViewModel extends ViewModel {
         this.photosListForDeleting.remove(uri);
     }
 
+    public void clearPhotosListToDeleting() {
+        if (photosListForDeleting != null) photosListForDeleting.clear();
+    }
+
     public List<String> getPhotosListForDeleting() {
         return photosListForDeleting;
     }

@@ -467,6 +467,8 @@ public class EditEventFragment extends Fragment {
         binding.editToothActionACTV.setText(event.getAction(), false);
         setTextActionACTV();
 
+        model.clearPhotosListToDeleting();
+
         refillPhotosUriList();
     }
 
