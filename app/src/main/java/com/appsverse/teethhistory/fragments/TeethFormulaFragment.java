@@ -82,7 +82,7 @@ public class TeethFormulaFragment extends Fragment {
 
             toothModels = model.getAllToothModelsForUser(user_id);
 
-             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
+            tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
             binding.setTooth(tooth);
 
             //todo hide teeth layout when recyclerview scroll down and show whe scroll up
@@ -139,8 +139,14 @@ public class TeethFormulaFragment extends Fragment {
         toothPositionIV.setImageResource(id);
         toothPositionIV.setAdjustViewBounds(true);
 
-        linearLayout.addView(toothIV);
-        linearLayout.addView(toothPositionIV);
+        if (i >= 0 && i < 16) {
+            linearLayout.addView(toothIV);
+            linearLayout.addView(toothPositionIV);
+        } else {
+            linearLayout.addView(toothPositionIV);
+            linearLayout.addView(toothIV);
+
+        }
 
         toothIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +168,7 @@ public class TeethFormulaFragment extends Fragment {
             int id = getResources().getIdentifier(toothIcon, "drawable", getActivity().getPackageName());
             toothIV.setImageResource(id);
         } else {
-            setGum(toothIV,toothModels.get(i).getId());
+            setGum(toothIV, toothModels.get(i).getId());
         }
         toothIV.setAdjustViewBounds(true);
         toothIV.setTag(toothModels.get(i).getPosition());
