@@ -149,7 +149,6 @@ public class NewEventViewModel extends ViewModel {
         int next_id = 0;
         int current_id = 0;
 
-        //todo как работает для разных пользователей? ВРОДЕ НЕ ДОЛЖНО
         MainActivity mainActivity = (MainActivity) context;
 
         ToothModel toothModel = getToothModel(mainActivity);
