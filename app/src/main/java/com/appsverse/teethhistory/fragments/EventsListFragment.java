@@ -132,7 +132,6 @@ public class EventsListFragment extends Fragment {
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    //model.deleteEvent(eventModels.get(position));
                                     mainActivity.deleteEvent(eventModels.get(position));
                                     deleteEventAnimation(position);
                                 });

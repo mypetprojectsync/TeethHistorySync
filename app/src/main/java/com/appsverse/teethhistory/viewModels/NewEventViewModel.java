@@ -100,6 +100,8 @@ public class NewEventViewModel extends ViewModel {
 
         List<String> photosUri = event.getPhotosUri();
 
+
+        //todo check uri in other events. Delete only if it not use in other events
         if (photosUri != null) {
             for (int i = 1; i <= photosUri.size(); i++) {
                 File file = new File(photosUri.get(photosUri.size() - i));
@@ -120,8 +122,12 @@ public class NewEventViewModel extends ViewModel {
 
         MainActivity mainActivity = (MainActivity) context;
 
-        //todo перенести во фрагмент
+        setDefaultValues(event, photosUri, mainActivity);
 
+        if (photosListForDeleting != null) photosListForDeleting.clear();
+    }
+
+    private void setDefaultValues(Event event, List<String> photosUri, MainActivity mainActivity) {
         setDate(new Date());
         setGuarantee(12);
         setNotes("");
@@ -135,7 +141,7 @@ public class NewEventViewModel extends ViewModel {
         mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
         mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
 
-        if (photosListForDeleting != null) photosListForDeleting.clear();
+        if (this.photosUri != null) this.photosUri.clear();
     }
 
     public void onClickSaveButton(Event event, Context context) {
@@ -237,6 +243,10 @@ public class NewEventViewModel extends ViewModel {
         if (photosListForDeleting != null) {
             deleteSelectedPhotos(context);
         }
+
+        List<String> photosUri = event.getPhotosUri();
+        setDefaultValues(event, photosUri, mainActivity);
+
     }
 
     private void setVisibilities(Context context) {

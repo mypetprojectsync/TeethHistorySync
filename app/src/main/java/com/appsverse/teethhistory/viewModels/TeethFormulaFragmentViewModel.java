@@ -221,3 +221,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         return tooth;
     }
 }
+
+
+//TODO delete all unused photos when delete user
