@@ -284,12 +284,9 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
 
             if (model.isUserExist()) {
 
-                newUserID[0] = model.getFirstUserID();
+                model.setMainActivityViewModelData(model.getFirstUserID());
 
-                model.setMainActivityViewModelData(newUserID[0]);
-                binding.setUser(new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth()));
-
-                ((MainActivity) binding.getRoot().getContext()).getSupportActionBar().setTitle(model.getUsername());
+                restartMainActivity(binding);
 
             } else {
                 newUserID[0] = -1;
