@@ -291,6 +291,8 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
 
                 ((MainActivity) binding.getRoot().getContext()).getSupportActionBar().setTitle(model.getUsername());
 
+                restartMainActivity(binding);
+
             } else {
                 newUserID[0] = -1;
 
