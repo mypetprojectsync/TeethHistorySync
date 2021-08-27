@@ -100,31 +100,47 @@ public class NewEventViewModel extends ViewModel {
 
         List<String> photosUri = event.getPhotosUri();
 
-
-        //todo check uri in other events. Delete only if it not use in other events
         if (photosUri != null) {
-            for (int i = 1; i <= photosUri.size(); i++) {
-                File file = new File(photosUri.get(photosUri.size() - i));
-                boolean isDeleted = file.delete();
-                if (isDeleted) {
-                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " deleted");
-                    MediaScannerConnection.scanFile(context, new String[]{photosUri.get(photosUri.size() - i)}, null, null);
-                } else {
-                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " doesn't deleted");
+
+            for (String uri : photosUri) {
+                if (!checkUriInOtherEvents(context,uri)) {
+                    File file = new File(uri);
+                    file.delete();
                 }
             }
-        }
-        if (photosUri != null) {
+
             photosUri.clear();
         }
 
         setVisibilities(context);
 
-        MainActivity mainActivity = (MainActivity) context;
-
-        setDefaultValues(event, photosUri, mainActivity);
+        setDefaultValues(event, photosUri, (MainActivity) context);
 
         if (photosListForDeleting != null) photosListForDeleting.clear();
+    }
+
+    private boolean checkUriInOtherEvents(Context context, String uri) {
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", ((MainActivity) context).user_id).findFirst();
+        RealmList<ToothModel> toothModels = userModel.getToothModels();
+
+        int coincidenceCounter = 0;
+
+        for (ToothModel toothModel : toothModels) {
+
+            RealmList<EventModel> eventModels = toothModel.getEventModels();
+
+            for (EventModel eventModel : eventModels) {
+
+                if (eventModel.getPhotosUri().contains(uri)) {
+                    coincidenceCounter++;
+                    break;
+                }
+            }
+            if (coincidenceCounter > 1) return true;
+        }
+
+        return false;
+
     }
 
     private void setDefaultValues(Event event, List<String> photosUri, MainActivity mainActivity) {
@@ -311,28 +327,10 @@ public class NewEventViewModel extends ViewModel {
 
         //todo check and delete in not main thread?
 
-        UserModel userModel = realm.where(UserModel.class).equalTo("id", ((MainActivity) context).user_id).findFirst();
-        RealmList<ToothModel> toothModels = userModel.getToothModels();
-
-        int coincidenceCounter = 0;
         for (String uri : photosListForDeleting) {
-            for (ToothModel toothModel : toothModels) {
-
-                RealmList<EventModel> eventModels = toothModel.getEventModels();
-
-                for (EventModel eventModel : eventModels) {
-
-                    if (eventModel.getPhotosUri().contains(uri)) {
-                        coincidenceCounter++;
-                        break;
-                    }
-                }
-                if (coincidenceCounter>1) break;
-            }
-            if (coincidenceCounter<2) {
+            if (!checkUriInOtherEvents(context, uri)) {
                 File file = new File(uri);
-                boolean isDeleted = file.delete();
-                Log.d(TAG, "file deleted: " + isDeleted + " uri: " + uri);
+                file.delete();
             }
         }
         photosListForDeleting.clear();
