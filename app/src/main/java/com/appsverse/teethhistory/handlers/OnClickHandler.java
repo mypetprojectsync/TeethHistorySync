@@ -288,6 +288,8 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
 
                 restartMainActivity(binding);
 
+                restartMainActivity(binding);
+
             } else {
                 newUserID[0] = -1;
 
