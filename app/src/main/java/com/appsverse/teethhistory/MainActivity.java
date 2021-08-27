@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.appsverse.teethhistory.data.MainActivityViewData;
@@ -114,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(MainActivityViewModel.class);
         if (user_id >= 0 && model.getUsername() == null) {
-            Log.d(TAG, "onCreate if (user_id >= 0 && model.getUsername() == null) user_id: " + user_id);
             model.setMainActivityViewModelData(user_id);
         }
 
@@ -162,30 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 onClickHandler.deleteUser(binding, model);
             }
 
-            int orientation = getResources().getConfiguration().orientation;
-
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-                mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-                mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
-
-                if (model.getNewEventFragmentVisibility() == View.GONE
-                        && model.getEditEventFragmentVisibilityData() == View.GONE) {
-                    mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
-                }
-
-            } else {
-                mAdView.loadAd(adRequest);
-
-                if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
-                    mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
-                    mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
-                } else {
-                    binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-                    mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
-                }
-                mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
-            }
+            setFragmentsVisibilities(adRequest);
 
             getSupportActionBar().setTitle(user.getName());
 
@@ -196,6 +171,33 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void setFragmentsVisibilities(AdRequest adRequest) {
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+            mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+
+            if (model.getNewEventFragmentVisibility() == View.GONE
+                    && model.getEditEventFragmentVisibilityData() == View.GONE) {
+                mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
+            }
+
+        } else {
+            mAdView.loadAd(adRequest);
+
+            if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
+                mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
+                mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+            } else {
+                binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+                mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
+            }
+            mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
+        }
     }
 
     //todo implement toolbar
@@ -261,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
             model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
             model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
         }
-
-        //todo clear cash after deleting app
     }
 
     @Override

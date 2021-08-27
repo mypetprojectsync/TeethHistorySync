@@ -31,6 +31,8 @@ import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.databinding.EditUsernameDialogBinding;
+import com.appsverse.teethhistory.repository.EventModel;
+import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 import com.appsverse.teethhistory.viewModels.MainActivityViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,6 +45,7 @@ import java.io.OutputStreamWriter;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.RealmList;
 
 public class OnClickHandler {
 
@@ -274,6 +277,9 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         MaterialAlertDialogBuilder dialogBuider = new MaterialAlertDialogBuilder(binding.getRoot().getContext());
         dialogBuider.setTitle(R.string.question_delete_user);
         dialogBuider.setPositiveButton(R.string.ok, (dialog1, which) -> {
+
+            model.deleteUserPhotos();
+
             model.deleteUser();
 
             if (model.isUserExist()) {
@@ -313,6 +319,9 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         model.getDeleteUserDialog().show();
 
         model.setDeleteUserDialogActive(true);
+
+        //todo update activity after delete user. Take code from change user
+
     }
 
 }

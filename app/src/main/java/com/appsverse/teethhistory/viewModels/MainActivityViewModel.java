@@ -1,5 +1,6 @@
 package com.appsverse.teethhistory.viewModels;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 import io.realm.Realm;
@@ -123,7 +125,7 @@ public class MainActivityViewModel extends ViewModel {
         this.chosenToothID = chosenToothID;
     }
 
-    public void setMainActivityViewModelData(int user_id){
+    public void setMainActivityViewModelData(int user_id) {
 
         Log.d(TAG, "setMainActivityViewModelData user_id: " + user_id);
 
@@ -137,7 +139,7 @@ public class MainActivityViewModel extends ViewModel {
         this.setDeleteUserDialog(null);
     }
 
-    public void updateUsername(String name){
+    public void updateUsername(String name) {
         setUsername(name);
 
         realm.beginTransaction();
@@ -145,17 +147,17 @@ public class MainActivityViewModel extends ViewModel {
         realm.commitTransaction();
     }
 
-    public void deleteUser(){
+    public void deleteUser() {
         realm.beginTransaction();
         realm.where(UserModel.class).equalTo("id", user_id).findFirst().deleteFromRealm();
         realm.commitTransaction();
     }
 
-    public int getFirstUserID(){
+    public int getFirstUserID() {
         return realm.where(UserModel.class).findFirst().getId();
     }
 
-    public String getUsernameFromRealm(){
+    public String getUsernameFromRealm() {
         return realm.where(UserModel.class).equalTo("id", user_id).findFirst().getName();
     }
 
@@ -214,7 +216,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public RealmResults<EventModel> getSortedEventsList(MainActivity mainActivity) {
-        UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
         return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
     }
@@ -225,7 +227,7 @@ public class MainActivityViewModel extends ViewModel {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
         int maxEventId = 0;
-        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         //todo use last date and last position
 
@@ -233,9 +235,10 @@ public class MainActivityViewModel extends ViewModel {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
-        Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
+        Log.d(TAG, "maxEventId: " + maxEventId % 1000 + " event id: " + eventModel.getId() % 1000);
 
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel, mainActivity);
+        if (eventModelsResults.get(0).getId() == eventModel.getId())
+            removeToothState(eventModel, toothModel, mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
             resetToothState(userModel, toothModel);
@@ -261,8 +264,8 @@ public class MainActivityViewModel extends ViewModel {
             if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
                     || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
                     || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
-                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
-                toothModel.setPosition(toothModel.getPosition()+40);
+                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)) {
+                toothModel.setPosition(toothModel.getPosition() + 40);
             }
         } else if (userModel.isBabyTeeth()) {
             toothModel.setExist(true);
@@ -272,8 +275,8 @@ public class MainActivityViewModel extends ViewModel {
             if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
                     || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
                     || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
-                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
-                toothModel.setPosition(toothModel.getPosition()+40);
+                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)) {
+                toothModel.setPosition(toothModel.getPosition() + 40);
 
             }
 
@@ -312,7 +315,6 @@ public class MainActivityViewModel extends ViewModel {
 
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
-        //todo optimize this method
 
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
@@ -356,13 +358,12 @@ public class MainActivityViewModel extends ViewModel {
     public String getDatabaseInJson(ActivityMainBinding binding) {
         List<UserModel> userModels = realm.where(UserModel.class).findAll();
         String json = new Gson().toJson(realm.copyFromRealm(userModels));
-        return "{\"userModels\":"+json+"}";
+        return "{\"userModels\":" + json + "}";
     }
 
 
-
     public void copyJsonToRealm(String databaseInJson) {
-        if (databaseInJson.length()>0) {
+        if (databaseInJson.length() > 0) {
             try {
                 JSONObject jsonObject = new JSONObject(databaseInJson);
 
@@ -393,7 +394,7 @@ public class MainActivityViewModel extends ViewModel {
 
             int next_id;
 
-                next_id = current_id + 1;
+            next_id = current_id + 1;
 
             arrayItem.put("id", String.valueOf(next_id));
         } catch (JSONException e) {
@@ -402,4 +403,50 @@ public class MainActivityViewModel extends ViewModel {
 
     }
 
+    public void deleteUserPhotos() {
+
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
+        RealmList<ToothModel> toothModels = userModel.getToothModels();
+
+        for (ToothModel toothModel : toothModels) {
+            RealmList<EventModel> eventModels = toothModel.getEventModels();
+
+            for (EventModel eventModel : eventModels) {
+                RealmList<String> photosUri = eventModel.getPhotosUri();
+
+                for (String uri : photosUri) {
+                    if (!checkUriInOtherEvents(uri)) {
+                        File file = new File(uri);
+                        file.delete();
+                    }
+                }
+
+            }
+        }
+    }
+
+    private boolean checkUriInOtherEvents(String uri) {
+
+        int coincidenceCounter = 0;
+
+        List<UserModel> userModels = realm.where(UserModel.class).findAll();
+
+        for (UserModel userModel : userModels) {
+            RealmList<ToothModel> toothModels = userModel.getToothModels();
+
+            for (ToothModel toothModel : toothModels) {
+
+                RealmList<EventModel> eventModels = toothModel.getEventModels();
+
+                for (EventModel eventModel : eventModels) {
+
+                    if (eventModel.getPhotosUri().contains(uri)) {
+                        coincidenceCounter++;
+                        if (coincidenceCounter > 1) return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

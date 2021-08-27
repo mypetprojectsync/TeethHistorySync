@@ -103,7 +103,7 @@ public class NewEventViewModel extends ViewModel {
         if (photosUri != null) {
 
             for (String uri : photosUri) {
-                if (!checkUriInOtherEvents(context,uri)) {
+                if (!checkUriInOtherEvents(uri)) {
                     File file = new File(uri);
                     file.delete();
                 }
@@ -119,28 +119,30 @@ public class NewEventViewModel extends ViewModel {
         if (photosListForDeleting != null) photosListForDeleting.clear();
     }
 
-    private boolean checkUriInOtherEvents(Context context, String uri) {
-        UserModel userModel = realm.where(UserModel.class).equalTo("id", ((MainActivity) context).user_id).findFirst();
-        RealmList<ToothModel> toothModels = userModel.getToothModels();
+    private boolean checkUriInOtherEvents(String uri) {
 
         int coincidenceCounter = 0;
 
-        for (ToothModel toothModel : toothModels) {
+        List<UserModel> userModels = realm.where(UserModel.class).findAll();
 
-            RealmList<EventModel> eventModels = toothModel.getEventModels();
+        for (UserModel userModel : userModels) {
+            RealmList<ToothModel> toothModels = userModel.getToothModels();
 
-            for (EventModel eventModel : eventModels) {
 
-                if (eventModel.getPhotosUri().contains(uri)) {
-                    coincidenceCounter++;
-                    break;
+            for (ToothModel toothModel : toothModels) {
+
+                RealmList<EventModel> eventModels = toothModel.getEventModels();
+
+                for (EventModel eventModel : eventModels) {
+
+                    if (eventModel.getPhotosUri().contains(uri)) {
+                        coincidenceCounter++;
+                        if (coincidenceCounter > 1) return true;
+                    }
                 }
             }
-            if (coincidenceCounter > 1) return true;
         }
-
         return false;
-
     }
 
     private void setDefaultValues(Event event, List<String> photosUri, MainActivity mainActivity) {
@@ -328,7 +330,7 @@ public class NewEventViewModel extends ViewModel {
         //todo check and delete in not main thread?
 
         for (String uri : photosListForDeleting) {
-            if (!checkUriInOtherEvents(context, uri)) {
+            if (!checkUriInOtherEvents(uri)) {
                 File file = new File(uri);
                 file.delete();
             }
