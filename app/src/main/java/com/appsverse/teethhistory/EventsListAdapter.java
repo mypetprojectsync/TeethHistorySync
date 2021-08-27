@@ -80,7 +80,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            itemClickListener.onItemClick(v, getAdapterPosition());
+            itemClickListener.onItemClick(v, getAbsoluteAdapterPosition());
         }
     }
 

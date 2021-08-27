@@ -157,7 +157,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
-        //todo optimize this method
 
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
@@ -221,3 +220,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         return tooth;
     }
 }
+
+
+//TODO delete all unused photos when delete user

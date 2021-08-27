@@ -198,7 +198,6 @@ public class CreateNewUserViewModel extends ViewModel {
         }
     }
 
-    //todo implement baby teeth
     private void setPermanentTeethToothModels(UserModel userModel) {
 
         for (int i = 18; i > 10; i--) {
@@ -278,11 +277,6 @@ public class CreateNewUserViewModel extends ViewModel {
 
     public void onClickCancelButton(Context context) {
         ((Activity) context).finish();
-    }
-
-    //todo нужна ли проверка на уникальность?
-    private void isUniqueName(User user) {
-
     }
 
     public boolean isNoTeeth() {

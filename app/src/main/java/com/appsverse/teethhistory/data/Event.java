@@ -132,4 +132,7 @@ public class Event extends BaseObservable {
         notifyPropertyChanged(BR.photosUri);
     }
 
+    public void clearPhotosUri() {
+        photosUri.clear();
+    }
 }

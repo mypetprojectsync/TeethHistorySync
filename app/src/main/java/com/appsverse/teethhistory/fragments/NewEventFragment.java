@@ -12,10 +12,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -23,15 +26,22 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ActionMode;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.selection.SelectionPredicates;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.adapters.EventPhotosListAdapter;
+import com.appsverse.teethhistory.adapters.PhotoItemDetailsLookup;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.databinding.FragmentNewEventBinding;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -45,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,6 +79,9 @@ public class NewEventFragment extends Fragment {
     RecyclerView recyclerView;
     public EventPhotosListAdapter eventPhotosListAdapter;
     List<String> photosUri = new ArrayList<>();
+
+    private ActionMode actionMode;
+    SelectionTracker<Long> tracker;
 
     ActivityResultLauncher<Uri> mGetContent = registerForActivityResult(new ActivityResultContracts.TakePicture(),
             new ActivityResultCallback<Boolean>() {
@@ -94,11 +108,17 @@ public class NewEventFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
 
-                        Uri uri = result.getData().getData();
+                        String uri = getPathFromUri(result.getData().getData());
 
-                        photosUri.add(getPathFromUri(uri));
-                        event.setPhotosUri(photosUri);
-                        eventPhotosListAdapter.notifyDataSetChanged();
+                        if (photosUri.contains(uri)) {
+                            Toast.makeText(getActivity().getBaseContext(), R.string.photo_already_added, Toast.LENGTH_SHORT).show();
+                        } else {
+                            photosUri.add(uri);
+                            event.setPhotosUri(photosUri);
+                            eventPhotosListAdapter.notifyDataSetChanged();
+
+                            if (model.getPhotosListForDeleting() != null) model.removeItemFromListToPhotosListToDeleting(uri);
+                        }
                     }
                 }
             }
@@ -142,7 +162,7 @@ public class NewEventFragment extends Fragment {
        Log.d(TAG, model.newEventViewModelState());
 
         event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
-        //event = new Event(model.getId(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes());
+
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -191,7 +211,27 @@ public class NewEventFragment extends Fragment {
         createDirectory();
         createEventPhotosList();
 
+        refillPhotosUriList();
+
         return binding.getRoot();
+    }
+
+    private void refillPhotosUriList() {
+
+        Log.d(TAG, "refillPhotosUriList()");
+
+        photosUri.clear();
+
+        if (event.getPhotosUri() != null) {
+            photosUri.addAll(event.getPhotosUri());
+        }
+
+        if (model.getPhotosListForDeleting() != null) {
+            photosUri.removeAll(model.getPhotosListForDeleting());
+        }
+
+        eventPhotosListAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -212,10 +252,133 @@ public class NewEventFragment extends Fragment {
     private void createEventPhotosList() {
 
         recyclerView = binding.listEventPhotos;
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
         eventPhotosListAdapter = new EventPhotosListAdapter(photosUri);
+        eventPhotosListAdapter.setHasStableIds(true);
+
         recyclerView.setAdapter(eventPhotosListAdapter);
+
+        tracker = new SelectionTracker.Builder<Long>(
+                "photosSelection",
+                recyclerView,
+                new StableIdKeyProvider(recyclerView),
+                new PhotoItemDetailsLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(SelectionPredicates.createSelectAnything()
+        ).build();
+
+        tracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
+            @Override
+            public void onItemStateChanged(@NonNull Long key, boolean selected) {
+                super.onItemStateChanged(key, selected);
+            }
+
+            @Override
+            public void onSelectionRefresh() {
+                super.onSelectionRefresh();
+            }
+
+            @Override
+            public void onSelectionChanged() {
+                super.onSelectionChanged();
+
+                Log.d(TAG, "onSelectionChanged() started");
+
+                if (tracker.hasSelection() && actionMode == null) {
+                    actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
+
+                    actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                    Log.d(TAG, "onSelectionChanged() actionMode.setTitle");
+                } else if (!tracker.hasSelection() && actionMode != null) {
+                    actionMode.finish();
+                    actionMode = null;
+                } else {
+                    if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                }
+            }
+
+            @Override
+            public void onSelectionRestored() {
+                super.onSelectionRestored();
+            }
+        });
+        eventPhotosListAdapter.setSelectionTracker(tracker);
+
+        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+                startActivity(intent);
+            }
+        });
     }
+
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            Log.d(TAG, "onCreateActionMode started");
+            mode.getMenuInflater().inflate(R.menu.action_bar_photo_selected, menu);
+            Log.d(TAG, "onCreateActionMode ended");
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Log.d(TAG, "Action menu clicked: " + item.getTitle());
+
+            List<String> listForRemove = new ArrayList<>();
+
+            for (int i : getSelectedItemsIndexList()) {
+                listForRemove.add(photosUri.get(i));
+            }
+
+            if (model.getPhotosListForDeleting() == null) {
+                model.setPhotosListForDeleting(listForRemove);
+                Log.d(TAG, "model.setPhotosListForDeleting: " + model.getPhotosListForDeleting());
+            } else {
+                model.addListToPhotosListToDeleting(listForRemove);
+                Log.d(TAG, "model.addListToPhotosListForDeleting: " + model.getPhotosListForDeleting());
+            }
+            photosUri.removeAll(listForRemove);
+
+            actionMode.finish();
+
+            eventPhotosListAdapter.notifyDataSetChanged();
+
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            tracker.clearSelection();
+        }
+    };
+
+    private List<Integer> getSelectedItemsIndexList() {
+        List<Integer> selectedIdList = new ArrayList<>();
+        Iterator<Long> iterator = tracker.getSelection().iterator();
+
+        while (iterator.hasNext()) {
+            long selectedId = iterator.next();
+            selectedIdList.add((int) selectedId);
+        }
+        return selectedIdList;
+    }
+
 
     private void galleryButtonClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

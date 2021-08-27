@@ -38,6 +38,7 @@ public class NewEventViewModel extends ViewModel {
 
     private List<String> actions;
     private List<String> photosUri;
+    private List<String> photosListForDeleting;
 
     public int getId() {
         return id;
@@ -79,32 +80,72 @@ public class NewEventViewModel extends ViewModel {
         this.notes = notes;
     }
 
+    public void setPhotosListForDeleting(List<String> photosListForDeleting) {
+        this.photosListForDeleting = photosListForDeleting;
+    }
+
+    public void addListToPhotosListToDeleting(List<String> photosListForDeleting){
+        this.photosListForDeleting.addAll(photosListForDeleting);
+    }
+
+    public void removeItemFromListToPhotosListToDeleting(String uri) {
+        this.photosListForDeleting.remove(uri);
+    }
+
+    public List<String> getPhotosListForDeleting() {
+        return photosListForDeleting;
+    }
+
     public void onClickCancelButton(Event event, Context context) {
 
         List<String> photosUri = event.getPhotosUri();
 
         if (photosUri != null) {
-            for (int i = 1; i <= photosUri.size(); i++) {
-                File file = new File(photosUri.get(photosUri.size() - i));
-                boolean isDeleted = file.delete();
-                if (isDeleted) {
-                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " deleted");
-                    MediaScannerConnection.scanFile(context, new String[]{photosUri.get(photosUri.size() - i)}, null, null);
-                } else {
-                    Log.d(TAG, "file " + photosUri.get(photosUri.size() - i) + " doesn't deleted");
+
+            for (String uri : photosUri) {
+                if (!checkUriInOtherEvents(uri)) {
+                    File file = new File(uri);
+                    file.delete();
                 }
             }
-        }
-        if (photosUri != null) {
+
             photosUri.clear();
         }
 
         setVisibilities(context);
 
-        MainActivity mainActivity = (MainActivity) context;
+        setDefaultValues(event, photosUri, (MainActivity) context);
 
-        //todo перенести во фрагмент
+        if (photosListForDeleting != null) photosListForDeleting.clear();
+    }
 
+    private boolean checkUriInOtherEvents(String uri) {
+
+        int coincidenceCounter = 0;
+
+        List<UserModel> userModels = realm.where(UserModel.class).findAll();
+
+        for (UserModel userModel : userModels) {
+            RealmList<ToothModel> toothModels = userModel.getToothModels();
+
+
+            for (ToothModel toothModel : toothModels) {
+
+                RealmList<EventModel> eventModels = toothModel.getEventModels();
+
+                for (EventModel eventModel : eventModels) {
+
+                    if (eventModel.getPhotosUri().contains(uri)) {
+                        coincidenceCounter++;
+                        if (coincidenceCounter > 1) return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setDefaultValues(Event event, List<String> photosUri, MainActivity mainActivity) {
         setDate(new Date());
         setGuarantee(12);
         setNotes("");
@@ -117,6 +158,8 @@ public class NewEventViewModel extends ViewModel {
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
         mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
+
+        if (this.photosUri != null) this.photosUri.clear();
     }
 
     public void onClickSaveButton(Event event, Context context) {
@@ -124,7 +167,6 @@ public class NewEventViewModel extends ViewModel {
         int next_id = 0;
         int current_id = 0;
 
-        //todo как работает для разных пользователей? ВРОДЕ НЕ ДОЛЖНО
         MainActivity mainActivity = (MainActivity) context;
 
         ToothModel toothModel = getToothModel(mainActivity);
@@ -214,6 +256,14 @@ public class NewEventViewModel extends ViewModel {
         for (EventModel i : toothModel.getEventModels()) {
             Log.d(TAG, i.toString());
         }
+
+        if (photosListForDeleting != null) {
+            deleteSelectedPhotos(context);
+        }
+
+        List<String> photosUri = event.getPhotosUri();
+        setDefaultValues(event, photosUri, mainActivity);
+
     }
 
     private void setVisibilities(Context context) {
@@ -273,5 +323,18 @@ public class NewEventViewModel extends ViewModel {
                 + ", notes: " + getNotes()
                 + ", actions: " + getActions()
                 + ", photosUri: " + getPhotosUri();
+    }
+
+    public void deleteSelectedPhotos(Context context) {
+
+        //todo check and delete in not main thread?
+
+        for (String uri : photosListForDeleting) {
+            if (!checkUriInOtherEvents(uri)) {
+                File file = new File(uri);
+                file.delete();
+            }
+        }
+        photosListForDeleting.clear();
     }
 }

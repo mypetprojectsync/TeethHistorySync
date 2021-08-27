@@ -68,7 +68,7 @@ public class EditEventFragment extends Fragment {
     Event event;
     ArrayAdapter adapter;
     //todo rename list below
-    List<String> list = new ArrayList<>();
+    List<String> actions = new ArrayList<>();
 
     File directory;
 
@@ -124,7 +124,6 @@ public class EditEventFragment extends Fragment {
     ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
         @Override
         public void onActivityResult(Map<String, Boolean> result) {
-            Log.d(TAG, "permission result: " + result);
 
             final boolean[] permission = {true};
 
@@ -151,40 +150,20 @@ public class EditEventFragment extends Fragment {
 
 
         //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
-        adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, list);
+        adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
 
         binding.editToothActionACTV.setAdapter(adapter);
 
         //todo list lost when chosen some item and orientation changed. Issue
         // binding.editToothActionACTV.setText(event.getAction(),false);
-        binding.editToothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                event.setAction(list.get(position));
-            }
-        });
+        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
 
-        binding.editGuaranteeSlider.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                event.setGuarantee(Math.round(value));
-            }
-        });
+        binding.editGuaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
         setTextActionACTV();
 
-        binding.photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyCameraPermissions();
-            }
-        });
+        binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
-        binding.galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                galleryButtonClicked();
-            }
-        });
+        binding.galleryButton.setOnClickListener(v -> galleryButtonClicked());
 
         createDirectory();
         createEventPhotosList();
@@ -239,6 +218,8 @@ public class EditEventFragment extends Fragment {
         if (model.getPhotosListForDeleting() != null) {
             photosUri.removeAll(model.getPhotosListForDeleting());
         }
+
+        clearPhotosUriFromDeletedItems();
 
         eventPhotosListAdapter.notifyDataSetChanged();
     }
@@ -302,17 +283,30 @@ public class EditEventFragment extends Fragment {
         });
         eventPhotosListAdapter.setSelectionTracker(tracker);
 
-        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        eventPhotosListAdapter.setClickListener((view, position) -> {
 
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
-                startActivity(intent);
-            }
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+            startActivity(intent);
         });
+    }
+
+    private void clearPhotosUriFromDeletedItems() {
+
+        List<String> tempList = new ArrayList<>();
+
+        for (String uri : photosUri) {
+            File file = new File(uri);
+            if (file.exists()) {
+                tempList.add(uri);
+            }
+        }
+
+        photosUri.clear();
+        photosUri.addAll(tempList);
+
     }
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -422,12 +416,12 @@ public class EditEventFragment extends Fragment {
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         if (toothModel != null) {
-            list.clear();
+            actions.clear();
             if (event.getActions() != null) {
-                list.addAll(event.getActions());
+                actions.addAll(event.getActions());
 
                 binding.editToothActionACTV.setText(event.getAction(), false);
-                event.setAction(list.get(0));
+                event.setAction(actions.get(0));
                 //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
                 adapter.notifyDataSetChanged();
             }
@@ -446,6 +440,8 @@ public class EditEventFragment extends Fragment {
 
         binding.editToothActionACTV.setText(event.getAction(), false);
         setTextActionACTV();
+
+        model.clearPhotosListToDeleting();
 
         refillPhotosUriList();
     }

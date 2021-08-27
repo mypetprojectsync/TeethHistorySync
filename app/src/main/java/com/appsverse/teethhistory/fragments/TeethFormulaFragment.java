@@ -82,10 +82,11 @@ public class TeethFormulaFragment extends Fragment {
 
             toothModels = model.getAllToothModelsForUser(user_id);
 
-             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
+            tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition());
+
             binding.setTooth(tooth);
 
-            //todo hide teeth layout when recyclerview scroll down and show whe scroll up
+            //todo hide teeth layout when events list recyclerview scroll down and show when it scroll up
 
 
             for (int i = 0; i < 16; i++) {
@@ -139,8 +140,14 @@ public class TeethFormulaFragment extends Fragment {
         toothPositionIV.setImageResource(id);
         toothPositionIV.setAdjustViewBounds(true);
 
-        linearLayout.addView(toothIV);
-        linearLayout.addView(toothPositionIV);
+        if (i >= 0 && i < 16) {
+            linearLayout.addView(toothIV);
+            linearLayout.addView(toothPositionIV);
+        } else {
+            linearLayout.addView(toothPositionIV);
+            linearLayout.addView(toothIV);
+
+        }
 
         toothIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,16 +160,22 @@ public class TeethFormulaFragment extends Fragment {
     }
 
     private ImageView getToothImageView(int i) {
+
         ImageView toothIV = new ImageView(this.getContext());
         toothIV.setScaleType(ImageView.ScaleType.FIT_START);
 
 
         if (toothModels.get(i).isExist()) {
-            String toothIcon = "ic_" + toothModels.get(i).getPosition() + chooseToothState(i);
+
+            int position = toothModels.get(i).getPosition();
+
+            if (position > 50) position = position - 40;
+
+            String toothIcon = "ic_" + position + chooseToothState(i);
             int id = getResources().getIdentifier(toothIcon, "drawable", getActivity().getPackageName());
             toothIV.setImageResource(id);
         } else {
-            setGum(toothIV,toothModels.get(i).getId());
+            setGum(toothIV, toothModels.get(i).getId());
         }
         toothIV.setAdjustViewBounds(true);
         toothIV.setTag(toothModels.get(i).getPosition());
@@ -197,10 +210,12 @@ public class TeethFormulaFragment extends Fragment {
         if (activityMainBinding.getModel().getChosenToothID() > 0) {
             Log.d(TAG, "previous tooth condition: " + tooth.getToothState());
 
-            ImageView toothIV = (ImageView) binding.getRoot().findViewById(tooth.getPosition());
+
+            ImageView toothIV = (ImageView) binding.getRoot().findViewById(tooth.getId());
 
             if (tooth.isExist()) {
-                String toothDrawableId = "ic_" + tooth.getPosition() + chooseToothState();
+
+                String toothDrawableId = "ic_" + tooth.getId() + chooseToothState();
                 int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
                 toothIV.setImageResource(id);
             } else {
@@ -208,12 +223,12 @@ public class TeethFormulaFragment extends Fragment {
             }
         }
 
-        activityMainBinding.getModel().setChosenToothID((Integer) view.getTag());
+        activityMainBinding.getModel().setChosenToothID((Integer) view.getId());
         setTooth();
 
-        String toothDrawableId = "ic_" + tooth.getPosition() + "g_selected";
+        String toothDrawableId = "ic_" + tooth.getId() + "g_selected";
         int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
-        ((ImageView) binding.getRoot().findViewById(tooth.getPosition())).setImageResource(id);
+        ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
 
         Log.d(TAG, "chosen tooth condition: " + tooth.getToothState());
 
