@@ -79,7 +79,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         }
 
         Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
-        //if (maxEventId%1000 == eventModel.getId()%1000) removeToothState(eventModel, toothModel,mainActivity);
+
         if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel,mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
