@@ -219,6 +219,22 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
         return tooth;
     }
+
+    public void saveTooth(Tooth tooth, MainActivity activity) {
+        ToothModel toothModel = getToothModel(activity);
+
+        realm.beginTransaction();
+
+        toothModel.setPosition(tooth.getPosition());
+        toothModel.setExist(tooth.isExist());
+        toothModel.setBabyTooth(tooth.isBabyTooth());
+        toothModel.setPermanentTooth(tooth.isPermanentTooth());
+        toothModel.setFilling(tooth.isFilling());
+        toothModel.setImplant(tooth.isImplant());
+
+        realm.commitTransaction();
+    }
+
 }
 
 

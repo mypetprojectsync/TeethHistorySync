@@ -19,6 +19,13 @@
     <string name="share">Share</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="photo_already_added">The photo has already added</string>
+    <string name="edit_tooth_state">"Изменить состояние зуба #"</string>
+    <string name="is_exist">Существует</string>
+    <string name="is_baby_tooth">Молочный зуб</string>
+    <string name="is_permanent_tooth">Коренной зуб</string>
+    <string name="is_filled">Запломбирован</string>
+    <string name="is_implant">Имплант</string>
+    <string name="state">""</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="permanent_tooth_actions">

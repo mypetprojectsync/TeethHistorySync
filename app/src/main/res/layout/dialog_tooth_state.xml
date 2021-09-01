@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="tooth"
+            type="com.appsverse.teethhistory.data.Tooth" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="@={tooth.exist}"
+            android:text="@string/is_exist"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <RadioButton
+                android:id="@+id/radio_button_baby_tooth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@={tooth.babyTooth}"
+                android:text="@string/is_baby_tooth" />
+
+            <RadioButton
+                android:id="@+id/radio_button_permanent_tooth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@={tooth.permanentTooth}"
+                android:text="@string/is_permanent_tooth" />
+        </RadioGroup>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="@={tooth.filling}"
+            android:text="@string/is_filled"
+            android:visibility="@{tooth.exist ? View.VISIBLE : View.GONE }"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="@={tooth.implant}"
+            android:text="@string/is_implant"
+            android:visibility="@{(tooth.babyTooth || !tooth.exist) ? View.GONE : View.VISIBLE}"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
+    </LinearLayout>
+
+</layout>
