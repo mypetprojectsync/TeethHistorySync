@@ -14,12 +14,20 @@
     <string name="create_new_user">Создать пользователя</string>
     <string name="cancel">Отмена</string>
     <string name="edit_username">Редактировать имя пользователя</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="format">%1$td/%1$tm/%1$tY</string>
     <string name="triple_dots">⋮</string>
     <string name="share">Поделиться</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="photo_already_added">Фото уже было добавлено ранее</string>
+    <string name="edit_tooth_state">"Edit tooth #"</string>
+    <string name="state">\" state\"</string>
+    <string name="is_exist">Exist</string>
+    <string name="is_baby_tooth">Baby tooth</string>
+    <string name="is_permanent_tooth">Permanent tooth</string>
+    <string name="is_filled">Filled</string>
+    <string name="is_implant">Implant</string>
+
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="permanent_tooth_actions">

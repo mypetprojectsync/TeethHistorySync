@@ -2,10 +2,9 @@ package com.appsverse.teethhistory.viewModels;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.media.MediaScannerConnection;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.lifecycle.ViewModel;
 
@@ -27,6 +26,7 @@ import io.realm.Sort;
 public class NewEventViewModel extends ViewModel {
 
     final String TAG = "myLogs";
+    final int MINIMAL_POSITION_IMAGE_ID = 1000;
     final Realm realm = Realm.getDefaultInstance();
 
     private int id;
@@ -216,8 +216,12 @@ public class NewEventViewModel extends ViewModel {
                         toothModel.setPermanentTooth(true);
 
                         toothModel.setPosition(toothModel.getPosition() - 40);
-                        TextView chosenTV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId());
-                        chosenTV.setText(String.valueOf(toothModel.getPosition()));
+
+                        ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId()+MINIMAL_POSITION_IMAGE_ID);
+                        String toothNumber = "ic_" + toothModel.getPosition();
+                        id = context.getResources().getIdentifier(toothNumber, "drawable", ((MainActivity) context).getPackageName());
+                        toothPositionIV.setImageResource(id);
+                        toothPositionIV.setAdjustViewBounds(true);
 
                     } else if (toothModel.isPermanentTooth()) {
                         toothModel.setPermanentTooth(false);

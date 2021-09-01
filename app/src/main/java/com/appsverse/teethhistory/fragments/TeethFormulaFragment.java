@@ -27,6 +27,7 @@ import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
+import com.appsverse.teethhistory.databinding.DialogToothStateBinding;
 import com.appsverse.teethhistory.databinding.FragmentTeethFormulaBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -38,6 +39,8 @@ import java.util.Date;
 import java.util.List;
 
 public class TeethFormulaFragment extends Fragment {
+
+    final int MINIMAL_POSITION_IMAGE_ID = 1000;
 
     TeethFormulaFragmentViewModel model;
     public FragmentTeethFormulaBinding binding;
@@ -57,9 +60,13 @@ public class TeethFormulaFragment extends Fragment {
 
     int orientation;
 
+    DialogToothStateBinding dialogToothStateBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        Log.d(TAG, "TeethFormulaFragment on createView started");
 
         mainActivity = (MainActivity) this.getActivity();
         activityMainBinding = mainActivity.getBinding();
@@ -87,7 +94,6 @@ public class TeethFormulaFragment extends Fragment {
             binding.setTooth(tooth);
 
             //todo hide teeth layout when events list recyclerview scroll down and show when it scroll up
-
 
             for (int i = 0; i < 16; i++) {
                 binding.llTeethFirstRow.addView(setToothImage(i));
@@ -139,6 +145,7 @@ public class TeethFormulaFragment extends Fragment {
         id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
         toothPositionIV.setImageResource(id);
         toothPositionIV.setAdjustViewBounds(true);
+        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
 
         if (i >= 0 && i < 16) {
             linearLayout.addView(toothIV);
@@ -156,7 +163,43 @@ public class TeethFormulaFragment extends Fragment {
             }
         });
 
+        toothIV.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                toothClicked(v);
+
+                toothLongClicked(v);
+
+                return false;
+            }
+        });
+
         return linearLayout;
+    }
+
+    private void toothLongClicked(View v) {
+
+        dialogToothStateBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_tooth_state, null, false);
+        dialogToothStateBinding.setTooth(tooth);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
+
+        dialogBuilder.setView(dialogToothStateBinding.getRoot().getRootView());
+
+        dialogBuilder.setTitle(getString(R.string.edit_tooth_state) + tooth.getPosition() + getString(R.string.state));
+        dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
+            model.saveTooth(tooth, (MainActivity) getActivity());
+
+            ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(tooth.getId()+1000);
+            String toothNumber = "ic_" + tooth.getPosition();
+            int id = getContext().getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
+            toothPositionIV.setImageResource(id);
+            toothPositionIV.setAdjustViewBounds(true);
+        });
+        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
+        dialogBuilder.show();
+
     }
 
     private ImageView getToothImageView(int i) {

@@ -79,7 +79,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         }
 
         Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
-        //if (maxEventId%1000 == eventModel.getId()%1000) removeToothState(eventModel, toothModel,mainActivity);
+
         if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel,mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
@@ -219,6 +219,22 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
         return tooth;
     }
+
+    public void saveTooth(Tooth tooth, MainActivity activity) {
+        ToothModel toothModel = getToothModel(activity);
+
+        realm.beginTransaction();
+
+        toothModel.setPosition(tooth.getPosition());
+        toothModel.setExist(tooth.isExist());
+        toothModel.setBabyTooth(tooth.isBabyTooth());
+        toothModel.setPermanentTooth(tooth.isPermanentTooth());
+        toothModel.setFilling(tooth.isFilling());
+        toothModel.setImplant(tooth.isImplant());
+
+        realm.commitTransaction();
+    }
+
 }
 
 

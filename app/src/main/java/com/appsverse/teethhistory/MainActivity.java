@@ -43,6 +43,8 @@ import java.io.InputStreamReader;
 
 import io.realm.RealmResults;
 
+//TODO Delete all photos in app folder when uninstalling the app
+
 public class MainActivity extends AppCompatActivity {
 
     final String TAG = "myLogs";
@@ -200,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //todo implement toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar_main_activity, menu);

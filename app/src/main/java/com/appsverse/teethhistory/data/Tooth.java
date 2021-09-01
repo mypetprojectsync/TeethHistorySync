@@ -64,6 +64,7 @@ public class Tooth extends BaseObservable {
     }
 
     public void setBabyTooth(boolean isBabyTooth) {
+        if (isBabyTooth && position>10 && position<50) setPosition(position+40);
         this.isBabyTooth = isBabyTooth;
         notifyPropertyChanged(BR.babyTooth);
     }
@@ -75,6 +76,7 @@ public class Tooth extends BaseObservable {
     }
 
     public void setPermanentTooth(boolean isPermanentTooth) {
+        if (isPermanentTooth && position>50 && position<90) setPosition(position-40);
         this.isPermanentTooth = isPermanentTooth;
         notifyPropertyChanged(BR.permanentTooth);
     }
@@ -85,6 +87,7 @@ public class Tooth extends BaseObservable {
     }
 
     public void setFilling(boolean filling) {
+        if (filling) setImplant(false);
         this.isFilling = filling;
         notifyPropertyChanged(BR.filling);
     }
@@ -95,6 +98,7 @@ public class Tooth extends BaseObservable {
     }
 
     public void setImplant(boolean implant) {
+        if (implant) setFilling(false);
         this.isImplant = implant;
         notifyPropertyChanged(BR.implant);
     }
@@ -105,7 +109,7 @@ public class Tooth extends BaseObservable {
                 + ", isExist: " + isExist()
                 + ", isBabyTooth: " + isBabyTooth()
                 + ", isPermanentTooth: " + isPermanentTooth()
-                + ", isFilled" + isFilling()
-                + ", isImplant" + isImplant();
+                + ", isFilled " + isFilling()
+                + ", isImplant " + isImplant();
     }
 }

@@ -67,7 +67,6 @@ public class EditEventFragment extends Fragment {
 
     Event event;
     ArrayAdapter adapter;
-    //todo rename list below
     List<String> actions = new ArrayList<>();
 
     File directory;

@@ -39,7 +39,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             EventModel event = eventModels.get(position);
-            //todo format to dd.MM.yyyy
 
             Date guarantyLastDate = getGuarantyLastDate(event);
             long guarantyDaysLeft = TimeUnit.DAYS.convert(guarantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
