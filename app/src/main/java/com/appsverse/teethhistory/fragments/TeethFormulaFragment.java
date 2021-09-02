@@ -199,7 +199,6 @@ public class TeethFormulaFragment extends Fragment {
         });
         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         dialogBuilder.show();
-
     }
 
     private ImageView getToothImageView(int i) {
