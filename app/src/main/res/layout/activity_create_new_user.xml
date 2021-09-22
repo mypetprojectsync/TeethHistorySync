@@ -39,7 +39,8 @@
                 android:id="@+id/nameTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={user.name}" />
+                android:text="@={user.name}"
+                android:imeOptions="flagNoExtractUi"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

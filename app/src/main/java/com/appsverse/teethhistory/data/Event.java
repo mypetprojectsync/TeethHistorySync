@@ -89,7 +89,6 @@ public class Event extends BaseObservable {
     public void setGuarantee(int guarantee) {
         this.guarantee = guarantee;
         notifyPropertyChanged(BR.guarantee);
-        Log.d(TAG, "setGuarantee: " + guarantee);
     }
 
     @Bindable
