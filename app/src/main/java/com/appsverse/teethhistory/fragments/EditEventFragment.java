@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -48,7 +47,6 @@ import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.EditEventViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.slider.Slider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
