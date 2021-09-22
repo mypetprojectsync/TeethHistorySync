@@ -69,7 +69,7 @@ public class OnClickHandler {
                     createNewUserActivityStart(binding);
                     break;
                 case R.id.choose_user_menu_item:
-                    createChooseUserSubmenu(item, model, binding);
+                    createChooseUserSubmenu(item, binding);
                     break;
                 case R.id.edit_user_menu_item:
                     createEditUserNameDialog(binding);
@@ -147,15 +147,14 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         binding.getRoot().getContext().startActivity(intent);
     }
 
-    //todo найти способ добыть контекст из menuitem
-    public void createChooseUserSubmenu(MenuItem item, MainActivityViewModel model, ActivityMainBinding binding) {
+    public void createChooseUserSubmenu(MenuItem item, ActivityMainBinding binding) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.getRoot().getContext());
         int user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
         SubMenu subMenu = item.getSubMenu();
 
-        for (UserModel user_model : model.getAllUsers()) {
+        for (UserModel user_model : binding.getModel().getAllUsers()) {
             if (user_model.getId() != user_id)
                 subMenu.addSubMenu(0, user_model.getId(), Menu.NONE, user_model.getName());
         }

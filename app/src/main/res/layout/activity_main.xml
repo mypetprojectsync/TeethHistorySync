@@ -48,18 +48,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--android:layout_marginTop="?attr/actionBarSize"-->
     <LinearLayout
         android:id="@+id/main_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
 
-
         android:orientation="horizontal"
         android:layout_above="@+id/adView">
 
-        <!--todo try to change name to variable-->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/teeth_formula_fragment"
             android:name="com.appsverse.teethhistory.fragments.TeethFormulaFragment"

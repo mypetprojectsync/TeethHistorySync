@@ -9,7 +9,10 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,6 +64,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class NewEventFragment extends Fragment {
+
+    final int MAX_GUARANTEE = 360;
 
     NewEventViewModel model;
     public FragmentNewEventBinding binding;
@@ -186,7 +191,10 @@ public class NewEventFragment extends Fragment {
                 event.setGuarantee(Math.round(value));
             }
         });
+
         setTextActionACTV();
+
+        setGuaranteeTIET();
 
         binding.photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -482,6 +490,40 @@ public class NewEventFragment extends Fragment {
             //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void setGuaranteeTIET() {
+
+        binding.guaranteeTIET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                if (s.toString().equals("0")) setSelectionWithDelay(1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().equals("")) {
+                    binding.guaranteeTIET.setText("0");
+                    setSelectionWithDelay(1);
+
+                } else if (Integer.parseInt(s.toString()) > MAX_GUARANTEE) {
+                    event.setGuarantee(MAX_GUARANTEE);
+                    setSelectionWithDelay(3);
+                }
+            }
+        });
+    }
+
+    private void setSelectionWithDelay(int i) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> binding.guaranteeTIET.setSelection(i),10);
     }
 
     @Override

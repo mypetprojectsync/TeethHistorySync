@@ -9,14 +9,16 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -48,7 +50,6 @@ import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.EditEventViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.slider.Slider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -60,6 +61,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class EditEventFragment extends Fragment {
+
+    final int MAX_GUARANTEE = 360;
 
     EditEventViewModel model;
     FragmentEditEventBinding binding;
@@ -158,7 +161,10 @@ public class EditEventFragment extends Fragment {
         binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
 
         binding.editGuaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
+
         setTextActionACTV();
+
+        setGuaranteeTIET();
 
         binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
@@ -170,6 +176,40 @@ public class EditEventFragment extends Fragment {
         refillPhotosUriList();
 
         return binding.getRoot();
+    }
+
+    private void setGuaranteeTIET() {
+
+        binding.editGuaranteeTIET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                if (s.toString().equals("0")) setSelectionWithDelay(1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().equals("")) {
+                    binding.editGuaranteeTIET.setText("0");
+                    setSelectionWithDelay(1);
+
+                } else if (Integer.parseInt(s.toString()) > MAX_GUARANTEE) {
+                    event.setGuarantee(MAX_GUARANTEE);
+                    setSelectionWithDelay(3);
+                }
+            }
+        });
+    }
+
+    private void setSelectionWithDelay(int i) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> binding.editGuaranteeTIET.setSelection(i),10);
     }
 
     private String getPathFromUri(Uri data) {

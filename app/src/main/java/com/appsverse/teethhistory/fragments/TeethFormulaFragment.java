@@ -93,8 +93,6 @@ public class TeethFormulaFragment extends Fragment {
 
             binding.setTooth(tooth);
 
-            //todo hide teeth layout when events list recyclerview scroll down and show when it scroll up
-
             for (int i = 0; i < 16; i++) {
                 binding.llTeethFirstRow.addView(setToothImage(i));
             }
