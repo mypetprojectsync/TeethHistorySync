@@ -257,7 +257,7 @@ public class EditEventViewModel extends ViewModel {
 
 
         if (photosListForDeleting != null) {
-            deleteSelectedPhotos(context);
+            deleteSelectedPhotos();
         }
 
     }
@@ -336,9 +336,7 @@ public class EditEventViewModel extends ViewModel {
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
-    public void deleteSelectedPhotos(Context context) {
-
-        //todo check and delete in not main thread?
+    public void deleteSelectedPhotos() {
 
         for (String uri : photosListForDeleting) {
 

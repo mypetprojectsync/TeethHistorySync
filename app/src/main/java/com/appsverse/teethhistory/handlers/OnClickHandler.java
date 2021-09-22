@@ -197,7 +197,6 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
 
         //todo try another type of TIET layout (more information on material.io)
         //todo sometimes keyboard didn't show when orientation changed
-        //todo clear spaces after save
 
         Activity activity = (Activity) binding.getRoot().getContext();
         Single.fromCallable(() -> requestFocusWithDelay(300, editUsernameBinding, activity)).subscribeOn(Schedulers.io()).subscribe();
@@ -231,7 +230,7 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         });
 
         dialog.setPositiveButton(R.string.ok, (dialog1, which) -> {
-            model.updateUsername(user.getName());
+            model.updateUsername(user.getName().trim());
             ((MainActivity) activity).getSupportActionBar().setTitle(model.getUsername());
         });
 
@@ -252,7 +251,6 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         model.setEditUserDialog(dialog.create());
 
         model.getEditUserDialog().show();
-        if (editUsernameBinding.editNameTIET.getText().length() < 1) model.getEditUserDialog().getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 
         model.setEditUsernameDialogActive(true);
     }

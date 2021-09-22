@@ -51,46 +51,44 @@ public class CreateNewUserViewModel extends ViewModel {
     }
 
     public void onClickSaveButton(User user, Context context) {
+        if (user.getName().trim().length() > 0) {
+            Number current_id = realm.where(UserModel.class).max("id");
 
-        Number current_id = realm.where(UserModel.class).max("id");
+            int next_id;
 
-        Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
+            if (current_id == null) {
+                next_id = 0;
+            } else {
+                next_id = current_id.intValue() + 1;
+            }
 
-        int next_id;
+            realm.beginTransaction();
+            UserModel userModel = realm.createObject(UserModel.class, next_id);
+            userModel.setName(user.getName().trim());
+            userModel.setNoTeeth(user.isNoTeeth());
+            userModel.setBabyTeeth(user.isBabyTeeth());
+            realm.commitTransaction();
 
-        if (current_id == null) {
-            next_id = 0;
-        } else {
-            next_id = current_id.intValue() + 1;
+            if (user.isNoTeeth()) {
+                setNoTeethToothModels(userModel);
+            } else if (user.isBabyTeeth()) {
+                setBabyTeethToothModels(userModel);
+            } else {
+                setPermanentTeethToothModels(userModel);
+            }
+
+            Log.d(TAG, "" + realm.where(ToothModel.class).findAll());
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("chosen_user_id", next_id);
+            editor.apply();
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            context.startActivity(intent);
+            realm.close();
         }
-
-        Log.d(TAG, "start writing new user to database");
-        realm.beginTransaction();
-        UserModel userModel = realm.createObject(UserModel.class, next_id);
-        userModel.setName(user.getName());
-        userModel.setNoTeeth(user.isNoTeeth());
-        userModel.setBabyTeeth(user.isBabyTeeth());
-        realm.commitTransaction();
-
-        if (user.isNoTeeth()) {
-            setNoTeethToothModels(userModel);
-        } else if (user.isBabyTeeth()) {
-            setBabyTeethToothModels(userModel);
-        } else {
-            setPermanentTeethToothModels(userModel);
-        }
-
-           Log.d(TAG, ""+ realm.where(ToothModel.class).findAll());
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("chosen_user_id", next_id);
-        editor.apply();
-
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        context.startActivity(intent);
-        realm.close();
         ((Activity) context).finish();
     }
 

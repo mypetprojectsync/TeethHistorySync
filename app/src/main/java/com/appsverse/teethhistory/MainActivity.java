@@ -43,8 +43,6 @@ import java.io.InputStreamReader;
 
 import io.realm.RealmResults;
 
-//TODO Delete all photos in app folder when uninstalling the app
-
 public class MainActivity extends AppCompatActivity {
 
     final String TAG = "myLogs";
@@ -124,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
 
-            //todo close ads banner when activity paused() or destroy()
             mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
 
@@ -167,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(user.getName());
 
         } else {
-            Log.d(TAG, "model.isUserExist() == false");
             Intent intent = new Intent(this, CreateNewUserActivity.class);
             this.startActivity(intent);
         }
@@ -231,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed()");
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
