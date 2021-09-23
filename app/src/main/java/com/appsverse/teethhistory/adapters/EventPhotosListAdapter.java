@@ -75,8 +75,6 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
 
         @Override
         public ItemDetailsLookup.ItemDetails getItemDetails() {
-            Log.d("myLogs", "ItemDetailsLookup.ItemDetails getItemDetails()");
-            Log.d("myLogs", "BindingAdapterPosition(): " + getBindingAdapterPosition());
             return new PhotoItemDetail(getBindingAdapterPosition(), (long) getBindingAdapterPosition());
         }
 

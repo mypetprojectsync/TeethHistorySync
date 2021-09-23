@@ -150,8 +150,6 @@ public class EditEventFragment extends Fragment {
 
         setDatePicker(event);
 
-
-        //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
 
         binding.editToothActionACTV.setAdapter(adapter);
