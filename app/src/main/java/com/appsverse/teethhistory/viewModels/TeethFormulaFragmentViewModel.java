@@ -1,6 +1,5 @@
 package com.appsverse.teethhistory.viewModels;
 
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModel;
@@ -78,8 +77,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
-        Log.d(TAG, "maxEventId: " + maxEventId%1000 + " event id: " + eventModel.getId()%1000);
-
         if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel,mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
@@ -91,9 +88,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         realm.commitTransaction();
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
-
-        Log.d(TAG, "tooth state after delete" + toothModel.toString());
-        //todo hide editEventFragment if delete event which opened on new event fragment
     }
 
     private void resetToothState(UserModel userModel, ToothModel toothModel) {
@@ -133,7 +127,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     }
 
     private void removeToothState(EventModel eventModel, ToothModel toothModel, MainActivity mainActivity) {
-        Log.d(TAG, "removeToothState");
+
         switch (eventModel.getAction()) {
             case "Extracted":
                 returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
@@ -200,7 +194,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     public ToothModel getToothModel(MainActivity mainActivity){
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
-        Log.d(TAG, "getToothModel() user_id: " + mainActivity.user_id + " chosen_tooth: " + mainActivityViewModel.getChosenToothID());
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
@@ -236,6 +229,3 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     }
 
 }
-
-
-//TODO delete all unused photos when delete user

@@ -2,7 +2,6 @@ package com.appsverse.teethhistory.viewModels;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -209,7 +208,6 @@ public class EditEventViewModel extends ViewModel {
         if (eventModelsResults.get(0).getId() == eventModel.getId()
                 && !oldEventModelAction.equals(newEventModelAction)) {
 
-            Log.d(TAG, "last event action: " + oldEventModelAction);
             switch (newEventModelAction) {
                 case "Extracted":
                     toothModel.setExist(false);
@@ -257,7 +255,7 @@ public class EditEventViewModel extends ViewModel {
 
 
         if (photosListForDeleting != null) {
-            deleteSelectedPhotos(context);
+            deleteSelectedPhotos();
         }
 
     }
@@ -336,9 +334,7 @@ public class EditEventViewModel extends ViewModel {
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
-    public void deleteSelectedPhotos(Context context) {
-
-        //todo check and delete in not main thread?
+    public void deleteSelectedPhotos() {
 
         for (String uri : photosListForDeleting) {
 

@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,7 +65,6 @@ public class EditEventFragment extends Fragment {
 
     EditEventViewModel model;
     FragmentEditEventBinding binding;
-    final String TAG = "myLogs";
 
     Event event;
     ArrayAdapter adapter;
@@ -94,8 +92,6 @@ public class EditEventFragment extends Fragment {
                         MediaScannerConnection.scanFile(getContext(), new String[]{publicPhotoUri.toString()}, null, null);
 
                         eventPhotosListAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d(TAG, "mGetContent photo canceled");
                     }
                 }
             });
@@ -150,14 +146,10 @@ public class EditEventFragment extends Fragment {
 
         setDatePicker(event);
 
-
-        //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
 
         binding.editToothActionACTV.setAdapter(adapter);
 
-        //todo list lost when chosen some item and orientation changed. Issue
-        // binding.editToothActionACTV.setText(event.getAction(),false);
         binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
 
         binding.editGuaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
@@ -246,7 +238,6 @@ public class EditEventFragment extends Fragment {
     }
 
     private void refillPhotosUriList() {
-        Log.d(TAG, "refillPhotosUriList()");
 
         photosUri.clear();
 
@@ -299,8 +290,6 @@ public class EditEventFragment extends Fragment {
             @Override
             public void onSelectionChanged() {
                 super.onSelectionChanged();
-
-                Log.d(TAG, "onSelectionChanged() started");
 
                 if (tracker.hasSelection() && actionMode == null) {
                     actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
@@ -362,7 +351,6 @@ public class EditEventFragment extends Fragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            Log.d(TAG, "Action menu clicked: " + item.getTitle());
 
                 List<String> listForRemove = new ArrayList<>();
 
@@ -372,10 +360,8 @@ public class EditEventFragment extends Fragment {
 
                 if (model.getPhotosListForDeleting() == null) {
                     model.setPhotosListForDeleting(listForRemove);
-                    Log.d(TAG, "model.setPhotosListForDeleting: " + model.getPhotosListForDeleting());
                 } else {
                     model.addListToPhotosListToDeleting(listForRemove);
-                    Log.d(TAG, "model.addListToPhotosListForDeleting: " + model.getPhotosListForDeleting());
                 }
                 photosUri.removeAll(listForRemove);
 
@@ -428,8 +414,7 @@ public class EditEventFragment extends Fragment {
         Uri imageUri = FileProvider.getUriForFile(this.getContext(), "com.appsverse.teethhistory.fileprovider", file);
 
         publicPhotoUri = Uri.parse(file.getAbsolutePath());
-        Log.d(TAG, "publicUri: " + publicPhotoUri);
-        Log.d(TAG, "nonpublicUri: " + imageUri);
+
         return imageUri;
     }
 
@@ -445,13 +430,11 @@ public class EditEventFragment extends Fragment {
             picker.addOnPositiveButtonClickListener(selection -> {
                 String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selection);
                 event.setDate(new Date((Long) selection));
-                Log.d(TAG, date);
             });
         });
     }
 
     public void setTextActionACTV() {
-        Log.d(TAG, "setTextActionACTV()");
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         if (toothModel != null) {
@@ -461,7 +444,6 @@ public class EditEventFragment extends Fragment {
 
                 binding.editToothActionACTV.setText(event.getAction(), false);
                 event.setAction(actions.get(0));
-                //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
                 adapter.notifyDataSetChanged();
             }
         }

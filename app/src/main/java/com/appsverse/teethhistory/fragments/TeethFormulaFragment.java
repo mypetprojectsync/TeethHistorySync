@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +43,6 @@ public class TeethFormulaFragment extends Fragment {
 
     TeethFormulaFragmentViewModel model;
     public FragmentTeethFormulaBinding binding;
-    final String TAG = "myLogs";
 
     MainActivity mainActivity;
     ActivityMainBinding activityMainBinding;
@@ -65,8 +63,6 @@ public class TeethFormulaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        Log.d(TAG, "TeethFormulaFragment on createView started");
 
         mainActivity = (MainActivity) this.getActivity();
         activityMainBinding = mainActivity.getBinding();
@@ -104,7 +100,6 @@ public class TeethFormulaFragment extends Fragment {
         }
 
         binding.floatingActionButton.setOnClickListener(v -> {
-            Log.d(TAG, "floating button was clicked");
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
@@ -204,8 +199,13 @@ public class TeethFormulaFragment extends Fragment {
         ImageView toothIV = new ImageView(this.getContext());
         toothIV.setScaleType(ImageView.ScaleType.FIT_START);
 
+        if (toothModels.get(i).getId() == activityMainBinding.getModel().getChosenToothID()) {
 
-        if (toothModels.get(i).isExist()) {
+            String toothDrawableId = "ic_" + toothModels.get(i).getId() + "g_selected";
+            int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
+            toothIV.setImageResource(id);
+
+        } else if (toothModels.get(i).isExist()) {
 
             int position = toothModels.get(i).getPosition();
 
@@ -248,10 +248,8 @@ public class TeethFormulaFragment extends Fragment {
     private void toothClicked(View view) {
 
         if (activityMainBinding.getModel().getChosenToothID() > 0) {
-            Log.d(TAG, "previous tooth condition: " + tooth.getToothState());
 
-
-            ImageView toothIV = (ImageView) binding.getRoot().findViewById(tooth.getId());
+            ImageView toothIV = binding.getRoot().findViewById(tooth.getId());
 
             if (tooth.isExist()) {
 
@@ -263,14 +261,12 @@ public class TeethFormulaFragment extends Fragment {
             }
         }
 
-        activityMainBinding.getModel().setChosenToothID((Integer) view.getId());
+        activityMainBinding.getModel().setChosenToothID(view.getId());
         setTooth();
 
         String toothDrawableId = "ic_" + tooth.getId() + "g_selected";
         int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
         ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
-
-        Log.d(TAG, "chosen tooth condition: " + tooth.getToothState());
 
         if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
             mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
@@ -300,7 +296,7 @@ public class TeethFormulaFragment extends Fragment {
     private void createEventsList() {
 
         recyclerView = binding.eventsList;
-        //todo implement binding to recyclerView
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation());
 
@@ -312,11 +308,8 @@ public class TeethFormulaFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                Log.d(TAG, "rv clicked position: " + position);
-
                 if (view.getId() == R.id.itemEventOptions) {
 
-                    //todo try to safe in viewmodel when destroy
                     PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                     popupMenu.inflate(R.menu.event_item_options_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -327,10 +320,9 @@ public class TeethFormulaFragment extends Fragment {
                                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                                 setVisibilities();
-                                Log.d(TAG, "option edit clicked");
+
                             } else {
 
-                                //todo save dialog when orientation changed
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
@@ -392,10 +384,8 @@ public class TeethFormulaFragment extends Fragment {
             eventModels.addAll(mainActivity.getSortedEventsList());
 
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
-            Log.d(TAG, "refillEventsList() | if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE");
         } else {
             if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
-            Log.d(TAG, "refillEventsList() | else");
         }
         adapter.notifyDataSetChanged();
     }

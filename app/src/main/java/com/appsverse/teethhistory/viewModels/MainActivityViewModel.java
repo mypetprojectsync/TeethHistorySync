@@ -1,7 +1,5 @@
 package com.appsverse.teethhistory.viewModels;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,9 +27,7 @@ import io.realm.Sort;
 
 public class MainActivityViewModel extends ViewModel {
 
-    final String TAG = "myLogs";
     final Realm realm = Realm.getDefaultInstance();
-
 
     private int user_id;
     private String username;
@@ -126,8 +122,6 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void setMainActivityViewModelData(int user_id) {
-
-        Log.d(TAG, "setMainActivityViewModelData user_id: " + user_id);
 
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         this.setUser_id(userModel.getId());
@@ -235,8 +229,6 @@ public class MainActivityViewModel extends ViewModel {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
-        Log.d(TAG, "maxEventId: " + maxEventId % 1000 + " event id: " + eventModel.getId() % 1000);
-
         if (eventModelsResults.get(0).getId() == eventModel.getId())
             removeToothState(eventModel, toothModel, mainActivity);
 
@@ -249,9 +241,6 @@ public class MainActivityViewModel extends ViewModel {
         realm.commitTransaction();
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
-
-        Log.d(TAG, "tooth state after delete" + toothModel.toString());
-        //todo hide editEventFragment if delete event which opened on new event fragment
     }
 
     private void resetToothState(UserModel userModel, ToothModel toothModel) {
@@ -291,7 +280,6 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     private void removeToothState(EventModel eventModel, ToothModel toothModel, MainActivity mainActivity) {
-        Log.d(TAG, "removeToothState");
         switch (eventModel.getAction()) {
             case "Extracted":
                 returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
@@ -388,9 +376,6 @@ public class MainActivityViewModel extends ViewModel {
     private void setPrimaryKey(JSONArray jsonArray, int i, int current_id) {
         try {
             JSONObject arrayItem = jsonArray.getJSONObject(i);
-
-
-            Log.d(TAG, "CreateNewUserViewModel max_user_id: " + current_id);
 
             int next_id;
 

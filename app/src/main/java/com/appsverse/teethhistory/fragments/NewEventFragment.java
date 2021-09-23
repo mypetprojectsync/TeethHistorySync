@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +54,6 @@ import com.google.android.material.slider.Slider;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -69,9 +67,6 @@ public class NewEventFragment extends Fragment {
 
     NewEventViewModel model;
     public FragmentNewEventBinding binding;
-    final String TAG = "myLogs";
-
-    final Calendar myCalendar = Calendar.getInstance();
 
     Event event;
 
@@ -100,8 +95,6 @@ public class NewEventFragment extends Fragment {
                         MediaScannerConnection.scanFile(getContext(), new String[]{publicPhotoUri.toString()}, null, null);
 
                         eventPhotosListAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d(TAG, "mGetContent photo canceled");
                     }
                 }
             });
@@ -132,7 +125,6 @@ public class NewEventFragment extends Fragment {
     ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
         @Override
         public void onActivityResult(Map<String, Boolean> result) {
-            Log.d(TAG, "permission result: " + result);
 
             final boolean[] permission = {true};
 
@@ -157,14 +149,10 @@ public class NewEventFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.d(TAG, "NewEventFragment onCreateView");
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_event, container, false);
 
         model = new ViewModelProvider(this).get(NewEventViewModel.class);
         binding.setModel(model);
-
-       Log.d(TAG, model.newEventViewModelState());
 
         event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
 
@@ -172,19 +160,15 @@ public class NewEventFragment extends Fragment {
 
         setDatePicker(event);
 
-         //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
-
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, list);
         binding.toothActionACTV.setAdapter(adapter);
 
-        //todo list lost when chosen some item and orientation changed. Issue https://github.com/material-components/material-components-android/issues/1464
-
-        binding.toothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                event.setAction(list.get(position));
-            }
-        });
+               binding.toothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                   @Override
+                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                       event.setAction(list.get(position));
+                   }
+               });
         binding.guaranteeSlider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -225,8 +209,6 @@ public class NewEventFragment extends Fragment {
     }
 
     private void refillPhotosUriList() {
-
-        Log.d(TAG, "refillPhotosUriList()");
 
         photosUri.clear();
 
@@ -294,16 +276,16 @@ public class NewEventFragment extends Fragment {
             public void onSelectionChanged() {
                 super.onSelectionChanged();
 
-                Log.d(TAG, "onSelectionChanged() started");
-
                 if (tracker.hasSelection() && actionMode == null) {
                     actionMode = ((MainActivity) getActivity()).startSupportActionMode(actionModeCallback);
 
                     actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-                    Log.d(TAG, "onSelectionChanged() actionMode.setTitle");
+
                 } else if (!tracker.hasSelection() && actionMode != null) {
+
                     actionMode.finish();
                     actionMode = null;
+
                 } else {
                     if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
                 }
@@ -332,9 +314,7 @@ public class NewEventFragment extends Fragment {
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            Log.d(TAG, "onCreateActionMode started");
             mode.getMenuInflater().inflate(R.menu.action_bar_photo_selected, menu);
-            Log.d(TAG, "onCreateActionMode ended");
             return true;
         }
 
@@ -345,7 +325,6 @@ public class NewEventFragment extends Fragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            Log.d(TAG, "Action menu clicked: " + item.getTitle());
 
             List<String> listForRemove = new ArrayList<>();
 
@@ -355,10 +334,8 @@ public class NewEventFragment extends Fragment {
 
             if (model.getPhotosListForDeleting() == null) {
                 model.setPhotosListForDeleting(listForRemove);
-                Log.d(TAG, "model.setPhotosListForDeleting: " + model.getPhotosListForDeleting());
             } else {
                 model.addListToPhotosListToDeleting(listForRemove);
-                Log.d(TAG, "model.addListToPhotosListForDeleting: " + model.getPhotosListForDeleting());
             }
             photosUri.removeAll(listForRemove);
 
@@ -446,13 +423,11 @@ public class NewEventFragment extends Fragment {
             picker.addOnPositiveButtonClickListener(selection -> {
                 String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selection);
                 event.setDate(new Date((Long) selection));
-                Log.d(TAG, date);
             });
         });
     }
 
     public void setTextActionACTV() {
-        Log.d(TAG, "setTextActionACTV()");
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         String[] items;
@@ -482,12 +457,9 @@ public class NewEventFragment extends Fragment {
             list.clear();
             Collections.addAll(list, items);
 
-            Log.d(TAG, "setTextActionACTV() list: " + list.toString());
-
             binding.toothActionACTV.setText(list.get(0), false);
             event.setAction(list.get(0));
             event.setActions(list);
-            //todo add to DataBindingAdapters chosenValue"@={event.action} https://stackoverflow.com/questions/58737505/autocompletetextview-or-spinner-data-binding-in-android
             adapter.notifyDataSetChanged();
         }
     }
@@ -529,8 +501,6 @@ public class NewEventFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG, "NewEventFragment onDestroy");
 
         model.setPosition(event.getPosition());
         model.setDate(event.getDate());

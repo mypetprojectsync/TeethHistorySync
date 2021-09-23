@@ -55,8 +55,6 @@
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- todo reduce size of TextInputEditText, add error message when > 3 symbols -->
-        <!-- todo maybe textview better -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="160dp"
             android:layout_height="wrap_content"
@@ -83,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:valueFrom="0"
-            android:valueTo="120"
+            android:valueTo="360"
             android:stepSize="1"
             android:value="360"/>
 

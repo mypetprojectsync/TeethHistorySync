@@ -43,8 +43,6 @@ import java.io.InputStreamReader;
 
 import io.realm.RealmResults;
 
-//TODO Delete all photos in app folder when uninstalling the app
-
 public class MainActivity extends AppCompatActivity {
 
     final String TAG = "myLogs";
@@ -59,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    // Handle the returned Uri
+
                     if (uri != null) {
-                        Log.d(TAG, "uri: " + uri);
+
                         File file = new File(uri.getPath());
                         if (file.exists()) {
                             FileInputStream fin = null;
@@ -76,16 +74,14 @@ public class MainActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            //Make sure you close all streams.
+
                             try {
                                 fin.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
-                            Log.d(TAG, ret);
-
-                            model.copyJsonToRealm(ret);
+                           model.copyJsonToRealm(ret);
                         }
                     }
                 }
@@ -108,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPreferences.getInt("chosen_user_id", -1);
@@ -119,12 +114,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (model.isUserExist()) {
-            Log.d(TAG, "model.isUserExist()");
 
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
 
-            //todo close ads banner when activity paused() or destroy()
             mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
 
@@ -167,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(user.getName());
 
         } else {
-            Log.d(TAG, "model.isUserExist() == false");
             Intent intent = new Intent(this, CreateNewUserActivity.class);
             this.startActivity(intent);
         }
@@ -231,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed()");
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
