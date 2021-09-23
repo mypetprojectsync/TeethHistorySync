@@ -28,7 +28,7 @@
             android:layout_marginEnd="30dp"
             android:clickable="true"
             android:focusable="true"
-            android:tooltipText="Add new event"
+            android:tooltipText="@string/add_new_event"
             android:visibility="@{tooth.id>0 ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_baseline_add_24" />
 

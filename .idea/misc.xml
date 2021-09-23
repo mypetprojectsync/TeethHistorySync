@@ -20,6 +20,8 @@
         <entry key="..\:/wrk/Android_projects/TeethHistory/app/src/main/res/layout/event_item.xml" value="0.2545289855072464" />
         <entry key="..\:/wrk/Android_projects/TeethHistory/app/src/main/res/layout/fragment_edit_event.xml" value="0.2563405797101449" />
         <entry key="..\:/wrk/Android_projects/TeethHistory/app/src/main/res/layout/fragment_new_event.xml" value="0.2545289855072464" />
+        <entry key="..\:/wrk/Android_projects/TeethHistory/app/src/main/res/layout/fragment_teeth_formula.xml" value="0.19739583333333333" />
+        <entry key="..\:/wrk/Android_projects/TeethHistory/app/src/main/res/menu/fragment_new_event_type.xml" value="0.19739583333333333" />
       </map>
     </option>
   </component>

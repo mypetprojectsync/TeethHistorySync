@@ -13,7 +13,6 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -134,7 +133,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/*");
 
-        binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Поделиться"));
+        binding.getRoot().getContext().startActivity(Intent.createChooser(intent, binding.getRoot().getContext().getString(R.string.share)));
 
     }
 

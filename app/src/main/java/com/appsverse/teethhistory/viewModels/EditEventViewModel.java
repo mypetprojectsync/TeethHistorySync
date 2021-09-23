@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
+import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -199,7 +200,7 @@ public class EditEventViewModel extends ViewModel {
         eventModelRealmList.deleteAllFromRealm();
         eventModelRealmList.addAll(event.getPhotosUri());
 
-        if (newEventModelAction.equals("Filled") || oldEventModelAction.equals("Filled")) {
+        if (newEventModelAction.equals(context.getString(R.string.filled)) || oldEventModelAction.equals(context.getString(R.string.filled))) {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
@@ -207,6 +208,8 @@ public class EditEventViewModel extends ViewModel {
 
         if (eventModelsResults.get(0).getId() == eventModel.getId()
                 && !oldEventModelAction.equals(newEventModelAction)) {
+
+            //TODO change switch to if/else, check same code in all project
 
             switch (newEventModelAction) {
                 case "Extracted":
