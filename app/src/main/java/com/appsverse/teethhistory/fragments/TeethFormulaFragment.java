@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +43,6 @@ public class TeethFormulaFragment extends Fragment {
 
     TeethFormulaFragmentViewModel model;
     public FragmentTeethFormulaBinding binding;
-    final String TAG = "myLogs";
 
     MainActivity mainActivity;
     ActivityMainBinding activityMainBinding;
@@ -65,8 +63,6 @@ public class TeethFormulaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        Log.d(TAG, "TeethFormulaFragment on createView started");
 
         mainActivity = (MainActivity) this.getActivity();
         activityMainBinding = mainActivity.getBinding();
@@ -104,7 +100,6 @@ public class TeethFormulaFragment extends Fragment {
         }
 
         binding.floatingActionButton.setOnClickListener(v -> {
-            Log.d(TAG, "floating button was clicked");
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
@@ -273,8 +268,6 @@ public class TeethFormulaFragment extends Fragment {
         int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
         ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
 
-        Log.d(TAG, "chosen tooth condition: " + tooth.getToothState());
-
         if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
             mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
             if (orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -391,10 +384,8 @@ public class TeethFormulaFragment extends Fragment {
             eventModels.addAll(mainActivity.getSortedEventsList());
 
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
-            Log.d(TAG, "refillEventsList() | if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE");
         } else {
             if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
-            Log.d(TAG, "refillEventsList() | else");
         }
         adapter.notifyDataSetChanged();
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
@@ -18,7 +17,6 @@ import io.realm.Realm;
 
 public class CreateNewUserViewModel extends ViewModel {
 
-    final String TAG = "myLogs";
     final Realm realm = Realm.getDefaultInstance();
 
     private int id;
@@ -76,8 +74,6 @@ public class CreateNewUserViewModel extends ViewModel {
             } else {
                 setPermanentTeethToothModels(userModel);
             }
-
-            Log.d(TAG, "" + realm.where(ToothModel.class).findAll());
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedPreferences.edit();

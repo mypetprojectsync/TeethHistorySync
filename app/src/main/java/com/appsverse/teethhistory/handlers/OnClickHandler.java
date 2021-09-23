@@ -46,12 +46,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OnClickHandler {
 
-    final String TAG = "myLogs";
-
     @SuppressLint("NonConstantResourceId")
     public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
 
-            Log.d(TAG, "Clicked on submenu item id: " + item.getItemId() + " name: " + item.getTitle());
 
         MainActivityViewModel model = binding.getModel();
 
@@ -135,7 +132,6 @@ public class OnClickHandler {
 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
         intent.setType("text/*");
 
         binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Поделиться"));
@@ -194,9 +190,6 @@ Log.d(TAG, binding.getRoot().getContext().getFilesDir().getAbsolutePath());
                 });
             }
         });
-
-        //todo try another type of TIET layout (more information on material.io)
-        //todo sometimes keyboard didn't show when orientation changed
 
         Activity activity = (Activity) binding.getRoot().getContext();
         Single.fromCallable(() -> requestFocusWithDelay(300, editUsernameBinding, activity)).subscribeOn(Schedulers.io()).subscribe();

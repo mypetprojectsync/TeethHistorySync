@@ -2,7 +2,6 @@ package com.appsverse.teethhistory.viewModels;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -25,7 +24,6 @@ import io.realm.Sort;
 
 public class NewEventViewModel extends ViewModel {
 
-    final String TAG = "myLogs";
     final int MINIMAL_POSITION_IMAGE_ID = 1000;
     final Realm realm = Realm.getDefaultInstance();
 
@@ -199,7 +197,6 @@ public class NewEventViewModel extends ViewModel {
         if (event.getPhotosUri() != null) amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
 
         for (int i = 0; i < amountOfNewPhotos; i++) {
-            Log.d(TAG, "eventModelRealmList.add");
             eventModelRealmList.add(event.getPhotosUri().get(eventModelRealmList.size()));
         }
 
@@ -244,22 +241,10 @@ public class NewEventViewModel extends ViewModel {
 
         realm.commitTransaction();
 
-        Log.d(TAG, "*******************************************************");
-        for (EventModel i : eventModelsResults) {
-            Log.d(TAG, "date in long: " + i.getDate().getTime());
-            Log.d(TAG, i.toString());
-        }
-        Log.d(TAG, "*******************************************************");
-
-        setVisibilities(context);
+                setVisibilities(context);
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getTeethFormulaFragment().setTooth();
-
-        Log.d(TAG, "Tooth condition: " + toothModel.toString());
-        for (EventModel i : toothModel.getEventModels()) {
-            Log.d(TAG, i.toString());
-        }
 
         if (photosListForDeleting != null) {
             deleteSelectedPhotos(context);
@@ -290,7 +275,6 @@ public class NewEventViewModel extends ViewModel {
     public ToothModel getToothModel(MainActivity mainActivity) {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
-        Log.d(TAG, "getToothModel() user_id: " + mainActivity.user_id + " chosen_tooth: " + mainActivityViewModel.getChosenToothID());
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
@@ -330,8 +314,6 @@ public class NewEventViewModel extends ViewModel {
     }
 
     public void deleteSelectedPhotos(Context context) {
-
-        //todo check and delete in not main thread?
 
         for (String uri : photosListForDeleting) {
             if (!checkUriInOtherEvents(uri)) {

@@ -1,6 +1,5 @@
 package com.appsverse.teethhistory.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
         Picasso.get().load("file://" + photosUri.get(position)).resize(200, 200).into(holder.photoImageButton);
 
         if (tracker != null)
-            holder.bind(photosUri.get(position), tracker.isSelected((long) position));
+            holder.bind(tracker.isSelected((long) position));
 
     }
 
@@ -68,8 +67,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
             photoImageButton.setOnClickListener(this);
         }
 
-        public final void bind(String item, boolean isActive) {
-            Log.d("myLogs", "bind isActive: " + isActive);
+        public final void bind(boolean isActive) {
             itemView.setActivated(isActive);
         }
 

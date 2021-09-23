@@ -1,7 +1,5 @@
 package com.appsverse.teethhistory.data;
 
-import android.util.Log;
-
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -9,8 +7,6 @@ import com.appsverse.teethhistory.BR;
 
 
 public class User extends BaseObservable {
-
-    final String TAG = "myLogs";
 
     private int id;
     private String name;
@@ -26,13 +22,10 @@ public class User extends BaseObservable {
 
     @Bindable
     public String getName() {
-
-        Log.d(TAG, "getName user: " + name);
         return name;
     }
 
     public void setName(String name) {
-        Log.d(TAG, "setName user: " + name);
         this.name = name;
         notifyPropertyChanged(BR.name);
     }

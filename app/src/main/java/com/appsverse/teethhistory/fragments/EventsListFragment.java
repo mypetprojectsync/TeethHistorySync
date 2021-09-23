@@ -35,7 +35,6 @@ import java.util.List;
 public class EventsListFragment extends Fragment {
     EventsListViewModel model;
     FragmentEventsListBinding binding;
-    final String TAG = "myLogs";
 
     MainActivity mainActivity;
     ActivityMainBinding activityMainBinding;
@@ -72,7 +71,6 @@ public class EventsListFragment extends Fragment {
 
 
         binding.floatingActionButton.setOnClickListener(v -> {
-            Log.d(TAG, "floating button was clicked");
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
@@ -100,7 +98,7 @@ public class EventsListFragment extends Fragment {
     private void createEventsList() {
 
         recyclerView = binding.eventsList;
-        //todo implement binding to recyclerView
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -110,11 +108,9 @@ public class EventsListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                Log.d(TAG, "rv clicked position: " + position);
 
                 if (view.getId() == R.id.itemEventOptions) {
 
-                    //todo try to safe in viewmodel when destroy
                     PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                     popupMenu.inflate(R.menu.event_item_options_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -125,10 +121,8 @@ public class EventsListFragment extends Fragment {
                                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                                 setVisibilities();
-                                Log.d(TAG, "option edit clicked");
                             } else {
 
-                                //todo save dialog when orientation changed
                                 MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
                                 dialogBuilder.setTitle("Delete event?");
                                 dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
@@ -139,7 +133,6 @@ public class EventsListFragment extends Fragment {
                                 });
                                 dialogBuilder.show();
 
-                                Log.d(TAG, "option delete clicked");
                             }
                             return false;
                         }

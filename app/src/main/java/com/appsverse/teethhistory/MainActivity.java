@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-                    // Handle the returned Uri
+
                     if (uri != null) {
-                        Log.d(TAG, "uri: " + uri);
+
                         File file = new File(uri.getPath());
                         if (file.exists()) {
                             FileInputStream fin = null;
@@ -74,16 +74,14 @@ public class MainActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            //Make sure you close all streams.
+
                             try {
                                 fin.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
-                            Log.d(TAG, ret);
-
-                            model.copyJsonToRealm(ret);
+                           model.copyJsonToRealm(ret);
                         }
                     }
                 }
@@ -106,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sharedPreferences.getInt("chosen_user_id", -1);
@@ -117,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (model.isUserExist()) {
-            Log.d(TAG, "model.isUserExist()");
 
             binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
             binding.setModel(model);
