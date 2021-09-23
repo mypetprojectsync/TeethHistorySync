@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Date"
+            android:hint="@string/date"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="Choose action"
+            android:hint="@string/choose_action"
             android:layout_marginTop="10dp">
 
             <com.appsverse.teethhistory.ExposedDropdownMenu
@@ -58,7 +58,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:hint="Guarantee in months"
+            android:hint="@string/guarantee_in_months"
             app:counterEnabled="true"
             app:counterMaxLength="3"
             app:errorEnabled="true"
@@ -88,7 +88,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Notes"
+            android:hint="@string/notes"
             app:counterEnabled="true"
             app:counterMaxLength="1000"
             app:errorEnabled="true"
@@ -152,7 +152,7 @@
                 android:layout_marginStart="40dp"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
-                android:text="Create event" />
+                android:text="@string/create_event" />
 
 
         </LinearLayout>

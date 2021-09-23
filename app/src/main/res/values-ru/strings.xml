@@ -20,44 +20,60 @@
     <string name="share">Поделиться</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="photo_already_added">Фото уже было добавлено ранее</string>
-    <string name="edit_tooth_state">"Edit tooth #"</string>
-    <string name="state">\" state\"</string>
-    <string name="is_exist">Exist</string>
-    <string name="is_baby_tooth">Baby tooth</string>
-    <string name="is_permanent_tooth">Permanent tooth</string>
-    <string name="is_filled">Filled</string>
-    <string name="is_implant">Implant</string>
+    <string name="edit_tooth_state">"Изменить состояние зуба #"</string>
+    <string name="state">""</string>
+    <string name="is_exist">Существует</string>
+    <string name="is_baby_tooth">Молочный зуб</string>
+    <string name="is_permanent_tooth">Коренной зуб</string>
+    <string name="is_filled">Запломбирован</string>
+    <string name="is_implant">Имплант</string>
+    <string name="no_teeth_yet">Ещё нет зубов</string>
+    <string name="have_all_baby_tooth">Молочные зубы выросли</string>
+    <string name="all_teeth_are_permanent">Все зубы коренные</string>
+    <string name="date">Дата</string>
+    <string name="add_new_event">Добавить новое событие</string>
+    <string name="choose_action">Выберите действие</string>
+    <string name="guarantee_in_months">Гарантия, мес.</string>
+    <string name="notes">Комментарий</string>
+    <string name="create_event">Создать событие</string>
+    <string name="implanting">Имплантирование</string>
+    <string name="cleaned">Чистка</string>
+    <string name="filled">Запломбирован</string>
+    <string name="extracted">Удалён</string>
+    <string name="other">Другое</string>
+    <string name="grown">Вырос</string>
+    <string name="implanted">Имплантирован</string>
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="permanent_tooth_actions">
-        <item>Cleaned</item>
-        <item>Filled</item>
-        <item>Extracted</item>
-        <item>Other</item>
+        <item>Чистка</item>
+        <item>Запломбирован</item>
+        <item>Удалён</item>
+        <item>Другое</item>
     </string-array>
 
     <string-array name="no_grown_tooth_actions">
-        <item>Grown</item>
-        <item>Other</item>
+        <item>Вырос</item>
+        <item>Другое</item>
     </string-array>
 
     <string-array name="baby_tooth_actions">
-        <item>Cleaned</item>
-        <item>Filled</item>
-        <item>Extracted</item>
-        <item>Other</item>
+        <item>Чистка</item>
+        <item>Запломбирован</item>
+        <item>Удалён</item>
+        <item>Другое</item>
     </string-array>
 
     <string-array name="extracted_permanent_tooth_actions">
-        <item>Implanted</item>
-        <item>Other</item>
+        <item>Имплантирован</item>
+        <item>Другое</item>
     </string-array>
 
     <string-array name="implanted_tooth_actions">
-        <item>Served</item>
-        <item>Extracted</item>
-        <item>Other</item>
+        <item>Обслужен</item>
+        <item>Удалён</item>
+        <item>Другое</item>
     </string-array>
 
 </resources>
