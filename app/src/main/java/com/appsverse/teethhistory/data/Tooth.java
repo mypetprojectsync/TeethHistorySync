@@ -7,8 +7,6 @@ import com.appsverse.teethhistory.BR;
 
 public class Tooth extends BaseObservable {
 
-    final String TAG = "myLogs";
-
     private int id;
     private int position;
     private boolean isExist = true;
@@ -17,7 +15,6 @@ public class Tooth extends BaseObservable {
     private boolean isFilling = false;
     private boolean isImplant = false;
 
-   // public Tooth(int id) {
     public Tooth(int id, int position) {
         setId(id);
         setPosition(position);
@@ -101,15 +98,5 @@ public class Tooth extends BaseObservable {
         if (implant) setFilling(false);
         this.isImplant = implant;
         notifyPropertyChanged(BR.implant);
-    }
-
-    public String getToothState(){
-        return " id: " + getId()
-                + ", position: " + getPosition()
-                + ", isExist: " + isExist()
-                + ", isBabyTooth: " + isBabyTooth()
-                + ", isPermanentTooth: " + isPermanentTooth()
-                + ", isFilled " + isFilling()
-                + ", isImplant " + isImplant();
     }
 }

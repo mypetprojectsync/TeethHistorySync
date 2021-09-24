@@ -57,7 +57,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class EditEventFragment extends Fragment {
 
@@ -119,18 +118,15 @@ public class EditEventFragment extends Fragment {
             }
     );
 
-    ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
+    ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
 
-            final boolean[] permission = {true};
+        final boolean[] permission = {true};
 
-            result.forEach((k, v) -> {
-                if (!v) permission[0] = false;
-            });
+        result.forEach((k, v) -> {
+            if (!v) permission[0] = false;
+        });
 
-            if (permission[0]) mGetContent.launch(generateFileUri());
-        }
+        if (permission[0]) mGetContent.launch(generateFileUri());
     });
 
     @Nullable

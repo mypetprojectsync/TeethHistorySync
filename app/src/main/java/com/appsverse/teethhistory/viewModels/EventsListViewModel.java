@@ -11,7 +11,6 @@ import java.util.List;
 import io.realm.Realm;
 
 public class EventsListViewModel extends ViewModel {
-    final String TAG = "myLogs";
     final Realm realm = Realm.getDefaultInstance();
 
     public List<EventModel> getEventModelsList(int userId, int chosenToothID){

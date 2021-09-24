@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -149,29 +148,21 @@ public class TeethFormulaFragment extends Fragment {
 
         }
 
-        toothIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toothClicked(v);
-            }
-        });
+        toothIV.setOnClickListener(this::toothClicked);
 
-        toothIV.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        toothIV.setOnLongClickListener(v -> {
 
-                toothClicked(v);
+            toothClicked(v);
 
-                toothLongClicked(v);
+            toothLongClicked();
 
-                return false;
-            }
+            return false;
         });
 
         return linearLayout;
     }
 
-    private void toothLongClicked(View v) {
+    private void toothLongClicked() {
 
         dialogToothStateBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_tooth_state, null, false);
         dialogToothStateBinding.setTooth(tooth);
@@ -304,44 +295,44 @@ public class TeethFormulaFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new EventsListAdapter(this.getContext(), eventModels);
-        adapter.setClickListener(new EventsListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
 
-                if (view.getId() == R.id.itemEventOptions) {
+        adapter.setClickListener((view, position) -> {
 
-                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-                    popupMenu.inflate(R.menu.event_item_options_menu);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            if (item.getItemId() == R.id.popupEventItemEdit) {
+            if (view.getId() == R.id.itemEventOptions) {
 
-                                mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                popupMenu.inflate(R.menu.event_item_options_menu);
 
-                                setVisibilities();
+                popupMenu.setOnMenuItemClickListener(item -> {
 
-                            } else {
+                    if (item.getItemId() == R.id.popupEventItemEdit) {
 
-                                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
-                                dialogBuilder.setTitle("Delete event?");
-                                dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    mainActivity.deleteEvent(eventModels.get(position));
-                                    deleteEventAnimation(position);
-                                });
-                                dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
-                                });
-                                dialogBuilder.show();
-                            }
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
-                } else {
-                    mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+                        mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
-                    setVisibilities();
-                }
+                        setVisibilities();
+
+                    } else {
+
+                        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
+                        dialogBuilder.setTitle(R.string.delete_event);
+
+                        dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
+                            mainActivity.deleteEvent(eventModels.get(position));
+                            deleteEventAnimation(position);
+                        });
+
+                        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        });
+
+                        dialogBuilder.show();
+                    }
+                    return false;
+                });
+                popupMenu.show();
+            } else {
+                mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+
+                setVisibilities();
             }
         });
         recyclerView.setAdapter(adapter);

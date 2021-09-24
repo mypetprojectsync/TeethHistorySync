@@ -163,7 +163,7 @@ public class NewEventViewModel extends ViewModel {
 
     public void onClickSaveButton(Event event, Context context) {
 
-        int next_id = 0;
+        int next_id;
         int current_id = 0;
 
         MainActivity mainActivity = (MainActivity) context;
@@ -253,7 +253,7 @@ public class NewEventViewModel extends ViewModel {
         mainActivity.binding.getTeethFormulaFragment().setTooth();
 
         if (photosListForDeleting != null) {
-            deleteSelectedPhotos(context);
+            deleteSelectedPhotos();
         }
 
         List<String> photosUri = event.getPhotosUri();
@@ -308,18 +308,7 @@ public class NewEventViewModel extends ViewModel {
         this.photosUri = photosUri;
     }
 
-    public String newEventViewModelState() {
-        return " id: " + getId()
-                + ", position: " + getPosition()
-                + ", date: " + getDate()
-                + ", action: " + getAction()
-                + ", guarantee: " + getGuarantee()
-                + ", notes: " + getNotes()
-                + ", actions: " + getActions()
-                + ", photosUri: " + getPhotosUri();
-    }
-
-    public void deleteSelectedPhotos(Context context) {
+    public void deleteSelectedPhotos() {
 
         for (String uri : photosListForDeleting) {
             if (!checkUriInOtherEvents(uri)) {

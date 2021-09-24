@@ -45,6 +45,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OnClickHandler {
 
+    private final int REQUEST_FOCUS_DELAY = 300;
+
     @SuppressLint("NonConstantResourceId")
     public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
 
@@ -113,7 +115,7 @@ public class OnClickHandler {
             BufferedWriter bufferedWriter = new BufferedWriter(
                     new OutputStreamWriter(
                             binding.getRoot().getContext().openFileOutput("fileForShare.txt", Context.MODE_PRIVATE)));
-            bufferedWriter.write(model.getDatabaseInJson(binding));
+            bufferedWriter.write(model.getDatabaseInJson());
             bufferedWriter.close();
 
 
@@ -191,7 +193,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         });
 
         Activity activity = (Activity) binding.getRoot().getContext();
-        Single.fromCallable(() -> requestFocusWithDelay(300, editUsernameBinding, activity)).subscribeOn(Schedulers.io()).subscribe();
+        Single.fromCallable(() -> requestFocusWithDelay(editUsernameBinding, activity)).subscribeOn(Schedulers.io()).subscribe();
 
         editUsernameBinding.editNameTIET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -247,8 +249,8 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         model.setEditUsernameDialogActive(true);
     }
 
-    private int requestFocusWithDelay(int delay, EditUsernameDialogBinding editUsernameBinding, Activity activity) {
-        SystemClock.sleep(delay);
+    private int requestFocusWithDelay(EditUsernameDialogBinding editUsernameBinding, Activity activity) {
+        SystemClock.sleep(REQUEST_FOCUS_DELAY);
         activity.runOnUiThread(() -> {
             editUsernameBinding.editNameTIET.requestFocus();
             editUsernameBinding.editNameTIET.setSelection(editUsernameBinding.editNameTIET.length());
