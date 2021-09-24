@@ -5,6 +5,7 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
+import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -51,25 +52,25 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         this.layoutVisibility = layoutVisibility;
     }
 
-    public List<ToothModel> getAllToothModelsForUser(int user_id){
-        UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
+    public List<ToothModel> getAllToothModelsForUser(int user_id) {
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         return userModel.getToothModels();
     }
 
-    public  List<EventModel> getEventModelsList(int user_id, Tooth tooth){
+    public List<EventModel> getEventModelsList(int user_id, Tooth tooth) {
 
-            UserModel userModel = realm.where(UserModel.class).equalTo("id",user_id).findFirst();
-            ToothModel toothModel = userModel.getToothModels().where().equalTo("id", tooth.getId()).findFirst();
-            return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
+        ToothModel toothModel = userModel.getToothModels().where().equalTo("id", tooth.getId()).findFirst();
+        return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
     }
 
-    public void deleteEvent(EventModel eventModel, MainActivity mainActivity){
+    public void deleteEvent(EventModel eventModel, MainActivity mainActivity) {
         realm.beginTransaction();
 
-        UserModel userModel = realm.where(UserModel.class).equalTo("id",mainActivity.user_id).findFirst();
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", mainActivity.binding.getModel().getChosenToothID()).findFirst();
         int maxEventId = 0;
-        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING,"id", Sort.DESCENDING);
+        RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         //todo use last date and last position
 
@@ -77,7 +78,8 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
             returnToothModelStateIfLastActionFilled(toothModel);
         }
 
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) removeToothState(eventModel, toothModel,mainActivity);
+        if (eventModelsResults.get(0).getId() == eventModel.getId())
+            removeToothState(eventModel, toothModel, mainActivity);
 
         if (toothModel.getEventModels().size() == 1) {
             resetToothState(userModel, toothModel);
@@ -98,10 +100,10 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
             toothModel.setBabyTooth(true);
 
             if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
-            || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
-            || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
-            || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
-                toothModel.setPosition(toothModel.getPosition()+40);
+                    || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
+                    || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
+                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)) {
+                toothModel.setPosition(toothModel.getPosition() + 40);
             }
         } else if (userModel.isBabyTeeth()) {
             toothModel.setExist(true);
@@ -111,8 +113,8 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
             if ((toothModel.getPosition() > 10 && toothModel.getPosition() < 16)
                     || (toothModel.getPosition() > 20 && toothModel.getPosition() < 26)
                     || (toothModel.getPosition() > 30 && toothModel.getPosition() < 36)
-                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)){
-                toothModel.setPosition(toothModel.getPosition()+40);
+                    || (toothModel.getPosition() > 40 && toothModel.getPosition() < 46)) {
+                toothModel.setPosition(toothModel.getPosition() + 40);
 
             }
 
@@ -128,15 +130,17 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     private void removeToothState(EventModel eventModel, ToothModel toothModel, MainActivity mainActivity) {
 
-        switch (eventModel.getAction()) {
-            case "Extracted":
-                returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
-                break;
-            case "Implanted":
-                returnToothModelStateIfLastActionImplanted(toothModel);
-                break;
-            case "Grown":
-                returnToothModelStateIfLastActionGrown(toothModel);
+        if (eventModel.getAction().equals(mainActivity.getString(R.string.extracted))) {
+
+            returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
+
+        } else if (eventModel.getAction().equals(mainActivity.getString(R.string.implanted))) {
+
+            returnToothModelStateIfLastActionImplanted(toothModel);
+
+        } else if (eventModel.getAction().equals(mainActivity.getString(R.string.grown))) {
+
+            returnToothModelStateIfLastActionGrown(toothModel);
         }
     }
 
@@ -191,12 +195,11 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         }
     }
 
-    public ToothModel getToothModel(MainActivity mainActivity){
+    public ToothModel getToothModel(MainActivity mainActivity) {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
-
 
 
     public Tooth setTooth(Tooth tooth, MainActivity activity) {

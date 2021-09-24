@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
+import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -82,7 +83,7 @@ public class NewEventViewModel extends ViewModel {
         this.photosListForDeleting = photosListForDeleting;
     }
 
-    public void addListToPhotosListToDeleting(List<String> photosListForDeleting){
+    public void addListToPhotosListToDeleting(List<String> photosListForDeleting) {
         this.photosListForDeleting.addAll(photosListForDeleting);
     }
 
@@ -194,7 +195,8 @@ public class NewEventViewModel extends ViewModel {
         RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
 
         int amountOfNewPhotos = 0;
-        if (event.getPhotosUri() != null) amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
+        if (event.getPhotosUri() != null)
+            amountOfNewPhotos = event.getPhotosUri().size() - eventModelRealmList.size();
 
         for (int i = 0; i < amountOfNewPhotos; i++) {
             eventModelRealmList.add(event.getPhotosUri().get(eventModelRealmList.size()));
@@ -203,45 +205,49 @@ public class NewEventViewModel extends ViewModel {
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         if (eventModelsResults.get(0).getId() == eventModel.getId()) {
-            switch (event.getAction()) {
-                case "Extracted":
-                    toothModel.setExist(false);
-                    toothModel.setFilling(false);
 
-                    if (toothModel.isBabyTooth()) {
-                        toothModel.setBabyTooth(false);
-                        toothModel.setPermanentTooth(true);
+            if (event.getAction().equals(context.getString(R.string.extracted))) {
 
-                        toothModel.setPosition(toothModel.getPosition() - 40);
+                toothModel.setExist(false);
+                toothModel.setFilling(false);
 
-                        ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId()+MINIMAL_POSITION_IMAGE_ID);
-                        String toothNumber = "ic_" + toothModel.getPosition();
-                        id = context.getResources().getIdentifier(toothNumber, "drawable", ((MainActivity) context).getPackageName());
-                        toothPositionIV.setImageResource(id);
-                        toothPositionIV.setAdjustViewBounds(true);
+                if (toothModel.isBabyTooth()) {
+                    toothModel.setBabyTooth(false);
+                    toothModel.setPermanentTooth(true);
 
-                    } else if (toothModel.isPermanentTooth()) {
-                        toothModel.setPermanentTooth(false);
-                    } else if (toothModel.isImplant()) {
-                        toothModel.setImplant(false);
-                    }
-                    break;
-                case "Filled":
-                    toothModel.setFilling(true);
-                    break;
-                case "Implanted":
-                    toothModel.setExist(true);
-                    toothModel.setImplant(true);
-                    break;
-                case "Grown":
-                    toothModel.setExist(true);
-                    break;
+                    toothModel.setPosition(toothModel.getPosition() - 40);
+
+                    ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId() + MINIMAL_POSITION_IMAGE_ID);
+                    String toothNumber = "ic_" + toothModel.getPosition();
+                    id = context.getResources().getIdentifier(toothNumber, "drawable", ((MainActivity) context).getPackageName());
+                    toothPositionIV.setImageResource(id);
+                    toothPositionIV.setAdjustViewBounds(true);
+
+                } else if (toothModel.isPermanentTooth()) {
+                    toothModel.setPermanentTooth(false);
+                } else if (toothModel.isImplant()) {
+                    toothModel.setImplant(false);
+                }
+
+            } else if (event.getAction().equals(context.getString(R.string.filled))) {
+
+                toothModel.setFilling(true);
+
+            } else if (event.getAction().equals(context.getString(R.string.implanted))) {
+
+                toothModel.setExist(true);
+                toothModel.setImplant(true);
+
+            } else if (event.getAction().equals(context.getString(R.string.grown))) {
+
+                toothModel.setExist(true);
+
             }
         }
 
         realm.commitTransaction();
 
-                setVisibilities(context);
+        setVisibilities(context);
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getTeethFormulaFragment().setTooth();
@@ -302,7 +308,7 @@ public class NewEventViewModel extends ViewModel {
         this.photosUri = photosUri;
     }
 
-    public String newEventViewModelState(){
+    public String newEventViewModelState() {
         return " id: " + getId()
                 + ", position: " + getPosition()
                 + ", date: " + getDate()

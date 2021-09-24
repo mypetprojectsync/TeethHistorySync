@@ -209,43 +209,45 @@ public class EditEventViewModel extends ViewModel {
         if (eventModelsResults.get(0).getId() == eventModel.getId()
                 && !oldEventModelAction.equals(newEventModelAction)) {
 
-            //TODO change switch to if/else, check same code in all project
+            if (newEventModelAction.equals(context.getString(R.string.extracted))) {
 
-            switch (newEventModelAction) {
-                case "Extracted":
-                    toothModel.setExist(false);
-                    toothModel.setFilling(false);
+               toothModel.setExist(false);
+                toothModel.setFilling(false);
 
-                    if (toothModel.isBabyTooth()) {
-                        toothModel.setBabyTooth(false);
-                        toothModel.setPermanentTooth(true);
-                        toothModel.setPosition(toothModel.getPosition() - 40);
-                        ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
+                if (toothModel.isBabyTooth()) {
+                    toothModel.setBabyTooth(false);
+                    toothModel.setPermanentTooth(true);
+                    toothModel.setPosition(toothModel.getPosition() - 40);
+                    ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
 
-                    } else if (toothModel.isPermanentTooth()) {
-                        toothModel.setPermanentTooth(false);
-                    } else if (toothModel.isImplant()) {
-                        toothModel.setImplant(false);
-                    }
-                    break;
-                case "Implanted":
-                    toothModel.setExist(true);
-                    toothModel.setImplant(true);
-                    break;
-                case "Grown":
-                    toothModel.setExist(true);
-                    break;
+                } else if (toothModel.isPermanentTooth()) {
+                    toothModel.setPermanentTooth(false);
+                } else if (toothModel.isImplant()) {
+                    toothModel.setImplant(false);
+                }
+
+            } else if (newEventModelAction.equals(context.getString(R.string.implanted))) {
+
+                toothModel.setExist(true);
+                toothModel.setImplant(true);
+
+            } else if (newEventModelAction.equals(context.getString(R.string.grown))) {
+
+                toothModel.setExist(true);
+
             }
 
-            switch (oldEventModelAction) {
-                case "Extracted":
-                    returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
-                    break;
-                case "Implanted":
-                    returnToothModelStateIfLastActionImplanted(toothModel);
-                    break;
-                case "Grown":
-                    returnToothModelStateIfLastActionGrown(toothModel);
+            if (oldEventModelAction.equals(context.getString(R.string.extracted))) {
+
+                returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
+
+            } else if (oldEventModelAction.equals(context.getString(R.string.implanted))) {
+
+                returnToothModelStateIfLastActionImplanted(toothModel);
+
+            } else if (oldEventModelAction.equals(context.getString(R.string.grown))) {
+
+                returnToothModelStateIfLastActionGrown(toothModel);
             }
         }
 
