@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
+import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -280,15 +281,18 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     private void removeToothState(EventModel eventModel, ToothModel toothModel, MainActivity mainActivity) {
-        switch (eventModel.getAction()) {
-            case "Extracted":
-                returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
-                break;
-            case "Implanted":
-                returnToothModelStateIfLastActionImplanted(toothModel);
-                break;
-            case "Grown":
-                returnToothModelStateIfLastActionGrown(toothModel);
+
+        if (eventModel.getAction().equals(mainActivity.getString(R.string.extracted))) {
+
+            returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
+
+        } else if (eventModel.getAction().equals(mainActivity.getString(R.string.implanted))) {
+
+            returnToothModelStateIfLastActionImplanted(toothModel);
+
+        } else if (eventModel.getAction().equals(mainActivity.getString(R.string.grown))) {
+
+            returnToothModelStateIfLastActionGrown(toothModel);
         }
     }
 
