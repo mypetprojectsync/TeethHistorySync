@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsverse.teethhistory.EventsListAdapter;
+import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Tooth;

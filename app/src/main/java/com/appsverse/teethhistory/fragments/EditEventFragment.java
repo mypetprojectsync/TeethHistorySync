@@ -439,7 +439,6 @@ public class EditEventFragment extends Fragment {
                 actions.addAll(event.getActions());
 
                 binding.editToothActionACTV.setText(event.getAction(), false);
-                event.setAction(actions.get(0));
                 adapter.notifyDataSetChanged();
             }
         }
@@ -455,7 +454,7 @@ public class EditEventFragment extends Fragment {
         this.event.setPhotosUri(event.getPhotosUri());
 
 
-        binding.editToothActionACTV.setText(event.getAction(), false);
+        binding.editToothActionACTV.setText(this.event.getAction(), false);
         setTextActionACTV();
 
         model.clearPhotosListToDeleting();

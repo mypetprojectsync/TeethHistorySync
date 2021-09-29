@@ -1,4 +1,4 @@
-package com.appsverse.teethhistory;
+package com.appsverse.teethhistory.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.repository.EventModel;
 
 import java.text.SimpleDateFormat;

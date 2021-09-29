@@ -261,5 +261,4 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-//TODO Crash when delete last event
 //TODO Когда открыто событие и оно же удаляется, фрагмент открытого события не скрывается и не обновляется

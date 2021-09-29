@@ -424,8 +424,12 @@ public class NewEventFragment extends Fragment {
             list.clear();
             Collections.addAll(list, items);
 
-            binding.toothActionACTV.setText(list.get(0), false);
-            event.setAction(list.get(0));
+            if (event.getAction() == null) {
+                binding.toothActionACTV.setText(list.get(0), false);
+            } else {
+                binding.toothActionACTV.setText(event.getAction(), false);
+            }
+
             event.setActions(list);
             adapter.notifyDataSetChanged();
         }
@@ -478,5 +482,3 @@ public class NewEventFragment extends Fragment {
         model.setPhotosUri(event.getPhotosUri());
     }
 }
-
-//TODO Если несколько раз менять одно и то же событие, action сбрасывается на cleaned

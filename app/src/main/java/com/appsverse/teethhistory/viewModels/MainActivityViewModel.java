@@ -225,12 +225,13 @@ public class MainActivityViewModel extends ViewModel {
         if (eventModelsResults.get(0).getId() == eventModel.getId())
             removeToothState(eventModel, toothModel, mainActivity);
 
+        eventModel.deleteFromRealm();
+
         if (toothModel.getEventModels().size() == 1) {
             resetToothState(userModel, toothModel);
             ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
         }
 
-        eventModel.deleteFromRealm();
         realm.commitTransaction();
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
