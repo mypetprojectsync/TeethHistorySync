@@ -65,8 +65,8 @@ public class NewEventFragment extends Fragment {
 
     Event event;
 
-    ArrayAdapter adapter;
-    List<String> list = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+    List<String> actions = new ArrayList<>();
 
     File directory;
     Uri publicPhotoUri;
@@ -148,10 +148,10 @@ public class NewEventFragment extends Fragment {
 
         setDatePicker(event);
 
-        adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, list);
+        adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
         binding.toothActionACTV.setAdapter(adapter);
 
-        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(list.get(position)));
+        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
 
         binding.guaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
 
@@ -421,16 +421,16 @@ public class NewEventFragment extends Fragment {
                 }
             }
 
-            list.clear();
-            Collections.addAll(list, items);
+            actions.clear();
+            Collections.addAll(actions, items);
 
             if (event.getAction() == null) {
-                binding.toothActionACTV.setText(list.get(0), false);
+                binding.toothActionACTV.setText(actions.get(0), false);
             } else {
                 binding.toothActionACTV.setText(event.getAction(), false);
             }
 
-            event.setActions(list);
+            event.setActions(actions);
             adapter.notifyDataSetChanged();
         }
     }
