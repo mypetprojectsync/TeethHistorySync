@@ -2,9 +2,7 @@ package com.appsverse.teethhistory.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,7 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsverse.teethhistory.EventsListAdapter;
+import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Tooth;
@@ -104,45 +102,40 @@ public class EventsListFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         adapter = new EventsListAdapter(this.getContext(), eventModels);
-        adapter.setClickListener(new EventsListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        adapter.setClickListener((view, position) -> {
 
+            if (view.getId() == R.id.itemEventOptions) {
 
-                if (view.getId() == R.id.itemEventOptions) {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                popupMenu.inflate(R.menu.event_item_options_menu);
 
-                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-                    popupMenu.inflate(R.menu.event_item_options_menu);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            if (item.getItemId() == R.id.popupEventItemEdit) {
+                popupMenu.setOnMenuItemClickListener(item -> {
 
-                                mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+                    if (item.getItemId() == R.id.popupEventItemEdit) {
 
-                                setVisibilities();
-                            } else {
+                        mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
-                                MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
-                                dialogBuilder.setTitle("Delete event?");
-                                dialogBuilder.setPositiveButton("ok", (dialog, which) -> {
-                                    mainActivity.deleteEvent(eventModels.get(position));
-                                    deleteEventAnimation(position);
-                                });
-                                dialogBuilder.setNegativeButton("cancel", (dialog, which) -> {
-                                });
-                                dialogBuilder.show();
+                        setVisibilities();
+                    } else {
 
-                            }
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
-                } else {
-                    mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+                        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
+                        dialogBuilder.setTitle(R.string.delete_event);
+                        dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
+                            mainActivity.deleteEvent(eventModels.get(position));
+                            deleteEventAnimation(position);
+                        });
+                        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        });
+                        dialogBuilder.show();
 
-                    setVisibilities();
-                }
+                    }
+                    return false;
+                });
+                popupMenu.show();
+            } else {
+                mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
+
+                setVisibilities();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -192,11 +185,5 @@ public class EventsListFragment extends Fragment {
     public void deleteEventAnimation(int position) {
         eventModels.remove(position);
         adapter.notifyItemRemoved(position);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
     }
 }

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
-import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
@@ -156,12 +155,6 @@ public class MainActivityViewModel extends ViewModel {
         return realm.where(UserModel.class).equalTo("id", user_id).findFirst().getName();
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-
-    }
-
     public int getTeethFormulaFragmentVisibility() {
         return teethFormulaFragmentVisibility;
     }
@@ -210,7 +203,7 @@ public class MainActivityViewModel extends ViewModel {
         isNoTeeth = noTeeth;
     }
 
-    public RealmResults<EventModel> getSortedEventsList(MainActivity mainActivity) {
+    public RealmResults<EventModel> getSortedEventsList() {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
         return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
@@ -221,7 +214,6 @@ public class MainActivityViewModel extends ViewModel {
 
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
-        int maxEventId = 0;
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         //todo use last date and last position
@@ -233,12 +225,13 @@ public class MainActivityViewModel extends ViewModel {
         if (eventModelsResults.get(0).getId() == eventModel.getId())
             removeToothState(eventModel, toothModel, mainActivity);
 
+        eventModel.deleteFromRealm();
+
         if (toothModel.getEventModels().size() == 1) {
             resetToothState(userModel, toothModel);
             ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
         }
 
-        eventModel.deleteFromRealm();
         realm.commitTransaction();
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
@@ -347,7 +340,7 @@ public class MainActivityViewModel extends ViewModel {
         }
     }
 
-    public String getDatabaseInJson(ActivityMainBinding binding) {
+    public String getDatabaseInJson() {
         List<UserModel> userModels = realm.where(UserModel.class).findAll();
         String json = new Gson().toJson(realm.copyFromRealm(userModels));
         return "{\"userModels\":" + json + "}";

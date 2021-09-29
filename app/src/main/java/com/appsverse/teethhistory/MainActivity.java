@@ -44,8 +44,6 @@ import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
 
-    final String TAG = "myLogs";
-
     MainActivityViewModel model;
     public ActivityMainBinding binding;
     MainActivityViewData mainActivityViewData;
@@ -89,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
@@ -213,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public RealmResults<EventModel> getSortedEventsList() {
-        return model.getSortedEventsList(this);
+        return model.getSortedEventsList();
     }
 
     public void deleteEvent(EventModel eventModel) {
@@ -263,5 +261,4 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-//TODO Crash when delete last event
 //TODO Когда открыто событие и оно же удаляется, фрагмент открытого события не скрывается и не обновляется

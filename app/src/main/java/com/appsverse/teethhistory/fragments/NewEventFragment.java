@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -49,17 +48,13 @@ import com.appsverse.teethhistory.databinding.FragmentNewEventBinding;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.NewEventViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.slider.Slider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class NewEventFragment extends Fragment {
 
@@ -115,35 +110,28 @@ public class NewEventFragment extends Fragment {
                             event.setPhotosUri(photosUri);
                             eventPhotosListAdapter.notifyDataSetChanged();
 
-                            if (model.getPhotosListForDeleting() != null) model.removeItemFromListToPhotosListToDeleting(uri);
+                            if (model.getPhotosListForDeleting() != null)
+                                model.removeItemFromListToPhotosListToDeleting(uri);
                         }
                     }
                 }
             }
     );
 
-    ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
+    ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
 
-            final boolean[] permission = {true};
+        final boolean[] permission = {true};
 
-            result.forEach((k,v)-> {
-                if (!v) permission[0] =false;
-            });
+        result.forEach((k, v) -> {
+            if (!v) permission[0] = false;
+        });
 
-            if (permission[0]) mGetContent.launch(generateFileUri());
-        }
+        if (permission[0]) mGetContent.launch(generateFileUri());
     });
 
-    ActivityResultLauncher<String[]> galleryPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
-            result.forEach((k,v)-> {
-                if (v) galleryButtonClicked();
-            });
-        }
-    });
+    ActivityResultLauncher<String[]> galleryPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> result.forEach((k, v) -> {
+        if (v) galleryButtonClicked();
+    }));
 
     @Nullable
     @Override
@@ -163,40 +151,24 @@ public class NewEventFragment extends Fragment {
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, list);
         binding.toothActionACTV.setAdapter(adapter);
 
-               binding.toothActionACTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                   @Override
-                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                       event.setAction(list.get(position));
-                   }
-               });
-        binding.guaranteeSlider.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                event.setGuarantee(Math.round(value));
-            }
-        });
+        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(list.get(position)));
+
+        binding.guaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
 
         setTextActionACTV();
 
         setGuaranteeTIET();
 
-        binding.photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyCameraPermissions();
-            }
-        });
+        binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
-        binding.galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (android.os.Build.VERSION.SDK_INT > 29) {
-                    galleryButtonClicked();
-                } else {
-                    galleryPermissionLauncher.launch(new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    });
-                }
+        binding.galleryButton.setOnClickListener(v -> {
+
+            if (android.os.Build.VERSION.SDK_INT > 29) {
+                galleryButtonClicked();
+            } else {
+                galleryPermissionLauncher.launch(new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                });
             }
         });
 
@@ -287,7 +259,8 @@ public class NewEventFragment extends Fragment {
                     actionMode = null;
 
                 } else {
-                    if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                    if (actionMode != null)
+                        actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
                 }
             }
 
@@ -298,16 +271,13 @@ public class NewEventFragment extends Fragment {
         });
         eventPhotosListAdapter.setSelectionTracker(tracker);
 
-        eventPhotosListAdapter.setClickListener(new EventPhotosListAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        eventPhotosListAdapter.setClickListener((view, position) -> {
 
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
-                startActivity(intent);
-            }
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.parse(photosUri.get(position)), "image/*");
+            startActivity(intent);
         });
     }
 
@@ -355,10 +325,8 @@ public class NewEventFragment extends Fragment {
 
     private List<Integer> getSelectedItemsIndexList() {
         List<Integer> selectedIdList = new ArrayList<>();
-        Iterator<Long> iterator = tracker.getSelection().iterator();
 
-        while (iterator.hasNext()) {
-            long selectedId = iterator.next();
+        for (long selectedId : tracker.getSelection()) {
             selectedIdList.add((int) selectedId);
         }
         return selectedIdList;
@@ -421,7 +389,6 @@ public class NewEventFragment extends Fragment {
 
             picker.show(this.getActivity().getSupportFragmentManager(), picker.toString());
             picker.addOnPositiveButtonClickListener(selection -> {
-                String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selection);
                 event.setDate(new Date((Long) selection));
             });
         });
@@ -457,8 +424,12 @@ public class NewEventFragment extends Fragment {
             list.clear();
             Collections.addAll(list, items);
 
-            binding.toothActionACTV.setText(list.get(0), false);
-            event.setAction(list.get(0));
+            if (event.getAction() == null) {
+                binding.toothActionACTV.setText(list.get(0), false);
+            } else {
+                binding.toothActionACTV.setText(event.getAction(), false);
+            }
+
             event.setActions(list);
             adapter.notifyDataSetChanged();
         }
@@ -495,7 +466,7 @@ public class NewEventFragment extends Fragment {
 
     private void setSelectionWithDelay(int i) {
         Handler handler = new Handler();
-        handler.postDelayed(() -> binding.guaranteeTIET.setSelection(i),10);
+        handler.postDelayed(() -> binding.guaranteeTIET.setSelection(i), 10);
     }
 
     @Override

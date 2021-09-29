@@ -1,7 +1,5 @@
 package com.appsverse.teethhistory.data;
 
-import android.util.Log;
-
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
@@ -13,8 +11,6 @@ import java.util.List;
 
 
 public class Event extends BaseObservable {
-
-    final String TAG = "myLogs";
 
     private int id;
     private int position;
@@ -129,9 +125,5 @@ public class Event extends BaseObservable {
     public void setPhotosUri(List<String> photosUri) {
         this.photosUri = photosUri;
         notifyPropertyChanged(BR.photosUri);
-    }
-
-    public void clearPhotosUri() {
-        photosUri.clear();
     }
 }

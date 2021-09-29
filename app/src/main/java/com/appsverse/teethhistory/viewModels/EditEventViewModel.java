@@ -26,7 +26,6 @@ import io.realm.Sort;
 
 public class EditEventViewModel extends ViewModel {
 
-    final String TAG = "myLogs";
     final Realm realm = Realm.getDefaultInstance();
 
     private int id;
@@ -183,8 +182,8 @@ public class EditEventViewModel extends ViewModel {
         String oldEventModelAction = eventModel.getAction();
         String newEventModelAction = event.getAction();
 
-        List<String> clearList = new ArrayList<>();
-        clearList.addAll(event.getPhotosUri());
+        List<String> clearList = new ArrayList<>(event.getPhotosUri());
+
         if (photosListForDeleting != null) clearList.removeAll(photosListForDeleting);
         event.setPhotosUri(clearList);
 

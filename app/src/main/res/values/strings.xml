@@ -42,6 +42,7 @@
     <string name="other">Other</string>
     <string name="grown">Grown</string>
     <string name="implanted">Implanted</string>
+    <string name="delete_event">Delete event?</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="permanent_tooth_actions">
