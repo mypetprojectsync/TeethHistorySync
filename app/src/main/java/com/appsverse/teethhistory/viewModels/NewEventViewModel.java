@@ -319,3 +319,5 @@ public class NewEventViewModel extends ViewModel {
         photosListForDeleting.clear();
     }
 }
+
+//TODO фрагмент не сбрасывается на дефолтные настройки при сохранении нового события
