@@ -34,7 +34,6 @@ public class EditEventViewModel extends ViewModel {
     private String action;
     private int guarantee;
     private String notes;
-    private List<String> actions;
     private List<String> photosUri;
     private List<String> photosListForDeleting;
 
@@ -104,14 +103,6 @@ public class EditEventViewModel extends ViewModel {
 
     public void setPhotosUri(List<String> photosUri) {
         this.photosUri = photosUri;
-    }
-
-    public List<String> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<String> actions) {
-        this.actions = actions;
     }
 
     public int getPosition() {

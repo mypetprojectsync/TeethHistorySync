@@ -45,33 +45,12 @@
     <string name="delete_event">Delete event?</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
-    <string-array name="permanent_tooth_actions">
+    <string-array name="actions">
         <item>Cleaned</item>
         <item>Filled</item>
         <item>Extracted</item>
-        <item>Other</item>
-    </string-array>
-
-    <string-array name="no_grown_tooth_actions">
         <item>Grown</item>
-        <item>Other</item>
-    </string-array>
-
-    <string-array name="baby_tooth_actions">
-        <item>Cleaned</item>
-        <item>Filled</item>
-        <item>Extracted</item>
-        <item>Other</item>
-    </string-array>
-
-    <string-array name="extracted_permanent_tooth_actions">
         <item>Implanted</item>
-        <item>Other</item>
-    </string-array>
-
-    <string-array name="implanted_tooth_actions">
-        <item>Served</item>
-        <item>Extracted</item>
         <item>Other</item>
     </string-array>
 

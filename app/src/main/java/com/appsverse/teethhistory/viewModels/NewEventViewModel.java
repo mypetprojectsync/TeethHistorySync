@@ -35,7 +35,6 @@ public class NewEventViewModel extends ViewModel {
     private int guarantee = 12;
     private String notes;
 
-    private List<String> actions;
     private List<String> photosUri;
     private List<String> photosListForDeleting;
 
@@ -189,10 +188,6 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setGuarantee(event.getGuarantee());
         eventModel.setNotes(event.getNotes());
 
-        RealmList<String> realmList = new RealmList<>();
-        realmList.addAll(event.getActions());
-        eventModel.setActions(realmList);
-
         RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
 
         int amountOfNewPhotos = 0;
@@ -284,14 +279,6 @@ public class NewEventViewModel extends ViewModel {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
         MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
-    }
-
-    public List<String> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<String> actions) {
-        this.actions = actions;
     }
 
     public int getPosition() {

@@ -47,33 +47,12 @@
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
-    <string-array name="permanent_tooth_actions">
+    <string-array name="actions">
         <item>Чистка</item>
         <item>Запломбирован</item>
         <item>Удалён</item>
-        <item>Другое</item>
-    </string-array>
-
-    <string-array name="no_grown_tooth_actions">
         <item>Вырос</item>
-        <item>Другое</item>
-    </string-array>
-
-    <string-array name="baby_tooth_actions">
-        <item>Чистка</item>
-        <item>Запломбирован</item>
-        <item>Удалён</item>
-        <item>Другое</item>
-    </string-array>
-
-    <string-array name="extracted_permanent_tooth_actions">
         <item>Имплантирован</item>
-        <item>Другое</item>
-    </string-array>
-
-    <string-array name="implanted_tooth_actions">
-        <item>Обслужен</item>
-        <item>Удалён</item>
         <item>Другое</item>
     </string-array>
 

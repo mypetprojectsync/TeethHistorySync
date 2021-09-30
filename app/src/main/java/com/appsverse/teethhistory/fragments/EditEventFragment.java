@@ -67,7 +67,7 @@ public class EditEventFragment extends Fragment {
 
     Event event;
     ArrayAdapter adapter;
-    List<String> actions = new ArrayList<>();
+    String[] actions;
 
     File directory;
 
@@ -132,12 +132,15 @@ public class EditEventFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_event, container, false);
+
+        actions = getResources().getStringArray(R.array.actions);
 
         model = new ViewModelProvider(this).get(EditEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getPhotosUri());
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -146,7 +149,7 @@ public class EditEventFragment extends Fragment {
 
         binding.editToothActionACTV.setAdapter(adapter);
 
-        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
+        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions[position]));
 
         binding.editGuaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
 
@@ -434,13 +437,10 @@ public class EditEventFragment extends Fragment {
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         if (toothModel != null) {
-            actions.clear();
-            if (event.getActions() != null) {
-                actions.addAll(event.getActions());
 
                 binding.editToothActionACTV.setText(event.getAction(), false);
                 adapter.notifyDataSetChanged();
-            }
+
         }
     }
 
@@ -450,9 +450,7 @@ public class EditEventFragment extends Fragment {
         this.event.setAction(event.getAction());
         this.event.setGuarantee(event.getGuarantee());
         this.event.setNotes(event.getNotes());
-        this.event.setActions(event.getActions());
         this.event.setPhotosUri(event.getPhotosUri());
-
 
         binding.editToothActionACTV.setText(this.event.getAction(), false);
         setTextActionACTV();
@@ -472,7 +470,6 @@ public class EditEventFragment extends Fragment {
         model.setAction(event.getAction());
         model.setGuarantee(event.getGuarantee());
         model.setNotes(event.getNotes());
-        model.setActions(event.getActions());
         model.setPhotosUri(event.getPhotosUri());
 
     }

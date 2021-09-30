@@ -1,7 +1,6 @@
 package com.appsverse.teethhistory.viewModels;
 
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
@@ -227,12 +226,13 @@ public class MainActivityViewModel extends ViewModel {
 
         eventModel.deleteFromRealm();
 
+
         if (toothModel.getEventModels().size() == 1) {
             resetToothState(userModel, toothModel);
-            ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
+           // ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
         }
-
         realm.commitTransaction();
+
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
     }
@@ -333,7 +333,7 @@ public class MainActivityViewModel extends ViewModel {
             toothModel.setPermanentTooth(false);
             toothModel.setPosition(toothModel.getPosition() + 40);
 
-            ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
+           // ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
 
         } else if (!toothModel.isBabyTooth()) {
             toothModel.setBabyTooth(false);

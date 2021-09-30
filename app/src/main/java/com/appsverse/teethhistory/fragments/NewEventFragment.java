@@ -52,7 +52,6 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class NewEventFragment extends Fragment {
     Event event;
 
     ArrayAdapter<String> adapter;
-    List<String> actions = new ArrayList<>();
+    String[] actions;
 
     File directory;
     Uri publicPhotoUri;
@@ -139,10 +138,12 @@ public class NewEventFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_event, container, false);
 
+        actions = getResources().getStringArray(R.array.actions);
+
         model = new ViewModelProvider(this).get(NewEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getActions(), model.getPhotosUri());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getPhotosUri());
 
         binding.setEvent(event);
 
@@ -151,7 +152,7 @@ public class NewEventFragment extends Fragment {
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
         binding.toothActionACTV.setAdapter(adapter);
 
-        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions.get(position)));
+        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions[position]));
 
         binding.guaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
 
@@ -397,36 +398,11 @@ public class NewEventFragment extends Fragment {
     public void setDefaultTextActionACTV() {
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
-        String[] items;
+
         if (toothModel != null) {
 
-            if (!toothModel.isExist()) {
-                if (toothModel.isBabyTooth()) {
-                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-                } else if (toothModel.isPermanentTooth()) {
-                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-                } else {
-                    items = getResources().getStringArray(R.array.extracted_permanent_tooth_actions);
-                }
+            binding.toothActionACTV.setText(actions[0], false);
 
-            } else {
-                if (toothModel.isBabyTooth()) {
-                    items = getResources().getStringArray(R.array.baby_tooth_actions);
-                } else if (toothModel.isPermanentTooth()) {
-                    items = getResources().getStringArray(R.array.permanent_tooth_actions);
-                } else if (toothModel.isImplant()) {
-                    items = getResources().getStringArray(R.array.implanted_tooth_actions);
-                } else {
-                    items = new String[0];
-                }
-            }
-
-            actions.clear();
-            Collections.addAll(actions, items);
-
-            binding.toothActionACTV.setText(actions.get(0), false);
-
-            event.setActions(actions);
             adapter.notifyDataSetChanged();
         }
     }
@@ -434,41 +410,16 @@ public class NewEventFragment extends Fragment {
     public void setTextActionACTV() {
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
-        String[] items;
+
         if (toothModel != null) {
 
-            if (!toothModel.isExist()) {
-                if (toothModel.isBabyTooth()) {
-                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-                } else if (toothModel.isPermanentTooth()) {
-                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
-                } else {
-                    items = getResources().getStringArray(R.array.extracted_permanent_tooth_actions);
-                }
-
-            } else {
-                if (toothModel.isBabyTooth()) {
-                    items = getResources().getStringArray(R.array.baby_tooth_actions);
-                } else if (toothModel.isPermanentTooth()) {
-                    items = getResources().getStringArray(R.array.permanent_tooth_actions);
-                } else if (toothModel.isImplant()) {
-                    items = getResources().getStringArray(R.array.implanted_tooth_actions);
-                } else {
-                    items = new String[0];
-                }
-            }
-
-            actions.clear();
-            Collections.addAll(actions, items);
-
             if (event.getAction() == null) {
-                binding.toothActionACTV.setText(actions.get(0), false);
-                event.setAction(actions.get(0));
+                binding.toothActionACTV.setText(actions[0], false);
+                event.setAction(actions[0]);
             } else {
                 binding.toothActionACTV.setText(event.getAction(), false);
             }
 
-            event.setActions(actions);
             adapter.notifyDataSetChanged();
         }
     }
@@ -516,7 +467,6 @@ public class NewEventFragment extends Fragment {
         model.setAction(event.getAction());
         model.setGuarantee(event.getGuarantee());
         model.setNotes(event.getNotes());
-        model.setActions(event.getActions());
         model.setPhotosUri(event.getPhotosUri());
     }
 }
