@@ -196,7 +196,7 @@ public class TeethFormulaFragment extends Fragment {
             int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
             toothIV.setImageResource(id);
 
-        } else if (toothModels.get(i).isExist()) {
+        } else if (toothModels.get(i).getState() != ToothModel.NO_BABY_TOOTH && toothModels.get(i).getState() != ToothModel.NO_PERMANENT_TOOTH) {
 
             int position = toothModels.get(i).getPosition();
 
@@ -216,9 +216,9 @@ public class TeethFormulaFragment extends Fragment {
 
     private String chooseToothState() {
 
-        if (tooth.isImplant()) {
+        if (tooth.getState() == Tooth.IMPLANTED) {
             return "i";
-        } else if (tooth.isFilling()) {
+        } else if (tooth.getState() == Tooth.FILLED) {
             return "f";
         } else {
             return "g";
@@ -227,9 +227,9 @@ public class TeethFormulaFragment extends Fragment {
     }
 
     private String chooseToothState(int i) {
-        if (toothModels.get(i).isImplant()) {
+        if (toothModels.get(i).getState() == ToothModel.IMPLANTED) {
             return "i";
-        } else if (toothModels.get(i).isFilling()) {
+        } else if (toothModels.get(i).getState() == ToothModel.FILLED) {
             return "f";
         } else {
             return "g";
@@ -242,7 +242,7 @@ public class TeethFormulaFragment extends Fragment {
 
             ImageView toothIV = binding.getRoot().findViewById(tooth.getId());
 
-            if (tooth.isExist()) {
+            if (tooth.getState() != Tooth.NO_BABY_TOOTH || tooth.getState() != Tooth.NO_PERMANENT_TOOTH) {
 
                 String toothDrawableId = "ic_" + tooth.getId() + chooseToothState();
                 int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());

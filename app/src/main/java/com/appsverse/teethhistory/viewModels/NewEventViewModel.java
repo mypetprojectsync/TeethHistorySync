@@ -154,6 +154,7 @@ public class NewEventViewModel extends ViewModel {
         event.setNotes(getNotes());
 
         mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
+
         mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
 
         if (this.photosUri != null) this.photosUri.clear();
@@ -207,11 +208,14 @@ public class NewEventViewModel extends ViewModel {
                 toothModel.setExist(false);
                 toothModel.setFilling(false);
 
-                if (toothModel.isBabyTooth()) {
+
+
+                if (toothModel.getPosition()>50) {
                     toothModel.setBabyTooth(false);
                     toothModel.setPermanentTooth(true);
 
                     toothModel.setPosition(toothModel.getPosition() - 40);
+                    toothModel.setState(toothModel.NO_PERMANENT_TOOTH);
 
                     ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId() + MINIMAL_POSITION_IMAGE_ID);
                     String toothNumber = "ic_" + toothModel.getPosition();
@@ -221,22 +225,28 @@ public class NewEventViewModel extends ViewModel {
 
                 } else if (toothModel.isPermanentTooth()) {
                     toothModel.setPermanentTooth(false);
+                    toothModel.setState(toothModel.NO_PERMANENT_TOOTH);
                 } else if (toothModel.isImplant()) {
                     toothModel.setImplant(false);
+                    toothModel.setState(toothModel.NO_PERMANENT_TOOTH);
                 }
 
             } else if (event.getAction().equals(context.getString(R.string.filled))) {
 
                 toothModel.setFilling(true);
+                toothModel.setState(toothModel.FILLED);
 
             } else if (event.getAction().equals(context.getString(R.string.implanted))) {
 
                 toothModel.setExist(true);
                 toothModel.setImplant(true);
 
+                toothModel.setState(toothModel.IMPLANTED);
+
             } else if (event.getAction().equals(context.getString(R.string.grown))) {
 
                 toothModel.setExist(true);
+                toothModel.setState(toothModel.NORMAL);
 
             }
         }

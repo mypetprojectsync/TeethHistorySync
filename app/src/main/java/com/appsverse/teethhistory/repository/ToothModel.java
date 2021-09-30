@@ -7,8 +7,19 @@ import io.realm.annotations.RealmClass;
 @RealmClass(embedded = true)
 public class ToothModel extends RealmObject {
 
+    public static final int NO_BABY_TOOTH = 0;
+    public static final int NO_PERMANENT_TOOTH = 1;
+    public static final int BABY_TOOTH = 2;
+    public static final int PERMANENT_TOOTH = 3;
+
+    public static final int IMPLANTED = 30;
+    public static final int FILLED = 20;
+    public static final int NORMAL = 10;
+
     private int id;
     private int position;
+    private int defaultState;
+    private int state;
     private boolean isExist;
     private boolean isBabyTooth;
     private boolean isPermanentTooth;
@@ -78,5 +89,21 @@ public class ToothModel extends RealmObject {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getDefaultState() {
+        return defaultState;
+    }
+
+    public void setDefaultState(int defaultState) {
+        this.defaultState = defaultState;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

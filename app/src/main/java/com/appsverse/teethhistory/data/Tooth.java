@@ -7,6 +7,13 @@ import com.appsverse.teethhistory.BR;
 
 public class Tooth extends BaseObservable {
 
+    public static final int IMPLANTED = 30;
+    public static final int FILLED = 20;
+    public static final int NORMAL = 10;
+
+    public static final int NO_BABY_TOOTH = 0;
+    public static final int NO_PERMANENT_TOOTH = 1;
+
     private int id;
     private int position;
     private boolean isExist = true;
@@ -14,6 +21,8 @@ public class Tooth extends BaseObservable {
     private boolean isPermanentTooth = true;
     private boolean isFilling = false;
     private boolean isImplant = false;
+
+    private int state;
 
     public Tooth(int id, int position) {
         setId(id);
@@ -98,5 +107,15 @@ public class Tooth extends BaseObservable {
         if (implant) setFilling(false);
         this.isImplant = implant;
         notifyPropertyChanged(BR.implant);
+    }
+
+    @Bindable
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+        notifyPropertyChanged(BR.state);
     }
 }

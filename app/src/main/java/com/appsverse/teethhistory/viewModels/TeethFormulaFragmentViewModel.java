@@ -58,6 +58,8 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         tooth.setFilling(toothModel.isFilling());
         tooth.setImplant(toothModel.isImplant());
 
+        tooth.setState(toothModel.getState());
+
         return tooth;
     }
 

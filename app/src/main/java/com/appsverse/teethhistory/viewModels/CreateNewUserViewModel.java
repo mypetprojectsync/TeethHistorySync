@@ -229,6 +229,7 @@ public class CreateNewUserViewModel extends ViewModel {
         toothModel.setPermanentTooth(true);
         toothModel.setFilling(false);
         toothModel.setImplant(false);
+        toothModel.setDefaultState(toothModel.PERMANENT_TOOTH);
     }
 
     private void setNoPermanentToothModel(ToothModel toothModel, int i) {
@@ -239,6 +240,7 @@ public class CreateNewUserViewModel extends ViewModel {
         toothModel.setPermanentTooth(true);
         toothModel.setFilling(false);
         toothModel.setImplant(false);
+        toothModel.setDefaultState(toothModel.NO_PERMANENT_TOOTH);
     }
 
 
@@ -253,6 +255,7 @@ public class CreateNewUserViewModel extends ViewModel {
         toothModel.setPermanentTooth(false);
         toothModel.setFilling(false);
         toothModel.setImplant(false);
+        toothModel.setDefaultState(toothModel.BABY_TOOTH);
     }
 
     private void setNoBabyToothModel(ToothModel toothModel, int i) {
@@ -266,6 +269,7 @@ public class CreateNewUserViewModel extends ViewModel {
         toothModel.setPermanentTooth(false);
         toothModel.setFilling(false);
         toothModel.setImplant(false);
+        toothModel.setDefaultState(toothModel.NO_BABY_TOOTH);
     }
 
 

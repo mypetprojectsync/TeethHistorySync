@@ -197,7 +197,6 @@ public class NewEventFragment extends Fragment {
 
     }
 
-
     private String getPathFromUri(Uri data) {
         Context context = getContext();
         Cursor cursor = context.getContentResolver().query(data, null, null, null, null);
@@ -332,7 +331,6 @@ public class NewEventFragment extends Fragment {
         }
         return selectedIdList;
     }
-
 
     private void galleryButtonClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
