@@ -154,11 +154,12 @@ public class NewEventViewModel extends ViewModel {
         event.setGuarantee(getGuarantee());
         event.setNotes(getNotes());
 
-        mainActivity.binding.getNewEventFragment().setTextActionACTV();
+        mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
         mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
-        mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
 
         if (this.photosUri != null) this.photosUri.clear();
+
+        mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
     }
 
     public void onClickSaveButton(Event event, Context context) {
@@ -249,7 +250,7 @@ public class NewEventViewModel extends ViewModel {
 
         setVisibilities(context);
 
-        mainActivity.binding.getNewEventFragment().setTextActionACTV();
+
         mainActivity.binding.getTeethFormulaFragment().setTooth();
 
         if (photosListForDeleting != null) {
@@ -257,6 +258,7 @@ public class NewEventViewModel extends ViewModel {
         }
 
         List<String> photosUri = event.getPhotosUri();
+
         setDefaultValues(event, photosUri, mainActivity);
 
     }

@@ -218,8 +218,8 @@ public class MainActivityViewModel extends ViewModel {
 
         //todo use last date and last position
 
-        if (eventModel.getAction().equals("Filled")) {
-            returnToothModelStateIfLastActionFilled(toothModel);
+        if (eventModel.getAction().equals(mainActivity.getString(R.string.filled))) {
+            returnToothModelStateIfLastActionFilled(toothModel, mainActivity);
         }
 
         if (eventModelsResults.get(0).getId() == eventModel.getId())
@@ -298,20 +298,20 @@ public class MainActivityViewModel extends ViewModel {
         toothModel.setImplant(false);
     }
 
-    private void returnToothModelStateIfLastActionFilled(ToothModel toothModel) {
+    private void returnToothModelStateIfLastActionFilled(ToothModel toothModel, MainActivity mainActivity) {
         //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
 
         RealmList<EventModel> eventsList = toothModel.getEventModels();
 
         if (toothModel.isBabyTooth()) {
-            if (eventsList.where().equalTo("action", "Filled").findAll().size() > 0) {
+            if (eventsList.where().equalTo("action", mainActivity.getString(R.string.filled)).findAll().size() > 0) {
                 toothModel.setFilling(true);
             } else {
                 toothModel.setFilling(false);
             }
         } else if (toothModel.isPermanentTooth()) {
             int amountOfPermanentToothFillingEvents = 0;
-            for (EventModel eventModel : eventsList.where().equalTo("action", "Filled").findAll()) {
+            for (EventModel eventModel : eventsList.where().equalTo("action", mainActivity.getString(R.string.filled)).findAll()) {
                 if (eventModel.getId() / 1000 < 50) amountOfPermanentToothFillingEvents++;
             }
             if (amountOfPermanentToothFillingEvents > 0) {
