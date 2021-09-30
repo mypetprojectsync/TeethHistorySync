@@ -394,6 +394,43 @@ public class NewEventFragment extends Fragment {
         });
     }
 
+    public void setDefaultTextActionACTV() {
+
+        ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
+        String[] items;
+        if (toothModel != null) {
+
+            if (!toothModel.isExist()) {
+                if (toothModel.isBabyTooth()) {
+                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
+                } else if (toothModel.isPermanentTooth()) {
+                    items = getResources().getStringArray(R.array.no_grown_tooth_actions);
+                } else {
+                    items = getResources().getStringArray(R.array.extracted_permanent_tooth_actions);
+                }
+
+            } else {
+                if (toothModel.isBabyTooth()) {
+                    items = getResources().getStringArray(R.array.baby_tooth_actions);
+                } else if (toothModel.isPermanentTooth()) {
+                    items = getResources().getStringArray(R.array.permanent_tooth_actions);
+                } else if (toothModel.isImplant()) {
+                    items = getResources().getStringArray(R.array.implanted_tooth_actions);
+                } else {
+                    items = new String[0];
+                }
+            }
+
+            actions.clear();
+            Collections.addAll(actions, items);
+
+            binding.toothActionACTV.setText(actions.get(0), false);
+
+            event.setActions(actions);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public void setTextActionACTV() {
 
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
@@ -426,6 +463,7 @@ public class NewEventFragment extends Fragment {
 
             if (event.getAction() == null) {
                 binding.toothActionACTV.setText(actions.get(0), false);
+                event.setAction(actions.get(0));
             } else {
                 binding.toothActionACTV.setText(event.getAction(), false);
             }
