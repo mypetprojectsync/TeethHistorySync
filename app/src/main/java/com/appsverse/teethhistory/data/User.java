@@ -50,13 +50,13 @@ public class User extends BaseObservable {
         notifyPropertyChanged(BR.babyTeeth);
     }
 
+    @Bindable
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+        notifyPropertyChanged(BR.id);
     }
-
-
 }

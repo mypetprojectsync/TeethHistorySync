@@ -17,6 +17,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     private int chosenToothID;
     private int chosenToothPosition;
+    private int chosenToothState;
 
     public int getChosenToothID() {
         return chosenToothID;
@@ -52,11 +53,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
         tooth.setId(toothModel.getId());
         tooth.setPosition(toothModel.getPosition());
-        tooth.setExist(toothModel.isExist());
-        tooth.setBabyTooth(toothModel.isBabyTooth());
-        tooth.setPermanentTooth(toothModel.isPermanentTooth());
-        tooth.setFilling(toothModel.isFilling());
-        tooth.setImplant(toothModel.isImplant());
+        tooth.setState(toothModel.getState());
 
         return tooth;
     }
@@ -67,13 +64,16 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         realm.beginTransaction();
 
         toothModel.setPosition(tooth.getPosition());
-        toothModel.setExist(tooth.isExist());
-        toothModel.setBabyTooth(tooth.isBabyTooth());
-        toothModel.setPermanentTooth(tooth.isPermanentTooth());
-        toothModel.setFilling(tooth.isFilling());
-        toothModel.setImplant(tooth.isImplant());
+        toothModel.setState(tooth.getState());
 
         realm.commitTransaction();
     }
 
+    public int getChosenToothState() {
+        return chosenToothState;
+    }
+
+    public void setChosenToothState(int chosenToothState) {
+        this.chosenToothState = chosenToothState;
+    }
 }

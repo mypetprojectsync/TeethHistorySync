@@ -3,7 +3,6 @@ package com.appsverse.teethhistory.viewModels;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.lifecycle.ViewModel;
 
@@ -34,7 +33,6 @@ public class EditEventViewModel extends ViewModel {
     private String action;
     private int guarantee;
     private String notes;
-    private List<String> actions;
     private List<String> photosUri;
     private List<String> photosListForDeleting;
 
@@ -104,14 +102,6 @@ public class EditEventViewModel extends ViewModel {
 
     public void setPhotosUri(List<String> photosUri) {
         this.photosUri = photosUri;
-    }
-
-    public List<String> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<String> actions) {
-        this.actions = actions;
     }
 
     public int getPosition() {
@@ -199,10 +189,6 @@ public class EditEventViewModel extends ViewModel {
         eventModelRealmList.deleteAllFromRealm();
         eventModelRealmList.addAll(event.getPhotosUri());
 
-        if (newEventModelAction.equals(context.getString(R.string.filled)) || oldEventModelAction.equals(context.getString(R.string.filled))) {
-            returnToothModelStateIfLastActionFilled(toothModel, context);
-        }
-
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         if (eventModelsResults.get(0).getId() == eventModel.getId()
@@ -210,43 +196,20 @@ public class EditEventViewModel extends ViewModel {
 
             if (newEventModelAction.equals(context.getString(R.string.extracted))) {
 
-               toothModel.setExist(false);
-                toothModel.setFilling(false);
-
-                if (toothModel.isBabyTooth()) {
-                    toothModel.setBabyTooth(false);
-                    toothModel.setPermanentTooth(true);
+                if (toothModel.getPosition() > 50)
                     toothModel.setPosition(toothModel.getPosition() - 40);
-                    ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
 
-                } else if (toothModel.isPermanentTooth()) {
-                    toothModel.setPermanentTooth(false);
-                } else if (toothModel.isImplant()) {
-                    toothModel.setImplant(false);
-                }
+                toothModel.setState(ToothModel.NO_TOOTH);
 
             } else if (newEventModelAction.equals(context.getString(R.string.implanted))) {
 
-                toothModel.setExist(true);
-                toothModel.setImplant(true);
+                toothModel.setState(ToothModel.IMPLANTED);
 
-            } else if (newEventModelAction.equals(context.getString(R.string.grown))) {
+            } else if (newEventModelAction.equals(context.getString(R.string.grown))
+                    || newEventModelAction.equals(context.getString(R.string.cleaned))
+                    || newEventModelAction.equals(context.getString(R.string.other))) {
 
-                toothModel.setExist(true);
-
-            }
-
-            if (oldEventModelAction.equals(context.getString(R.string.extracted))) {
-
-                returnToothModelStateIfLastActionExtracted(toothModel, mainActivity);
-
-            } else if (oldEventModelAction.equals(context.getString(R.string.implanted))) {
-
-                returnToothModelStateIfLastActionImplanted(toothModel);
-
-            } else if (oldEventModelAction.equals(context.getString(R.string.grown))) {
-
-                returnToothModelStateIfLastActionGrown(toothModel);
+                toothModel.setState(ToothModel.NORMAL);
             }
         }
 
@@ -254,7 +217,6 @@ public class EditEventViewModel extends ViewModel {
 
         setVisibilities(context);
 
-        mainActivity.binding.getNewEventFragment().setTextActionACTV();
         mainActivity.binding.getTeethFormulaFragment().setTooth();
 
 
@@ -264,58 +226,7 @@ public class EditEventViewModel extends ViewModel {
 
     }
 
-    private void returnToothModelStateIfLastActionGrown(ToothModel toothModel) {
-        toothModel.setExist(false);
-    }
-
-    private void returnToothModelStateIfLastActionImplanted(ToothModel toothModel) {
-        toothModel.setExist(false);
-        toothModel.setImplant(false);
-    }
-
-    private void returnToothModelStateIfLastActionFilled(ToothModel toothModel, Context context) {
-        //todo!! check all lists when could been have babytooth or permanenttooth filling and true if find one (or two?)
-
-        RealmList<EventModel> eventsList = toothModel.getEventModels();
-
-        if (toothModel.isBabyTooth()) {
-            if (eventsList.where().equalTo("action", context.getString(R.string.filled)).findAll().size() > 0) {
-                toothModel.setFilling(true);
-            } else {
-                toothModel.setFilling(false);
-            }
-        } else if (toothModel.isPermanentTooth()) {
-            int amountOfPermanentToothFillingEvents = 0;
-            for (EventModel eventModel : eventsList.where().equalTo("action", context.getString(R.string.filled)).findAll()) {
-                if (eventModel.getId() / 1000 < 50) amountOfPermanentToothFillingEvents++;
-            }
-            if (amountOfPermanentToothFillingEvents > 0) {
-                toothModel.setFilling(true);
-            } else {
-                toothModel.setFilling(false);
-            }
-        }
-    }
-
-    private void returnToothModelStateIfLastActionExtracted(ToothModel toothModel, MainActivity mainActivity) {
-
-        toothModel.setExist(true);
-
-        if (!toothModel.isBabyTooth() && !toothModel.isPermanentTooth()) {
-            toothModel.setPermanentTooth(true);
-        } else if (!toothModel.isBabyTooth() && toothModel.isPermanentTooth()) {
-            toothModel.setBabyTooth(true);
-            toothModel.setPermanentTooth(false);
-            toothModel.setPosition(toothModel.getPosition() + 40);
-
-            ((TextView) mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId())).setText(String.valueOf(toothModel.getPosition()));
-
-        } else if (!toothModel.isBabyTooth()) {
-            toothModel.setBabyTooth(false);
-        }
-    }
-
-    private void setVisibilities(Context context) {
+      private void setVisibilities(Context context) {
         MainActivity mainActivity = (MainActivity) context;
 
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {

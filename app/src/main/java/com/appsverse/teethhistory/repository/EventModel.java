@@ -17,8 +17,6 @@ public class EventModel extends RealmObject {
     private String notes;
     private RealmList<String> photosUri;
 
-private RealmList<String> actions;
-
     public int getId() {
         return id;
     }
@@ -57,14 +55,6 @@ private RealmList<String> actions;
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public RealmList<String> getActions() {
-        return actions;
-    }
-
-    public void setActions(RealmList<String> actions) {
-        this.actions = actions;
     }
 
     public int getPosition() {
