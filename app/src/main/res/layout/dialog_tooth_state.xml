@@ -4,6 +4,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.appsverse.teethhistory.data.Tooth" />
 
         <variable
             name="tooth"
@@ -15,14 +16,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:checked="@={tooth.exist}"
-            android:text="@string/is_exist"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
-
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,34 +26,64 @@
                 android:id="@+id/radio_button_baby_tooth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@={tooth.babyTooth}"
+                android:checked="@{tooth.position > 50}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(checked, tooth.position + 40)}"
                 android:text="@string/is_baby_tooth" />
 
             <RadioButton
                 android:id="@+id/radio_button_permanent_tooth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@={tooth.permanentTooth}"
+                android:checked="@{tooth.position &lt; 50}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(checked, tooth.position - 40)}"
                 android:text="@string/is_permanent_tooth" />
         </RadioGroup>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:checked="@={tooth.filling}"
-            android:text="@string/is_filled"
-            android:visibility="@{tooth.exist ? View.VISIBLE : View.GONE }"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tooth_state"
+            android:layout_marginStart="10dp"/>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:checked="@={tooth.implant}"
-            android:text="@string/is_implant"
-            android:visibility="@{(tooth.babyTooth || !tooth.exist) ? View.GONE : View.VISIBLE}"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
+            android:layout_marginEnd="15dp">
+
+            <RadioButton
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@{tooth.state == Tooth.NORMAL}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.NORMAL)}"
+                android:text="@string/normal" />
+
+            <RadioButton
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@{tooth.state == Tooth.NO_TOOTH}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.NO_TOOTH)}"
+                android:text="@string/not_grown_or_removed" />
+
+            <RadioButton
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@{tooth.state == Tooth.FILLED}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.FILLED)}"
+                android:text="@string/filled" />
+
+            <RadioButton
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@{tooth.state == Tooth.IMPLANTED}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.IMPLANTED)}"
+                android:text="@string/implanted" />
+        </RadioGroup>
+
     </LinearLayout>
 
 </layout>

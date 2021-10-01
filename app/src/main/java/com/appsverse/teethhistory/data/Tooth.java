@@ -11,8 +11,7 @@ public class Tooth extends BaseObservable {
     public static final int FILLED = 20;
     public static final int NORMAL = 10;
 
-    public static final int NO_BABY_TOOTH = 0;
-    public static final int NO_PERMANENT_TOOTH = 1;
+    public static final int NO_TOOTH = 0;
 
     private int id;
     private int position;
@@ -24,14 +23,10 @@ public class Tooth extends BaseObservable {
 
     private int state;
 
-    public Tooth(int id, int position) {
+    public Tooth(int id, int position, int state) {
         setId(id);
         setPosition(position);
-        setExist(true);
-        setBabyTooth(false);
-        setPermanentTooth(true);
-        setFilling(false);
-        setImplant(false);
+        setState(state);
     }
 
     @Bindable
@@ -51,6 +46,11 @@ public class Tooth extends BaseObservable {
 
     public void setPosition(int position) {
         this.position = position;
+        notifyPropertyChanged(BR.position);
+    }
+
+    public void setPosition(boolean checked, int position) {
+        if (checked) this.position = position;
         notifyPropertyChanged(BR.position);
     }
 
@@ -116,6 +116,13 @@ public class Tooth extends BaseObservable {
 
     public void setState(int state) {
         this.state = state;
+        notifyPropertyChanged(BR.state);
+    }
+
+    public void setState(boolean checked, int state) {
+
+        if (checked) this.state = state;
+
         notifyPropertyChanged(BR.state);
     }
 }

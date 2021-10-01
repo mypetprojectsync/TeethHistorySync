@@ -44,6 +44,8 @@
     <string name="grown">Вырос</string>
     <string name="implanted">Имплантирован</string>
     <string name="delete_event">Удалить событие?</string>
+    <string name="tooth_state">Состояние зуба</string>
+    <string name="not_grown_or_removed">Не вырос или удалён</string>
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 

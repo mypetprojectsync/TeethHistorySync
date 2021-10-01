@@ -224,23 +224,15 @@ public class CreateNewUserViewModel extends ViewModel {
     private void setPermanentToothModel(ToothModel toothModel, int i) {
         toothModel.setId(i);
         toothModel.setPosition(i);
-        toothModel.setExist(true);
-        toothModel.setBabyTooth(false);
-        toothModel.setPermanentTooth(true);
-        toothModel.setFilling(false);
-        toothModel.setImplant(false);
-        toothModel.setDefaultState(toothModel.PERMANENT_TOOTH);
+        toothModel.setDefaultState(ToothModel.PERMANENT_TOOTH);
+        toothModel.setState(ToothModel.NORMAL);
     }
 
     private void setNoPermanentToothModel(ToothModel toothModel, int i) {
         toothModel.setId(i);
         toothModel.setPosition(i);
-        toothModel.setExist(false);
-        toothModel.setBabyTooth(false);
-        toothModel.setPermanentTooth(true);
-        toothModel.setFilling(false);
-        toothModel.setImplant(false);
-        toothModel.setDefaultState(toothModel.NO_PERMANENT_TOOTH);
+        toothModel.setDefaultState(ToothModel.NO_TOOTH);
+        toothModel.setState(ToothModel.NO_TOOTH);
     }
 
 
@@ -250,12 +242,8 @@ public class CreateNewUserViewModel extends ViewModel {
         //add 40 to get baby tooth index from permanent tooth index
         toothModel.setPosition(i+40);
 
-        toothModel.setExist(true);
-        toothModel.setBabyTooth(true);
-        toothModel.setPermanentTooth(false);
-        toothModel.setFilling(false);
-        toothModel.setImplant(false);
-        toothModel.setDefaultState(toothModel.BABY_TOOTH);
+        toothModel.setDefaultState(ToothModel.BABY_TOOTH);
+        toothModel.setState(ToothModel.NORMAL);
     }
 
     private void setNoBabyToothModel(ToothModel toothModel, int i) {
@@ -264,12 +252,8 @@ public class CreateNewUserViewModel extends ViewModel {
         //add 40 to get baby tooth index from permanent tooth index
         toothModel.setPosition(i+40);
 
-        toothModel.setExist(false);
-        toothModel.setBabyTooth(true);
-        toothModel.setPermanentTooth(false);
-        toothModel.setFilling(false);
-        toothModel.setImplant(false);
-        toothModel.setDefaultState(toothModel.NO_BABY_TOOTH);
+        toothModel.setDefaultState(ToothModel.NO_BABY_TOOTH);
+        toothModel.setState(ToothModel.NO_TOOTH);
     }
 
 
