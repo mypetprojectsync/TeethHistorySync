@@ -427,7 +427,7 @@ public class EditEventFragment extends Fragment {
 
             picker.show(this.getActivity().getSupportFragmentManager(), picker.toString());
             picker.addOnPositiveButtonClickListener(selection -> {
-                String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selection);
+
                 event.setDate(new Date((Long) selection));
             });
         });
