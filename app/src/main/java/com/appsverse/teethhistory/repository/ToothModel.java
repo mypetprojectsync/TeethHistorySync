@@ -8,19 +8,19 @@ import io.realm.annotations.RealmClass;
 public class ToothModel extends RealmObject {
 
     public static final int NO_BABY_TOOTH = -1;
-    public static final int NO_TOOTH = 0;
-
+    public static final int NO_PERMANENT_TOOTH = 0;
     public static final int BABY_TOOTH = 2;
     public static final int PERMANENT_TOOTH = 3;
 
-    public static final int IMPLANTED = 30;
-    public static final int FILLED = 20;
-    public static final int NORMAL = 10;
+    public static final String IMPLANTED = "i";
+    public static final String FILLED = "f";
+    public static final String NORMAL = "g";
+    public static final String NO_TOOTH = "";
 
     private int id;
     private int position;
     private int defaultState;
-    private int state;
+    private String state;
 
     private RealmList<EventModel> eventModels;
 
@@ -57,11 +57,11 @@ public class ToothModel extends RealmObject {
         this.defaultState = defaultState;
     }
 
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
     }
 }

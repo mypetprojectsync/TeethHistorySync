@@ -258,7 +258,7 @@ public class MainActivityViewModel extends ViewModel {
 
         switch (toothModel.getDefaultState()) {
             case ToothModel.NO_BABY_TOOTH:
-            case ToothModel.NO_TOOTH:
+            case ToothModel.NO_PERMANENT_TOOTH:
                 toothModel.setState(ToothModel.NO_TOOTH);
                 break;
             case ToothModel.BABY_TOOTH:
