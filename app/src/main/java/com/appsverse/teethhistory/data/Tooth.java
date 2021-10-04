@@ -7,23 +7,16 @@ import com.appsverse.teethhistory.BR;
 
 public class Tooth extends BaseObservable {
 
-    public static final int IMPLANTED = 30;
-    public static final int FILLED = 20;
-    public static final int NORMAL = 10;
-
-    public static final int NO_TOOTH = 0;
+    public static final String IMPLANTED = "i";
+    public static final String FILLED = "f";
+    public static final String NORMAL = "g";
+    public static final String NO_TOOTH = "";
 
     private int id;
     private int position;
-    private boolean isExist = true;
-    private boolean isBabyTooth = false;
-    private boolean isPermanentTooth = true;
-    private boolean isFilling = false;
-    private boolean isImplant = false;
+    private String state;
 
-    private int state;
-
-    public Tooth(int id, int position, int state) {
+    public Tooth(int id, int position, String state) {
         setId(id);
         setPosition(position);
         setState(state);
@@ -55,71 +48,16 @@ public class Tooth extends BaseObservable {
     }
 
     @Bindable
-    public boolean isExist() {
-        return isExist;
-    }
-
-    public void setExist(boolean isExist) {
-        this.isExist = isExist;
-        notifyPropertyChanged(BR.exist);
-    }
-
-    @Bindable
-    public boolean isBabyTooth() {
-        return isBabyTooth;
-    }
-
-    public void setBabyTooth(boolean isBabyTooth) {
-        if (isBabyTooth && position>10 && position<50) setPosition(position+40);
-        this.isBabyTooth = isBabyTooth;
-        notifyPropertyChanged(BR.babyTooth);
-    }
-
-
-    @Bindable
-    public boolean isPermanentTooth() {
-        return isPermanentTooth;
-    }
-
-    public void setPermanentTooth(boolean isPermanentTooth) {
-        if (isPermanentTooth && position>50 && position<90) setPosition(position-40);
-        this.isPermanentTooth = isPermanentTooth;
-        notifyPropertyChanged(BR.permanentTooth);
-    }
-
-    @Bindable
-    public boolean isFilling() {
-        return isFilling;
-    }
-
-    public void setFilling(boolean filling) {
-        if (filling) setImplant(false);
-        this.isFilling = filling;
-        notifyPropertyChanged(BR.filling);
-    }
-
-    @Bindable
-    public boolean isImplant() {
-        return isImplant;
-    }
-
-    public void setImplant(boolean implant) {
-        if (implant) setFilling(false);
-        this.isImplant = implant;
-        notifyPropertyChanged(BR.implant);
-    }
-
-    @Bindable
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
         notifyPropertyChanged(BR.state);
     }
 
-    public void setState(boolean checked, int state) {
+    public void setState(boolean checked, String state) {
 
         if (checked) this.state = state;
 

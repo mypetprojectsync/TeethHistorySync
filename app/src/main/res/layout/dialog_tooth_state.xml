@@ -55,7 +55,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@{tooth.state == Tooth.NORMAL}"
+                android:checked="@{tooth.state.equals(Tooth.NORMAL)}"
                 android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.NORMAL)}"
                 android:text="@string/normal" />
 
@@ -63,7 +63,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@{tooth.state == Tooth.NO_TOOTH}"
+                android:checked="@{tooth.state.equals(Tooth.NO_TOOTH)}"
                 android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.NO_TOOTH)}"
                 android:text="@string/not_grown_or_removed" />
 
@@ -71,7 +71,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@{tooth.state == Tooth.FILLED}"
+                android:checked="@{tooth.state.equals(Tooth.FILLED)}"
                 android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.FILLED)}"
                 android:text="@string/filled" />
 
@@ -79,7 +79,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checked="@{tooth.state == Tooth.IMPLANTED}"
+                android:checked="@{tooth.state.equals(Tooth.IMPLANTED)}"
                 android:onCheckedChanged="@{(button, checked) -> tooth.setState(checked, Tooth.IMPLANTED)}"
                 android:text="@string/implanted" />
         </RadioGroup>
