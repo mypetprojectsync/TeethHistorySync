@@ -55,6 +55,8 @@
         android:orientation="horizontal"
         android:layout_above="@+id/adView">
 
+
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/teeth_formula_fragment"
             android:name="com.appsverse.teethhistory.fragments.TeethFormulaFragment"

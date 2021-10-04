@@ -128,16 +128,8 @@ public class TeethFormulaFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         ImageView toothIV = getToothImageView(i);
-        int id;
 
-        ImageView toothPositionIV = new ImageView(this.getContext());
-        toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
-
-        String toothNumber = "ic_" + toothModels.get(i).getPosition();
-        id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
-        toothPositionIV.setImageResource(id);
-        toothPositionIV.setAdjustViewBounds(true);
-        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
+        ImageView toothPositionIV = getPositionImageView(i);
 
         if (i >= 0 && i < 16) {
             linearLayout.addView(toothIV);
@@ -162,6 +154,24 @@ public class TeethFormulaFragment extends Fragment {
         return linearLayout;
     }
 
+    @NonNull
+    private ImageView getPositionImageView(int i) {
+
+        int id;
+
+        ImageView toothPositionIV = new ImageView(this.getContext());
+        toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
+
+        String toothNumber = "ic_" + toothModels.get(i).getPosition();
+        id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
+
+        toothPositionIV.setImageResource(id);
+        toothPositionIV.setAdjustViewBounds(true);
+        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
+
+        return toothPositionIV;
+    }
+
     private void toothLongClicked() {
 
         dialogToothStateBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_tooth_state, null, false);
@@ -173,14 +183,12 @@ public class TeethFormulaFragment extends Fragment {
 
         dialogBuilder.setTitle(getString(R.string.edit_tooth_state) + tooth.getPosition() + getString(R.string.state));
         dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
+
             model.saveTooth(tooth, (MainActivity) getActivity());
 
-            ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(tooth.getId()+1000);
-            String toothNumber = "ic_" + tooth.getPosition();
-            int id = getContext().getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
-            toothPositionIV.setImageResource(id);
-            toothPositionIV.setAdjustViewBounds(true);
+            setPositionIVById(tooth.getId(), tooth.getPosition());
         });
+
         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         dialogBuilder.show();
     }
@@ -212,9 +220,6 @@ public class TeethFormulaFragment extends Fragment {
         }
 
         toothIV.setAdjustViewBounds(true);
-
-        //TODO Do TAG used?
-        toothIV.setTag(toothModels.get(i).getPosition());
 
         toothIV.setId(toothModels.get(i).getId());
         return toothIV;
@@ -255,7 +260,7 @@ public class TeethFormulaFragment extends Fragment {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             mainActivity.binding.getEventsListFragment().refillEventsList();
 
-        mainActivity.binding.getNewEventFragment().setTextActionACTV();
+        mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
     }
 
     private void setGum(ImageView toothIV, int toothId) {
@@ -379,5 +384,16 @@ public class TeethFormulaFragment extends Fragment {
         model.setChosenToothID(tooth.getId());
         model.setChosenToothPosition(tooth.getPosition());
         model.setChosenToothState(tooth.getState());
+    }
+
+    public void setPositionIVById(int id, int position) {
+
+        ImageView positionImageView = binding.getRoot().findViewById(id + MINIMAL_POSITION_IMAGE_ID);
+
+        positionImageView.setImageResource(getResources().getIdentifier("ic_" + position, "drawable", getActivity().getPackageName()));
+
+        positionImageView.setScaleType(ImageView.ScaleType.FIT_START);
+
+        positionImageView.setAdjustViewBounds(true);
     }
 }

@@ -3,7 +3,6 @@ package com.appsverse.teethhistory.viewModels;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.lifecycle.ViewModel;
 
@@ -112,7 +111,7 @@ public class NewEventViewModel extends ViewModel {
 
         setVisibilities(context);
 
-        setDefaultValues(event, photosUri, (MainActivity) context);
+        setDefaultValues(event, (MainActivity) context);
 
         if (photosListForDeleting != null) photosListForDeleting.clear();
     }
@@ -143,11 +142,10 @@ public class NewEventViewModel extends ViewModel {
         return false;
     }
 
-    private void setDefaultValues(Event event, List<String> photosUri, MainActivity mainActivity) {
+    private void setDefaultValues(Event event, MainActivity mainActivity) {
         setDate(new Date());
         setGuarantee(12);
         setNotes("");
-        setPhotosUri(photosUri);
 
         event.setDate(getDate());
         event.setGuarantee(getGuarantee());
@@ -157,7 +155,7 @@ public class NewEventViewModel extends ViewModel {
 
         mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
 
-        if (this.photosUri != null) this.photosUri.clear();
+        if (event.getPhotosUri() != null) event.getPhotosUri().clear();
 
         mainActivity.binding.getNewEventFragment().eventPhotosListAdapter.notifyDataSetChanged();
     }
@@ -201,42 +199,11 @@ public class NewEventViewModel extends ViewModel {
 
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) {
-
-            if (event.getAction().equals(context.getString(R.string.extracted))) {
-
-                if (toothModel.getPosition() > 50) {
-
-                    toothModel.setPosition(toothModel.getPosition() - 40);
-                    toothModel.setState(ToothModel.NO_TOOTH);
-
-                    setToothPositionIV(context, mainActivity, toothModel);
-
-                } else {
-                    toothModel.setState(toothModel.NO_TOOTH);
-                }
-
-            } else if (event.getAction().equals(context.getString(R.string.filled))) {
-
-                toothModel.setState(toothModel.FILLED);
-
-            } else if (event.getAction().equals(context.getString(R.string.implanted))) {
-
-                toothModel.setState(toothModel.IMPLANTED);
-
-            } else if (event.getAction().equals(context.getString(R.string.grown))
-                    || event.getAction().equals(context.getString(R.string.cleaned))
-                    || event.getAction().equals(context.getString(R.string.other))) {
-
-                toothModel.setState(toothModel.NORMAL);
-
-            }
-        }
+        if (eventModelsResults.get(0).getId() == eventModel.getId()) setToothModelState(event, context, toothModel);
 
         realm.commitTransaction();
 
         setVisibilities(context);
-
 
         mainActivity.binding.getTeethFormulaFragment().setTooth();
 
@@ -244,18 +211,38 @@ public class NewEventViewModel extends ViewModel {
             deleteSelectedPhotos();
         }
 
-        List<String> photosUri = event.getPhotosUri();
-
-        setDefaultValues(event, photosUri, mainActivity);
-
+        setDefaultValues(event, mainActivity);
     }
 
-    private void setToothPositionIV(Context context, MainActivity mainActivity, ToothModel toothModel) {
-        ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(toothModel.getId() + MINIMAL_POSITION_IMAGE_ID);
-        String toothNumber = "ic_" + toothModel.getPosition();
-        id = context.getResources().getIdentifier(toothNumber, "drawable", ((MainActivity) context).getPackageName());
-        toothPositionIV.setImageResource(id);
-        toothPositionIV.setAdjustViewBounds(true);
+    private void setToothModelState(Event event, Context context, ToothModel toothModel) {
+        if (event.getAction().equals(context.getString(R.string.extracted))) {
+
+            if (toothModel.getPosition() > 50) {
+
+                toothModel.setPosition(toothModel.getPosition() - 40);
+                toothModel.setState(ToothModel.NO_TOOTH);
+
+                ((MainActivity) context).binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
+
+            } else {
+                toothModel.setState(ToothModel.NO_TOOTH);
+            }
+
+        } else if (event.getAction().equals(context.getString(R.string.filled))) {
+
+            toothModel.setState(ToothModel.FILLED);
+
+        } else if (event.getAction().equals(context.getString(R.string.implanted))) {
+
+            toothModel.setState(ToothModel.IMPLANTED);
+
+        } else if (event.getAction().equals(context.getString(R.string.grown))
+                || event.getAction().equals(context.getString(R.string.cleaned))
+                || event.getAction().equals(context.getString(R.string.other))) {
+
+            toothModel.setState(ToothModel.NORMAL);
+
+        }
     }
 
     private void setVisibilities(Context context) {
@@ -277,8 +264,8 @@ public class NewEventViewModel extends ViewModel {
 
     public ToothModel getToothModel(MainActivity mainActivity) {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", mainActivity.user_id).findFirst();
-        MainActivityViewModel mainActivityViewModel = mainActivity.binding.getModel();
-        return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
+
+        return userModel.getToothModels().where().equalTo("id", mainActivity.binding.getModel().getChosenToothID()).findFirst();
     }
 
     public int getPosition() {

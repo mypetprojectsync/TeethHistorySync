@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checked="@{tooth.position > 50}"
-                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(checked, tooth.position + 40)}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(tooth.position &lt; 50 ? checked : false, tooth.position + 40)}"
                 android:text="@string/is_baby_tooth" />
 
             <RadioButton
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checked="@{tooth.position &lt; 50}"
-                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(checked, tooth.position - 40)}"
+                android:onCheckedChanged="@{(button, checked) -> tooth.setPosition(tooth.position > 50 ? checked : false, tooth.position - 40)}"
                 android:text="@string/is_permanent_tooth" />
         </RadioGroup>
 
