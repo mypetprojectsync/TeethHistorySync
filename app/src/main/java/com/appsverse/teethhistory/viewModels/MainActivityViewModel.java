@@ -123,6 +123,9 @@ public class MainActivityViewModel extends ViewModel {
     public void setMainActivityViewModelData(int user_id) {
 
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
+
+        if (userModel == null) userModel = realm.where(UserModel.class).findFirst();
+
         this.setUser_id(userModel.getId());
         this.setUsername(userModel.getName());
         this.setBabyTeeth(userModel.isBabyTeeth());
