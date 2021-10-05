@@ -309,7 +309,10 @@ public class TeethFormulaFragment extends Fragment {
 
                         dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
                             mainActivity.deleteEvent(eventModels.get(position));
+
                             deleteEventAnimation(position);
+
+                            setVisibilitiesAfterDeleteEvent();
                         });
 
                         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {
@@ -343,6 +346,16 @@ public class TeethFormulaFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setVisibilitiesAfterDeleteEvent() {
+        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+
+        mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
+
+        mainActivity.binding.getTeethFormulaFragment().refillEventsList();
+        mainActivity.binding.getEventsListFragment().refillEventsList();
     }
 
 

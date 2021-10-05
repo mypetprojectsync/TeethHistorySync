@@ -258,6 +258,3 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
-
-
-//TODO Когда открыто событие и оно же удаляется, фрагмент открытого события не скрывается и не обновляется
