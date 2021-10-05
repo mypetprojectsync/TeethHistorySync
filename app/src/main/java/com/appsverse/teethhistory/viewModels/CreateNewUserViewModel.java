@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
 
@@ -19,10 +18,16 @@ public class CreateNewUserViewModel extends ViewModel {
 
     final Realm realm = Realm.getDefaultInstance();
 
+    //TODO bug when deleted last event, tooth image not changed
+
+    public static final int NO_TEETH = 0;
+    public static final int BABY_TEETH = 1;
+    public static final int PERMANENT_TEETH = 2;
+
     private int id;
     private String name = "";
-    private boolean isNoTeeth = false;
-    private boolean isBabyTeeth = false;
+
+    private int userState = PERMANENT_TEETH;
 
     public int getId() {
         return id;
@@ -40,16 +45,16 @@ public class CreateNewUserViewModel extends ViewModel {
         this.name = name;
     }
 
-    public boolean isBabyTeeth() {
-        return isBabyTeeth;
+    public int getUserState() {
+        return userState;
     }
 
-    public void setBabyTeeth(boolean babyTeeth) {
-        this.isBabyTeeth = babyTeeth;
+    public void setUserState(int userState) {
+        this.userState = userState;
     }
 
-    public void onClickSaveButton(User user, Context context) {
-        if (user.getName().trim().length() > 0) {
+    public void onClickSaveButton(Context context) {
+        if (getName().trim().length() > 0) {
             Number current_id = realm.where(UserModel.class).max("id");
 
             int next_id;
@@ -62,17 +67,22 @@ public class CreateNewUserViewModel extends ViewModel {
 
             realm.beginTransaction();
             UserModel userModel = realm.createObject(UserModel.class, next_id);
-            userModel.setName(user.getName().trim());
-            userModel.setNoTeeth(user.isNoTeeth());
-            userModel.setBabyTeeth(user.isBabyTeeth());
+            userModel.setName(getName().trim());
             realm.commitTransaction();
 
-            if (user.isNoTeeth()) {
+            switch (userState) {
+
+                case NO_TEETH:
                 setNoTeethToothModels(userModel);
-            } else if (user.isBabyTeeth()) {
+                break;
+
+                case BABY_TEETH:
                 setBabyTeethToothModels(userModel);
-            } else {
+                break;
+
+                case PERMANENT_TEETH:
                 setPermanentTeethToothModels(userModel);
+                break;
             }
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -85,6 +95,7 @@ public class CreateNewUserViewModel extends ViewModel {
             context.startActivity(intent);
             realm.close();
         }
+
         ((Activity) context).finish();
     }
 
@@ -256,16 +267,8 @@ public class CreateNewUserViewModel extends ViewModel {
         toothModel.setState(ToothModel.NO_TOOTH);
     }
 
-
     public void onClickCancelButton(Context context) {
         ((Activity) context).finish();
     }
 
-    public boolean isNoTeeth() {
-        return isNoTeeth;
-    }
-
-    public void setNoTeeth(boolean noTeeth) {
-        isNoTeeth = noTeeth;
-    }
 }

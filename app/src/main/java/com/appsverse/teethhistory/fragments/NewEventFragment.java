@@ -344,7 +344,7 @@ public class NewEventFragment extends Fragment {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         File file = new File(directory.getAbsolutePath(),
-                mainActivity.binding.getUser().getName() + "_"
+                mainActivity.binding.getModel().getUsername() + "_"
                         + mainActivity.binding.getModel().getChosenToothID() + "_"
                         + event.getId() + "_"
                         + timeStamp + ".jpg");

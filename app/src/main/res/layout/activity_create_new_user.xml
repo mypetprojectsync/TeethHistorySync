@@ -4,21 +4,10 @@
 
     <data>
 
-        <import type="android.view.View" />
-
-        <import type="android.text.TextUtils" />
-
-        <variable
-            name="user"
-            type="com.appsverse.teethhistory.data.User" />
-
         <variable
             name="model"
             type="com.appsverse.teethhistory.viewModels.CreateNewUserViewModel" />
 
-        <variable
-            name="errorMessage"
-            type="String" />
     </data>
 
     <LinearLayout
@@ -39,7 +28,7 @@
                 android:id="@+id/nameTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={user.name}"
+                android:text="@={model.name}"
                 android:imeOptions="flagNoExtractUi"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -47,28 +36,31 @@
         <RadioGroup
             android:id="@+id/initialTeethStateRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@id/radio_button_all_permanent">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/radio_button_no_teeth_yet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/no_teeth_yet"
-                android:checked="@={user.noTeeth}"/>
+                android:checked="@{model.userState == model.NO_TEETH}"
+                android:onClick="@{() -> model.setUserState(model.NO_TEETH)}"/>
 
             <RadioButton
                 android:id="@+id/radio_button_have_baby_teeth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/have_all_baby_tooth"
-                android:checked="@={user.babyTeeth}"/>
+                android:checked="@{model.userState == model.BABY_TEETH}"
+                android:onClick="@{() -> model.setUserState(model.BABY_TEETH)}"/>
 
             <RadioButton
                 android:id="@+id/radio_button_all_permanent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/all_teeth_are_permanent"/>
+                android:text="@string/all_teeth_are_permanent"
+                android:checked="@{model.userState == model.PERMANENT_TEETH}"
+                android:onClick="@{() -> model.setUserState(model.PERMANENT_TEETH)}"/>
 
         </RadioGroup>
 
@@ -93,7 +85,7 @@
                 android:layout_marginStart="40dp"
                 android:enabled="false"
                 android:gravity="center"
-                android:onClick="@{() -> model.onClickSaveButton(user, context)}"
+                android:onClick="@{() -> model.onClickSaveButton(context)}"
                 android:text="@string/create_user" />
 
 

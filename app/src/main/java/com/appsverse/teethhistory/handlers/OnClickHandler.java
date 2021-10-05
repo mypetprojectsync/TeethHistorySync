@@ -27,7 +27,6 @@ import androidx.databinding.DataBindingUtil;
 import com.appsverse.teethhistory.CreateNewUserActivity;
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
-import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.databinding.EditUsernameDialogBinding;
 import com.appsverse.teethhistory.repository.UserModel;
@@ -173,11 +172,11 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
     public void createEditUserNameDialog(ActivityMainBinding binding) {
 
-        User user = binding.getUser();
         MainActivityViewModel model = binding.getModel();
 
         EditUsernameDialogBinding editUsernameBinding = DataBindingUtil.inflate(LayoutInflater.from(binding.getRoot().getContext()), R.layout.edit_username_dialog, null, false);
-        editUsernameBinding.setUser(user);
+
+        editUsernameBinding.setModel(model);
 
         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(binding.getRoot().getContext());
         dialog.setView(editUsernameBinding.getRoot().getRootView());
@@ -224,7 +223,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         });
 
         dialog.setPositiveButton(R.string.ok, (dialog1, which) -> {
-            model.updateUsername(user.getName().trim());
+            model.updateUsername(model.getUsername().trim());
             ((MainActivity) activity).getSupportActionBar().setTitle(model.getUsername());
         });
 
@@ -234,7 +233,6 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             if (!model.getUsername().equals(model.getUsernameFromRealm()) && !model.getEditUserDialog().isShowing()) {
                 model.setUsername(model.getUsernameFromRealm());
-                user.setName(model.getUsername());
             }
 
             if (model.getEditUserDialog() != null && !model.getEditUserDialog().isShowing()) {

@@ -10,14 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityCreateNewUserBinding;
 import com.appsverse.teethhistory.viewModels.CreateNewUserViewModel;
 
 public class CreateNewUserActivity extends AppCompatActivity {
 
     public CreateNewUserViewModel model;
-    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +25,6 @@ public class CreateNewUserActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(CreateNewUserViewModel.class);
         binding.setModel(model);
-        user = new User(model.getName(), model.isNoTeeth(), model.isBabyTeeth());
-        binding.setUser(user);
 
         binding.nameTIET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -54,13 +50,6 @@ public class CreateNewUserActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        model.setName(user.getName());
-        model.setBabyTeeth(user.isBabyTeeth());
     }
 
     @Override
