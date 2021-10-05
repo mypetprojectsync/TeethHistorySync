@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AdView mAdView;
 
-    //todo добавить проверку на существование user_id в базе, если нет, то загружать первого юзера
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
