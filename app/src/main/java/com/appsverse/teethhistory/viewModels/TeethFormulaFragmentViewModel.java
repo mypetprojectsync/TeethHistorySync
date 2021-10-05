@@ -17,7 +17,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     private int chosenToothID;
     private int chosenToothPosition;
-    private int chosenToothState;
+    private String chosenToothState;
 
     public int getChosenToothID() {
         return chosenToothID;
@@ -69,11 +69,11 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         realm.commitTransaction();
     }
 
-    public int getChosenToothState() {
+    public String getChosenToothState() {
         return chosenToothState;
     }
 
-    public void setChosenToothState(int chosenToothState) {
+    public void setChosenToothState(String chosenToothState) {
         this.chosenToothState = chosenToothState;
     }
 }

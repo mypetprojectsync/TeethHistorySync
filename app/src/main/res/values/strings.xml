@@ -25,7 +25,7 @@
     <string name="is_permanent_tooth">Permanent tooth</string>
     <string name="is_filled">Filled</string>
     <string name="is_implant">Implant</string>
-    <string name="state">\" state\"</string>
+    <string name="state">" state"</string>
     <string name="no_teeth_yet">No teeth yet</string>
     <string name="have_all_baby_tooth">Have all baby teeth</string>
     <string name="all_teeth_are_permanent">All teeth are permanent</string>

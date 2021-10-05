@@ -243,11 +243,12 @@ public class MainActivityViewModel extends ViewModel {
         eventModel.deleteFromRealm();
 
 
-        if (toothModel.getEventModels().size() == 1) {
+        if (toothModel.getEventModels().size() == 0) {
             resetToothState(toothModel);
 
-            //TODO Возможно тут следует поменять изображение номера зуба
+            mainActivity.binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
         }
+
         realm.commitTransaction();
 
 
@@ -258,16 +259,33 @@ public class MainActivityViewModel extends ViewModel {
 
         switch (toothModel.getDefaultState()) {
             case ToothModel.NO_BABY_TOOTH:
-            case ToothModel.NO_TOOTH:
+
                 toothModel.setState(ToothModel.NO_TOOTH);
-                break;
-            case ToothModel.BABY_TOOTH:
-                toothModel.setState(ToothModel.NORMAL);
+
                 if (toothModel.getPosition() < 50)
                     toothModel.setPosition(toothModel.getPosition() + 40);
                 break;
-            case ToothModel.PERMANENT_TOOTH:
+
+            case ToothModel.NO_PERMANENT_TOOTH:
+
+                toothModel.setState(ToothModel.NO_TOOTH);
+
+                if (toothModel.getPosition() > 50)
+                    toothModel.setPosition(toothModel.getPosition() - 40);
+                break;
+
+            case ToothModel.BABY_TOOTH:
+
                 toothModel.setState(ToothModel.NORMAL);
+
+                if (toothModel.getPosition() < 50)
+                    toothModel.setPosition(toothModel.getPosition() + 40);
+                break;
+
+            case ToothModel.PERMANENT_TOOTH:
+
+                toothModel.setState(ToothModel.NORMAL);
+
                 if (toothModel.getPosition() > 50)
                     toothModel.setPosition(toothModel.getPosition() - 40);
                 break;

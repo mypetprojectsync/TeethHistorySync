@@ -128,16 +128,8 @@ public class TeethFormulaFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         ImageView toothIV = getToothImageView(i);
-        int id;
 
-        ImageView toothPositionIV = new ImageView(this.getContext());
-        toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
-
-        String toothNumber = "ic_" + toothModels.get(i).getPosition();
-        id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
-        toothPositionIV.setImageResource(id);
-        toothPositionIV.setAdjustViewBounds(true);
-        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
+        ImageView toothPositionIV = getPositionImageView(i);
 
         if (i >= 0 && i < 16) {
             linearLayout.addView(toothIV);
@@ -162,6 +154,24 @@ public class TeethFormulaFragment extends Fragment {
         return linearLayout;
     }
 
+    @NonNull
+    private ImageView getPositionImageView(int i) {
+
+        int id;
+
+        ImageView toothPositionIV = new ImageView(this.getContext());
+        toothPositionIV.setScaleType(ImageView.ScaleType.FIT_START);
+
+        String toothNumber = "ic_" + toothModels.get(i).getPosition();
+        id = getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
+
+        toothPositionIV.setImageResource(id);
+        toothPositionIV.setAdjustViewBounds(true);
+        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
+
+        return toothPositionIV;
+    }
+
     private void toothLongClicked() {
 
         dialogToothStateBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_tooth_state, null, false);
@@ -173,14 +183,12 @@ public class TeethFormulaFragment extends Fragment {
 
         dialogBuilder.setTitle(getString(R.string.edit_tooth_state) + tooth.getPosition() + getString(R.string.state));
         dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
+
             model.saveTooth(tooth, (MainActivity) getActivity());
 
-            ImageView toothPositionIV = mainActivity.binding.getTeethFormulaFragment().binding.getRoot().findViewById(tooth.getId()+1000);
-            String toothNumber = "ic_" + tooth.getPosition();
-            int id = getContext().getResources().getIdentifier(toothNumber, "drawable", getActivity().getPackageName());
-            toothPositionIV.setImageResource(id);
-            toothPositionIV.setAdjustViewBounds(true);
+            setPositionIVById(tooth.getId(), tooth.getPosition());
         });
+
         dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         dialogBuilder.show();
     }
@@ -196,45 +204,25 @@ public class TeethFormulaFragment extends Fragment {
             int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
             toothIV.setImageResource(id);
 
-        } else if (toothModels.get(i).getState() != ToothModel.NO_TOOTH) {
+        } else if (toothModels.get(i).getState().equals("")) {
+
+            setGum(toothIV, toothModels.get(i).getId());
+
+        } else {
 
             int position = toothModels.get(i).getPosition();
 
             if (position > 50) position = position - 40;
 
-            String toothIcon = "ic_" + position + chooseToothState(i);
+            String toothIcon = "ic_" + position + toothModels.get(i).getState();
             int id = getResources().getIdentifier(toothIcon, "drawable", getActivity().getPackageName());
             toothIV.setImageResource(id);
-
-        } else {
-            setGum(toothIV, toothModels.get(i).getId());
         }
+
         toothIV.setAdjustViewBounds(true);
-        toothIV.setTag(toothModels.get(i).getPosition());
+
         toothIV.setId(toothModels.get(i).getId());
         return toothIV;
-    }
-
-    private String chooseToothState() {
-
-        if (tooth.getState() == Tooth.IMPLANTED) {
-            return "i";
-        } else if (tooth.getState() == Tooth.FILLED) {
-            return "f";
-        } else {
-            return "g";
-        }
-
-    }
-
-    private String chooseToothState(int i) {
-        if (toothModels.get(i).getState() == ToothModel.IMPLANTED) {
-            return "i";
-        } else if (toothModels.get(i).getState() == ToothModel.FILLED) {
-            return "f";
-        } else {
-            return "g";
-        }
     }
 
     private void toothClicked(View view) {
@@ -243,13 +231,15 @@ public class TeethFormulaFragment extends Fragment {
 
             ImageView toothIV = binding.getRoot().findViewById(tooth.getId());
 
-            if (tooth.getState() != Tooth.NO_TOOTH) {
+            if (tooth.getState().equals("")) {
 
-                String toothDrawableId = "ic_" + tooth.getId() + chooseToothState();
+                setGum(toothIV, tooth.getId());
+
+            } else {
+
+                String toothDrawableId = "ic_" + tooth.getId() + tooth.getState();
                 int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
                 toothIV.setImageResource(id);
-            } else {
-                setGum(toothIV, tooth.getId());
             }
         }
 
@@ -270,7 +260,7 @@ public class TeethFormulaFragment extends Fragment {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             mainActivity.binding.getEventsListFragment().refillEventsList();
 
-        mainActivity.binding.getNewEventFragment().setTextActionACTV();
+        mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
     }
 
     private void setGum(ImageView toothIV, int toothId) {
@@ -394,5 +384,16 @@ public class TeethFormulaFragment extends Fragment {
         model.setChosenToothID(tooth.getId());
         model.setChosenToothPosition(tooth.getPosition());
         model.setChosenToothState(tooth.getState());
+    }
+
+    public void setPositionIVById(int id, int position) {
+
+        ImageView positionImageView = binding.getRoot().findViewById(id + MINIMAL_POSITION_IMAGE_ID);
+
+        positionImageView.setImageResource(getResources().getIdentifier("ic_" + position, "drawable", getActivity().getPackageName()));
+
+        positionImageView.setScaleType(ImageView.ScaleType.FIT_START);
+
+        positionImageView.setAdjustViewBounds(true);
     }
 }

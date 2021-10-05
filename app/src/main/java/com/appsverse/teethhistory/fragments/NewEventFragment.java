@@ -400,6 +400,7 @@ public class NewEventFragment extends Fragment {
         if (toothModel != null) {
 
             binding.toothActionACTV.setText(actions[0], false);
+            binding.getEvent().setAction(actions[0]);
 
             adapter.notifyDataSetChanged();
         }

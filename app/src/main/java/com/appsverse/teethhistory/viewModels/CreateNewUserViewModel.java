@@ -231,7 +231,7 @@ public class CreateNewUserViewModel extends ViewModel {
     private void setNoPermanentToothModel(ToothModel toothModel, int i) {
         toothModel.setId(i);
         toothModel.setPosition(i);
-        toothModel.setDefaultState(ToothModel.NO_TOOTH);
+        toothModel.setDefaultState(ToothModel.NO_PERMANENT_TOOTH);
         toothModel.setState(ToothModel.NO_TOOTH);
     }
 
