@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+
         <variable
-            name="user"
-            type="com.appsverse.teethhistory.data.User" />
+            name="model"
+            type="com.appsverse.teethhistory.viewModels.MainActivityViewModel" />
+
     </data>
     <LinearLayout
         android:id="@+id/activity_main_edit_username_dialog_ll"
@@ -27,7 +30,7 @@
                 android:id="@+id/editNameTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={user.name}"
+                android:text="@={model.username}"
                 android:singleLine="true"
                 android:imeOptions="flagNoExtractUi"/>
 

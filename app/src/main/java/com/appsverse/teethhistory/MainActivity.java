@@ -20,7 +20,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.appsverse.teethhistory.data.MainActivityViewData;
-import com.appsverse.teethhistory.data.User;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
 import com.appsverse.teethhistory.fragments.EventsListFragment;
@@ -117,10 +116,6 @@ public class MainActivity extends AppCompatActivity {
             mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
 
-
-            User user = new User(model.getUsername(), model.isNoTeeth(), model.isBabyTeeth());
-            binding.setUser(user);
-
             TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
             binding.setTeethFormulaFragment(fragment);
 
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
             setFragmentsVisibilities(adRequest);
 
-            getSupportActionBar().setTitle(user.getName());
+            getSupportActionBar().setTitle(model.getUsername());
 
         } else {
             Intent intent = new Intent(this, CreateNewUserActivity.class);

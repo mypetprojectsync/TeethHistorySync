@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 public class EditEventFragment extends Fragment {
 
@@ -405,7 +404,7 @@ public class EditEventFragment extends Fragment {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         File file = new File(directory.getAbsolutePath(),
-                mainActivity.binding.getUser().getName() + "_"
+                mainActivity.binding.getModel().getUsername() + "_"
                         + mainActivity.binding.getModel().getChosenToothID() + "_"
                         + event.getId() + "_"
                         + timeStamp + ".jpg");
