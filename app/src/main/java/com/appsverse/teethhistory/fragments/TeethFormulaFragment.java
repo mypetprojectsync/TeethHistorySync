@@ -257,12 +257,15 @@ public class TeethFormulaFragment extends Fragment {
         ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
 
         if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
+
             mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+
             if (orientation == Configuration.ORIENTATION_LANDSCAPE)
                 mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
         }
 
         refillEventsList();
+
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             mainActivity.binding.getEventsListFragment().refillEventsList();
 

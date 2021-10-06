@@ -231,10 +231,11 @@ public class MainActivityViewModel extends ViewModel {
             resetToothState(toothModel);
 
             mainActivity.binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
+
+            mainActivity.binding.getTeethFormulaFragment().binding.getTooth().setState(toothModel.getState());
         }
 
         realm.commitTransaction();
-
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
     }
