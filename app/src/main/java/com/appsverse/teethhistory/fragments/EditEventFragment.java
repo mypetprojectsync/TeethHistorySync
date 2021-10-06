@@ -54,7 +54,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class EditEventFragment extends Fragment {
@@ -335,7 +334,7 @@ public class EditEventFragment extends Fragment {
 
     }
 
-    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+    private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.action_bar_photo_selected, menu);
@@ -379,10 +378,8 @@ public class EditEventFragment extends Fragment {
 
     private List<Integer> getSelectedItemsIndexList() {
         List<Integer> selectedIdList = new ArrayList<>();
-        Iterator<Long> iterator = tracker.getSelection().iterator();
 
-        while (iterator.hasNext()) {
-            long selectedId = iterator.next();
+        for (long selectedId : tracker.getSelection()) {
             selectedIdList.add((int) selectedId);
         }
         return selectedIdList;
@@ -425,10 +422,7 @@ public class EditEventFragment extends Fragment {
             MaterialDatePicker picker = builder.build();
 
             picker.show(this.getActivity().getSupportFragmentManager(), picker.toString());
-            picker.addOnPositiveButtonClickListener(selection -> {
-
-                event.setDate(new Date((Long) selection));
-            });
+            picker.addOnPositiveButtonClickListener(selection -> event.setDate(new Date((Long) selection)));
         });
     }
 

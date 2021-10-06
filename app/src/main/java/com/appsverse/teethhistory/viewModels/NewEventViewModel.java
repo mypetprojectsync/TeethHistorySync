@@ -100,7 +100,7 @@ public class NewEventViewModel extends ViewModel {
         if (photosUri != null) {
 
             for (String uri : photosUri) {
-                if (!checkUriInOtherEvents(uri)) {
+                if (checkUriInOtherEvents(uri)) {
                     File file = new File(uri);
                     file.delete();
                 }
@@ -134,12 +134,12 @@ public class NewEventViewModel extends ViewModel {
 
                     if (eventModel.getPhotosUri().contains(uri)) {
                         coincidenceCounter++;
-                        if (coincidenceCounter > 1) return true;
+                        if (coincidenceCounter > 1) return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     private void setDefaultValues(Event event, MainActivity mainActivity) {
@@ -287,7 +287,7 @@ public class NewEventViewModel extends ViewModel {
     public void deleteSelectedPhotos() {
 
         for (String uri : photosListForDeleting) {
-            if (!checkUriInOtherEvents(uri)) {
+            if (checkUriInOtherEvents(uri)) {
                 File file = new File(uri);
                 file.delete();
             }

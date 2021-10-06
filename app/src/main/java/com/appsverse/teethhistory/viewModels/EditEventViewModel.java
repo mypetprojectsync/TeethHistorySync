@@ -126,7 +126,7 @@ public class EditEventViewModel extends ViewModel {
 
             String uri = photosUri.get(photosUri.size() - i);
 
-            if (!checkUriInOtherEvents(uri)) {
+            if (checkUriInOtherEvents(uri)) {
                 File file = new File(uri);
                 file.delete();
             }
@@ -154,12 +154,12 @@ public class EditEventViewModel extends ViewModel {
 
                     if (eventModel.getPhotosUri().contains(uri)) {
                         coincidenceCounter++;
-                        if (coincidenceCounter > 1) return true;
+                        if (coincidenceCounter > 1) return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public void onClickSaveButton(Event event, Context context) {
@@ -253,7 +253,7 @@ public class EditEventViewModel extends ViewModel {
 
         for (String uri : photosListForDeleting) {
 
-            if (!checkUriInOtherEvents(uri)) {
+            if (checkUriInOtherEvents(uri)) {
                 File file = new File(uri);
                 file.delete();
             }

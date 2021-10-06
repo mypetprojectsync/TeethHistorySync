@@ -32,7 +32,7 @@ public class MainActivityViewModel extends ViewModel implements Observable {
 
     final Realm realm = Realm.getDefaultInstance();
 
-    private PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
+    private final PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
 
     private int user_id;
     private String username;
@@ -159,7 +159,7 @@ public class MainActivityViewModel extends ViewModel implements Observable {
 
     public void setTeethFormulaFragmentVisibility(int teethFormulaFragmentVisibility) {
         this.teethFormulaFragmentVisibility = teethFormulaFragmentVisibility;
-        notifyPropertyChanged(BR.teethFormulaFragmentVisibilityData);
+        notifyPropertyChanged(BR.teethFormulaFragmentVisibility);
     }
 
     @Bindable
@@ -169,7 +169,7 @@ public class MainActivityViewModel extends ViewModel implements Observable {
 
     public void setNewEventFragmentVisibility(int newEventFragmentVisibility) {
         this.newEventFragmentVisibility = newEventFragmentVisibility;
-        notifyPropertyChanged(BR.newEventFragmentVisibilityData);
+        notifyPropertyChanged(BR.newEventFragmentVisibility);
     }
 
     @Bindable

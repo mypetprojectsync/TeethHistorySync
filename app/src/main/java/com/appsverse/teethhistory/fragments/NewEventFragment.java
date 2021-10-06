@@ -281,7 +281,7 @@ public class NewEventFragment extends Fragment {
         });
     }
 
-    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+    private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.action_bar_photo_selected, menu);
@@ -387,9 +387,7 @@ public class NewEventFragment extends Fragment {
             MaterialDatePicker picker = builder.build();
 
             picker.show(this.getActivity().getSupportFragmentManager(), picker.toString());
-            picker.addOnPositiveButtonClickListener(selection -> {
-                event.setDate(new Date((Long) selection));
-            });
+            picker.addOnPositiveButtonClickListener(selection -> event.setDate(new Date((Long) selection)));
         });
     }
 

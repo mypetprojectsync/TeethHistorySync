@@ -54,7 +54,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
 
     @Override
     public long getItemId(int position) {
-        return (long) position;
+        return position;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails, View.OnClickListener {
@@ -73,7 +73,7 @@ public class EventPhotosListAdapter extends RecyclerView.Adapter<EventPhotosList
 
         @Override
         public ItemDetailsLookup.ItemDetails getItemDetails() {
-            return new PhotoItemDetail(getBindingAdapterPosition(), (long) getBindingAdapterPosition());
+            return new PhotoItemDetail(getBindingAdapterPosition(), getBindingAdapterPosition());
         }
 
         @Override

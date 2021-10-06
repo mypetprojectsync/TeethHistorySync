@@ -9,9 +9,6 @@
             name="tooth"
             type="com.appsverse.teethhistory.data.Tooth" />
 
-        <variable
-            name="model"
-            type="com.appsverse.teethhistory.viewModels.EventsListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

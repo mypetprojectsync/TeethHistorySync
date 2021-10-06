@@ -8,17 +8,15 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/import_menu_item"
-        android:title="Import"
+        android:title="@string/import_json"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/activity_main_settings_menu_item"
-        android:title="@string/settings"
-        app:showAsAction="never" />
     <item
         android:id="@+id/create_new_user_menu_item"
         android:title="@string/create_new_user"
         app:showAsAction="never" />
+
+    <!--suppress CheckTagEmptyBody -->
     <item
         android:id="@+id/choose_user_menu_item"
         android:title="@string/choose_user"

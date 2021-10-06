@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.text.TextUtils" />
-
         <variable
             name="model"
             type="com.appsverse.teethhistory.viewModels.MainActivityViewModel" />

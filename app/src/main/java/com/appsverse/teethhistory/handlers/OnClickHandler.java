@@ -35,7 +35,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -49,18 +48,12 @@ public class OnClickHandler {
     @SuppressLint("NonConstantResourceId")
     public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
 
-
-        MainActivityViewModel model = binding.getModel();
-
             switch (item.getItemId()) {
                 case R.id.share_database_menu_item:
-                    shareDatabase(binding, model);
+                    shareDatabase(binding);
                     break;
                 case R.id.import_menu_item:
                     verifyStoragePermissions((MainActivity) binding.getRoot().getContext(), mGetContent);
-
-                    break;
-                case R.id.activity_main_settings_menu_item:
                     break;
                 case R.id.create_new_user_menu_item:
                     createNewUserActivityStart(binding);
@@ -72,7 +65,7 @@ public class OnClickHandler {
                     createEditUserNameDialog(binding);
                     break;
                 case R.id.delete_user_menu_item:
-                    deleteUser(binding, model);
+                    deleteUser(binding);
                     break;
                 default:
                     setChosenUser(item, binding);
@@ -107,8 +100,9 @@ public class OnClickHandler {
 
 
 
-    private void shareDatabase(ActivityMainBinding binding, MainActivityViewModel model) {
+    private void shareDatabase(ActivityMainBinding binding) {
 
+        MainActivityViewModel model = binding.getModel();
 
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(
@@ -118,8 +112,6 @@ public class OnClickHandler {
             bufferedWriter.close();
 
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -256,13 +248,15 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         return 0;
     }
 
-    public void deleteUser(ActivityMainBinding binding, MainActivityViewModel model) {
+    public void deleteUser(ActivityMainBinding binding) {
 
         final int[] newUserID = new int[1];
 
-        MaterialAlertDialogBuilder dialogBuider = new MaterialAlertDialogBuilder(binding.getRoot().getContext());
-        dialogBuider.setTitle(R.string.question_delete_user);
-        dialogBuider.setPositiveButton(R.string.ok, (dialog1, which) -> {
+        MainActivityViewModel model = binding.getModel();
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(binding.getRoot().getContext());
+        dialogBuilder.setTitle(R.string.question_delete_user);
+        dialogBuilder.setPositiveButton(R.string.ok, (dialog1, which) -> {
 
             model.deleteUserPhotos();
 
@@ -293,14 +287,14 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             editor.apply();
         });
 
-        dialogBuider.setNegativeButton(R.string.cancel, null);
-        dialogBuider.setOnDismissListener(dialog12 -> {
+        dialogBuilder.setNegativeButton(R.string.cancel, null);
+        dialogBuilder.setOnDismissListener(dialog12 -> {
             if (model.getDeleteUserDialog() != null && !model.getDeleteUserDialog().isShowing()) {
                 model.setDeleteUserDialogActive(false);
             }
         });
 
-        model.setDeleteUserDialog(dialogBuider.create());
+        model.setDeleteUserDialog(dialogBuilder.create());
         model.getDeleteUserDialog().show();
 
         model.setDeleteUserDialogActive(true);

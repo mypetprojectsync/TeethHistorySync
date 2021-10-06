@@ -46,6 +46,9 @@
     <string name="tooth_state">Tooth state</string>
     <string name="normal">Normal</string>
     <string name="not_grown_or_removed">Not grown or removed</string>
+    <string name="import_json">Import</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="actions">

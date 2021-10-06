@@ -11,19 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
+import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.databinding.FragmentEventsListBinding;
 import com.appsverse.teethhistory.repository.EventModel;
-import com.appsverse.teethhistory.viewModels.EventsListViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 public class EventsListFragment extends Fragment {
-    EventsListViewModel model;
+
     FragmentEventsListBinding binding;
 
     MainActivity mainActivity;
@@ -61,12 +59,8 @@ public class EventsListFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_events_list, container, false);
 
-        model = new ViewModelProvider(this).get(EventsListViewModel.class);
-        binding.setModel(model);
-
         Tooth tooth = activityMainBinding.getTeethFormulaFragment().binding.getTooth();
         binding.setTooth(tooth);
-
 
         binding.floatingActionButton.setOnClickListener(v -> {
 

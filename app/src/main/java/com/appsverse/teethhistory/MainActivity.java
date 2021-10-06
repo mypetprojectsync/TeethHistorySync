@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (model.isDeleteUserDialogActive()) {
                 OnClickHandler onClickHandler = new OnClickHandler();
-                onClickHandler.deleteUser(binding, model);
+                onClickHandler.deleteUser(binding);
             }
 
             setFragmentsVisibilities(adRequest);
@@ -233,14 +233,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (model.getEditUserDialog() != null) model.getEditUserDialog().dismiss();
         if (model.getDeleteUserDialog() != null) model.getDeleteUserDialog().dismiss();
-
-        /*if (mainActivityViewData != null) {
-           // model.setTeethFormulaFragmentVisibility(mainActivityViewData.getTeethFormulaFragmentVisibilityData());
-            //model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
-           // model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
-           // model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
-           // model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
-        }*/
     }
 
     @Override
@@ -248,3 +240,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
+
+//TODO Set app colors and don't forget background color
+//TODO Maybe set better holder for events
+//TODO Maybe add icon of action to event holder
+
