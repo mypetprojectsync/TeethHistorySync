@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.appsverse.teethhistory.data.MainActivityViewData;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.fragments.EditEventFragment;
 import com.appsverse.teethhistory.fragments.EventsListFragment;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     MainActivityViewModel model;
     public ActivityMainBinding binding;
-    MainActivityViewData mainActivityViewData;
 
     public int user_id;
 
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                           model.copyJsonToRealm(ret);
+                            model.copyJsonToRealm(ret);
                         }
                     }
                 }
@@ -110,31 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (model.isUserExist()) {
 
-            binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-            binding.setModel(model);
-
-            mAdView = binding.adView;
             AdRequest adRequest = new AdRequest.Builder().build();
 
-            TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
-            binding.setTeethFormulaFragment(fragment);
-
-            EditEventFragment editEventFragment = (EditEventFragment) getSupportFragmentManager().findFragmentById(R.id.edit_event_fragment);
-            binding.setEditEventFragment(editEventFragment);
-
-            EventsListFragment eventsListFragment = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.events_list_fragment);
-            binding.setEventsListFragment(eventsListFragment);
-
-            NewEventFragment newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
-            binding.setNewEventFragment(newEventFragment);
-
-            mainActivityViewData = new MainActivityViewData(
-                    model.getTeethFormulaFragmentVisibility(),
-                    model.getNewEventFragmentVisibility(),
-                    model.getEditEventFragmentVisibilityData(),
-                    model.getEventFragmentVisibilityData(),
-                    model.getEventsListFragmentVisibilityData());
-            binding.setViewData(mainActivityViewData);
+            setBinding();
 
             if (model.isEditUsernameDialogActive()) {
                 OnClickHandler onClickHandler = new OnClickHandler();
@@ -154,7 +130,26 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CreateNewUserActivity.class);
             this.startActivity(intent);
         }
+    }
 
+    private void setBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setModel(model);
+
+        mAdView = binding.adView;
+
+
+        TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
+        binding.setTeethFormulaFragment(fragment);
+
+        EditEventFragment editEventFragment = (EditEventFragment) getSupportFragmentManager().findFragmentById(R.id.edit_event_fragment);
+        binding.setEditEventFragment(editEventFragment);
+
+        EventsListFragment eventsListFragment = (EventsListFragment) getSupportFragmentManager().findFragmentById(R.id.events_list_fragment);
+        binding.setEventsListFragment(eventsListFragment);
+
+        NewEventFragment newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
+        binding.setNewEventFragment(newEventFragment);
 
     }
 
@@ -163,25 +158,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-            mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-            mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+            model.setTeethFormulaFragmentVisibility(View.VISIBLE);
+            model.setEventFragmentVisibilityData(View.VISIBLE);
 
             if (model.getNewEventFragmentVisibility() == View.GONE
                     && model.getEditEventFragmentVisibilityData() == View.GONE) {
-                mainActivityViewData.setEventsListFragmentVisibilityData(View.VISIBLE);
+                model.setEventsListFragmentVisibilityData(View.VISIBLE);
             }
 
         } else {
             mAdView.loadAd(adRequest);
 
             if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
-                mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.GONE);
-                mainActivityViewData.setEventFragmentVisibilityData(View.VISIBLE);
+                model.setTeethFormulaFragmentVisibility(View.GONE);
+                model.setEventFragmentVisibilityData(View.VISIBLE);
             } else {
-                binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
-                mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
+                model.setTeethFormulaFragmentVisibility(View.VISIBLE);
+                model.setEventFragmentVisibilityData(View.GONE);
             }
-            mainActivityViewData.setEventsListFragmentVisibilityData(View.GONE);
+            model.setEventsListFragmentVisibilityData(View.GONE);
         }
     }
 
@@ -219,12 +214,12 @@ public class MainActivity extends AppCompatActivity {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
         } else {
-            if (mainActivityViewData.getNewEventFragmentVisibilityData() == View.VISIBLE || mainActivityViewData.getEditEventFragmentVisibilityData() == View.VISIBLE) {
+            if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
 
-                mainActivityViewData.setEventFragmentVisibilityData(View.GONE);
-                mainActivityViewData.setNewEventFragmentVisibilityData(View.GONE);
-                mainActivityViewData.setEditEventFragmentVisibilityData(View.GONE);
-                mainActivityViewData.setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+                model.setEventFragmentVisibilityData(View.GONE);
+                model.setNewEventFragmentVisibility(View.GONE);
+                model.setEditEventFragmentVisibilityData(View.GONE);
+                model.setTeethFormulaFragmentVisibility(View.VISIBLE);
 
             } else {
                 finish();
@@ -239,13 +234,13 @@ public class MainActivity extends AppCompatActivity {
         if (model.getEditUserDialog() != null) model.getEditUserDialog().dismiss();
         if (model.getDeleteUserDialog() != null) model.getDeleteUserDialog().dismiss();
 
-        if (mainActivityViewData != null) {
-            model.setTeethFormulaFragmentVisibility(mainActivityViewData.getTeethFormulaFragmentVisibilityData());
-            model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
-            model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
-            model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
-            model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
-        }
+        /*if (mainActivityViewData != null) {
+           // model.setTeethFormulaFragmentVisibility(mainActivityViewData.getTeethFormulaFragmentVisibilityData());
+            //model.setNewEventFragmentVisibility(mainActivityViewData.getNewEventFragmentVisibilityData());
+           // model.setEditEventFragmentVisibilityData(mainActivityViewData.getEditEventFragmentVisibilityData());
+           // model.setEventFragmentVisibilityData(mainActivityViewData.getEventFragmentVisibilityData());
+           // model.setEventsListFragmentVisibilityData(mainActivityViewData.getEventsListFragmentVisibilityData());
+        }*/
     }
 
     @Override

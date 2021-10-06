@@ -3,6 +3,10 @@ package com.appsverse.teethhistory.viewModels;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
+import androidx.databinding.PropertyChangeRegistry;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -24,9 +28,11 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class MainActivityViewModel extends ViewModel {
+public class MainActivityViewModel extends ViewModel implements Observable {
 
     final Realm realm = Realm.getDefaultInstance();
+
+    private PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
 
     private int user_id;
     private String username;
@@ -146,44 +152,54 @@ public class MainActivityViewModel extends ViewModel {
         return realm.where(UserModel.class).equalTo("id", user_id).findFirst().getName();
     }
 
+    @Bindable
     public int getTeethFormulaFragmentVisibility() {
         return teethFormulaFragmentVisibility;
     }
 
     public void setTeethFormulaFragmentVisibility(int teethFormulaFragmentVisibility) {
         this.teethFormulaFragmentVisibility = teethFormulaFragmentVisibility;
+        notifyPropertyChanged(BR.teethFormulaFragmentVisibilityData);
     }
 
+    @Bindable
     public int getNewEventFragmentVisibility() {
         return newEventFragmentVisibility;
     }
 
     public void setNewEventFragmentVisibility(int newEventFragmentVisibility) {
         this.newEventFragmentVisibility = newEventFragmentVisibility;
+        notifyPropertyChanged(BR.newEventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEditEventFragmentVisibilityData() {
         return editEventFragmentVisibilityData;
     }
 
     public void setEditEventFragmentVisibilityData(int editEventFragmentVisibilityData) {
         this.editEventFragmentVisibilityData = editEventFragmentVisibilityData;
+        notifyPropertyChanged(BR.editEventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEventFragmentVisibilityData() {
         return eventFragmentVisibilityData;
     }
 
     public void setEventFragmentVisibilityData(int eventFragmentVisibilityData) {
         this.eventFragmentVisibilityData = eventFragmentVisibilityData;
+        notifyPropertyChanged(BR.eventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEventsListFragmentVisibilityData() {
         return eventsListFragmentVisibilityData;
     }
 
     public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
         this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
+        notifyPropertyChanged(BR.eventsListFragmentVisibilityData);
     }
 
     public RealmResults<EventModel> getSortedEventsList() {
@@ -368,5 +384,19 @@ public class MainActivityViewModel extends ViewModel {
             }
         }
         return false;
+    }
+
+    @Override
+    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.add(callback);
+    }
+
+    @Override
+    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.remove(callback);
+    }
+
+    void notifyPropertyChanged(int fieldId) {
+        callbacks.notifyCallbacks(this, fieldId, null);
     }
 }

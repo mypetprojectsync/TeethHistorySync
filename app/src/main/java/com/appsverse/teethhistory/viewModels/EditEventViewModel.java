@@ -230,14 +230,14 @@ public class EditEventViewModel extends ViewModel {
         MainActivity mainActivity = (MainActivity) context;
 
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.GONE);
-            mainActivity.binding.getViewData().setTeethFormulaFragmentVisibilityData(View.VISIBLE);
+            mainActivity.binding.getModel().setEventFragmentVisibilityData(View.GONE);
+            mainActivity.binding.getModel().setTeethFormulaFragmentVisibility(View.VISIBLE);
 
         } else {
-            mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
+            mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.VISIBLE);
         }
 
-        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.GONE);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
         mainActivity.binding.getEventsListFragment().refillEventsList();
