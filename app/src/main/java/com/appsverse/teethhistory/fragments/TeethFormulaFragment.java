@@ -181,6 +181,12 @@ public class TeethFormulaFragment extends Fragment {
 
         dialogBuilder.setView(dialogToothStateBinding.getRoot().getRootView());
 
+        //Teeth numbered x6, x7, x8 are never being baby teeth
+
+        if (tooth.getId() % 10 > 5) {
+            dialogToothStateBinding.babyOrPermanentToothRG.setVisibility(View.GONE);
+        }
+
         dialogBuilder.setTitle(getString(R.string.edit_tooth_state) + tooth.getPosition() + getString(R.string.state));
         dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
 

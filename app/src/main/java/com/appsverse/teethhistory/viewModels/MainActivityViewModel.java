@@ -30,8 +30,6 @@ public class MainActivityViewModel extends ViewModel {
 
     private int user_id;
     private String username;
-    private boolean isBabyTeeth;
-    private boolean isNoTeeth;
 
     private boolean isEditUsernameDialogActive;
     private boolean isDeleteUserDialogActive;
@@ -61,14 +59,6 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public boolean isBabyTeeth() {
-        return isBabyTeeth;
-    }
-
-    public void setBabyTeeth(boolean babyTeeth) {
-        isBabyTeeth = babyTeeth;
     }
 
     public boolean isEditUsernameDialogActive() {
@@ -128,7 +118,6 @@ public class MainActivityViewModel extends ViewModel {
 
         this.setUser_id(userModel.getId());
         this.setUsername(userModel.getName());
-        this.setBabyTeeth(userModel.isBabyTeeth());
         this.setEditUsernameDialogActive(false);
         this.setDeleteUserDialogActive(false);
         this.setEditUserDialog(null);
@@ -195,14 +184,6 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
         this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
-    }
-
-    public boolean isNoTeeth() {
-        return isNoTeeth;
-    }
-
-    public void setNoTeeth(boolean noTeeth) {
-        isNoTeeth = noTeeth;
     }
 
     public RealmResults<EventModel> getSortedEventsList() {
