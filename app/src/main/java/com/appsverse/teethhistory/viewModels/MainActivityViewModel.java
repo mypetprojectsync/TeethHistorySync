@@ -3,6 +3,10 @@ package com.appsverse.teethhistory.viewModels;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
+import androidx.databinding.PropertyChangeRegistry;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -24,14 +28,14 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class MainActivityViewModel extends ViewModel {
+public class MainActivityViewModel extends ViewModel implements Observable {
 
     final Realm realm = Realm.getDefaultInstance();
 
+    private PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
+
     private int user_id;
     private String username;
-    private boolean isBabyTeeth;
-    private boolean isNoTeeth;
 
     private boolean isEditUsernameDialogActive;
     private boolean isDeleteUserDialogActive;
@@ -61,14 +65,6 @@ public class MainActivityViewModel extends ViewModel {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public boolean isBabyTeeth() {
-        return isBabyTeeth;
-    }
-
-    public void setBabyTeeth(boolean babyTeeth) {
-        isBabyTeeth = babyTeeth;
     }
 
     public boolean isEditUsernameDialogActive() {
@@ -128,7 +124,6 @@ public class MainActivityViewModel extends ViewModel {
 
         this.setUser_id(userModel.getId());
         this.setUsername(userModel.getName());
-        this.setBabyTeeth(userModel.isBabyTeeth());
         this.setEditUsernameDialogActive(false);
         this.setDeleteUserDialogActive(false);
         this.setEditUserDialog(null);
@@ -157,52 +152,54 @@ public class MainActivityViewModel extends ViewModel {
         return realm.where(UserModel.class).equalTo("id", user_id).findFirst().getName();
     }
 
+    @Bindable
     public int getTeethFormulaFragmentVisibility() {
         return teethFormulaFragmentVisibility;
     }
 
     public void setTeethFormulaFragmentVisibility(int teethFormulaFragmentVisibility) {
         this.teethFormulaFragmentVisibility = teethFormulaFragmentVisibility;
+        notifyPropertyChanged(BR.teethFormulaFragmentVisibilityData);
     }
 
+    @Bindable
     public int getNewEventFragmentVisibility() {
         return newEventFragmentVisibility;
     }
 
     public void setNewEventFragmentVisibility(int newEventFragmentVisibility) {
         this.newEventFragmentVisibility = newEventFragmentVisibility;
+        notifyPropertyChanged(BR.newEventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEditEventFragmentVisibilityData() {
         return editEventFragmentVisibilityData;
     }
 
     public void setEditEventFragmentVisibilityData(int editEventFragmentVisibilityData) {
         this.editEventFragmentVisibilityData = editEventFragmentVisibilityData;
+        notifyPropertyChanged(BR.editEventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEventFragmentVisibilityData() {
         return eventFragmentVisibilityData;
     }
 
     public void setEventFragmentVisibilityData(int eventFragmentVisibilityData) {
         this.eventFragmentVisibilityData = eventFragmentVisibilityData;
+        notifyPropertyChanged(BR.eventFragmentVisibilityData);
     }
 
+    @Bindable
     public int getEventsListFragmentVisibilityData() {
         return eventsListFragmentVisibilityData;
     }
 
     public void setEventsListFragmentVisibilityData(int eventsListFragmentVisibilityData) {
         this.eventsListFragmentVisibilityData = eventsListFragmentVisibilityData;
-    }
-
-    public boolean isNoTeeth() {
-        return isNoTeeth;
-    }
-
-    public void setNoTeeth(boolean noTeeth) {
-        isNoTeeth = noTeeth;
+        notifyPropertyChanged(BR.eventsListFragmentVisibilityData);
     }
 
     public RealmResults<EventModel> getSortedEventsList() {
@@ -250,10 +247,11 @@ public class MainActivityViewModel extends ViewModel {
             resetToothState(toothModel);
 
             mainActivity.binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
+
+            mainActivity.binding.getTeethFormulaFragment().binding.getTooth().setState(toothModel.getState());
         }
 
         realm.commitTransaction();
-
 
         mainActivity.binding.getNewEventFragment().setTextActionACTV();
     }
@@ -386,5 +384,19 @@ public class MainActivityViewModel extends ViewModel {
             }
         }
         return false;
+    }
+
+    @Override
+    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.add(callback);
+    }
+
+    @Override
+    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
+        callbacks.remove(callback);
+    }
+
+    void notifyPropertyChanged(int fieldId) {
+        callbacks.notifyCallbacks(this, fieldId, null);
     }
 }

@@ -71,13 +71,13 @@ public class EventsListFragment extends Fragment {
         binding.floatingActionButton.setOnClickListener(v -> {
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+                activityMainBinding.getModel().setTeethFormulaFragmentVisibility(View.GONE);
             }
 
-            activityMainBinding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
-            activityMainBinding.getViewData().setNewEventFragmentVisibilityData(View.VISIBLE);
-            activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
-            activityMainBinding.getViewData().setEventsListFragmentVisibilityData(View.GONE);
+            activityMainBinding.getModel().setEventFragmentVisibilityData(View.VISIBLE);
+            activityMainBinding.getModel().setNewEventFragmentVisibility(View.VISIBLE);
+            activityMainBinding.getModel().setEditEventFragmentVisibilityData(View.GONE);
+            activityMainBinding.getModel().setEventsListFragmentVisibilityData(View.GONE);
 
             activityMainBinding.getTeethFormulaFragment().refillEventsList();
             activityMainBinding.getNewEventFragment().event.setDate(new Date());
@@ -165,19 +165,19 @@ public class EventsListFragment extends Fragment {
 
     private void setVisibilities() {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+            activityMainBinding.getModel().setTeethFormulaFragmentVisibility(View.GONE);
         }
 
-        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
-        mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
-        mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getModel().setNewEventFragmentVisibility(View.GONE);
+        mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.GONE);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
     }
 
 
     public void refillEventsList() {
-        if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.VISIBLE) {
+        if (mainActivity.binding.getModel().getEventsListFragmentVisibilityData() == View.VISIBLE) {
             eventModels.clear();
             eventModels.addAll(mainActivity.getSortedEventsList());
             adapter.notifyDataSetChanged();

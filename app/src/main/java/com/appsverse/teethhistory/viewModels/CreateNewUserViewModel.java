@@ -18,8 +18,6 @@ public class CreateNewUserViewModel extends ViewModel {
 
     final Realm realm = Realm.getDefaultInstance();
 
-    //TODO bug when deleted last event, tooth image not changed
-
     public static final int NO_TEETH = 0;
     public static final int BABY_TEETH = 1;
     public static final int PERMANENT_TEETH = 2;

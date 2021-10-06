@@ -101,12 +101,12 @@ public class TeethFormulaFragment extends Fragment {
         binding.floatingActionButton.setOnClickListener(v -> {
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+                activityMainBinding.getModel().setTeethFormulaFragmentVisibility(View.GONE);
             }
 
-            activityMainBinding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
-            activityMainBinding.getViewData().setNewEventFragmentVisibilityData(View.VISIBLE);
-            activityMainBinding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+            activityMainBinding.getModel().setEventFragmentVisibilityData(View.VISIBLE);
+            activityMainBinding.getModel().setNewEventFragmentVisibility(View.VISIBLE);
+            activityMainBinding.getModel().setEditEventFragmentVisibilityData(View.GONE);
 
             activityMainBinding.getNewEventFragment().event.setDate(new Date());
             activityMainBinding.getNewEventFragment().event.setPosition(tooth.getPosition());
@@ -181,6 +181,12 @@ public class TeethFormulaFragment extends Fragment {
 
         dialogBuilder.setView(dialogToothStateBinding.getRoot().getRootView());
 
+        //Teeth numbered x6, x7, x8 are never being baby teeth
+
+        if (tooth.getId() % 10 > 5) {
+            dialogToothStateBinding.babyOrPermanentToothRG.setVisibility(View.GONE);
+        }
+
         dialogBuilder.setTitle(getString(R.string.edit_tooth_state) + tooth.getPosition() + getString(R.string.state));
         dialogBuilder.setPositiveButton(R.string.ok, (dialog, which) -> {
 
@@ -250,13 +256,16 @@ public class TeethFormulaFragment extends Fragment {
         int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
         ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
 
-        if (mainActivity.binding.getViewData().getEditEventFragmentVisibilityData() == View.VISIBLE) {
-            mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
+        if (mainActivity.binding.getModel().getEditEventFragmentVisibilityData() == View.VISIBLE) {
+
+            mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.GONE);
+
             if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-                mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
+                mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.VISIBLE);
         }
 
         refillEventsList();
+
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             mainActivity.binding.getEventsListFragment().refillEventsList();
 
@@ -349,10 +358,10 @@ public class TeethFormulaFragment extends Fragment {
     }
 
     private void setVisibilitiesAfterDeleteEvent() {
-        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.GONE);
-        mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getModel().setNewEventFragmentVisibility(View.GONE);
 
-        mainActivity.binding.getViewData().setEventsListFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.VISIBLE);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
         mainActivity.binding.getEventsListFragment().refillEventsList();
@@ -361,19 +370,19 @@ public class TeethFormulaFragment extends Fragment {
 
     private void setVisibilities() {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activityMainBinding.getViewData().setTeethFormulaFragmentVisibilityData(View.GONE);
+            activityMainBinding.getModel().setTeethFormulaFragmentVisibility(View.GONE);
         }
 
-        mainActivity.binding.getViewData().setEditEventFragmentVisibilityData(View.VISIBLE);
-        mainActivity.binding.getViewData().setEventFragmentVisibilityData(View.VISIBLE);
-        mainActivity.binding.getViewData().setNewEventFragmentVisibilityData(View.GONE);
+        mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getModel().setEventFragmentVisibilityData(View.VISIBLE);
+        mainActivity.binding.getModel().setNewEventFragmentVisibility(View.GONE);
     }
 
 
     public void refillEventsList() {
         eventModels.clear();
 
-        if (mainActivity.binding.getViewData().getEventsListFragmentVisibilityData() == View.GONE
+        if (mainActivity.binding.getModel().getEventsListFragmentVisibilityData() == View.GONE
                 || orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             eventModels.addAll(mainActivity.getSortedEventsList());
