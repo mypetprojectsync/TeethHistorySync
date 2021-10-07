@@ -9,11 +9,18 @@ import io.realm.annotations.RealmClass;
 @RealmClass(embedded = true)
 public class EventModel extends RealmObject {
 
+    public static final int CLEANED = 0;
+    public static final int FILLED = 1;
+    public static final int EXTRACTED = 2;
+    public static final int GROWN = 3;
+    public static final int IMPLANTED = 4;
+    public static final int OTHER = 5;
+
     private int id;
     private int position;
     private long date;
-    private String action;
-    private int guarantee;
+    private int action;
+    private int warranty;
     private String notes;
     private RealmList<String> photosUri;
 
@@ -33,20 +40,20 @@ public class EventModel extends RealmObject {
         this.date = date.getTime();
     }
 
-    public String getAction() {
+    public int getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(int action) {
         this.action = action;
     }
 
-    public int getGuarantee() {
-        return guarantee;
+    public int getWarranty() {
+        return warranty;
     }
 
-    public void setGuarantee(int guarantee) {
-        this.guarantee = guarantee;
+    public void setWarranty(int warranty) {
+        this.warranty = warranty;
     }
 
     public String getNotes() {

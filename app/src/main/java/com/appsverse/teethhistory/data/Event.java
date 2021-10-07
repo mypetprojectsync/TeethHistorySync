@@ -15,18 +15,18 @@ public class Event extends BaseObservable {
     private int id;
     private int position;
     private Date date;
-    private String action;
-    private int guarantee;
+    private int action;
+    private int warranty;
     private String notes;
 
     private List<String> photosUri;
 
-    public Event(int id, int position, Date date, String action, int guarantee, String notes, List<String> photosUri){
+    public Event(int id, int position, Date date, int action, int warranty, String notes, List<String> photosUri){
         setId(id);
         setPosition(position);
         setDate(date);
         setAction(action);
-        setGuarantee(guarantee);
+        setWarranty(warranty);
         setNotes(notes);
         setPhotosUri(photosUri);
 
@@ -66,23 +66,23 @@ public class Event extends BaseObservable {
     }
 
     @Bindable
-    public String getAction() {
+    public int getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(int action) {
         this.action = action;
         notifyPropertyChanged(BR.action);
     }
 
     @Bindable
-    public int getGuarantee() {
-        return guarantee;
+    public int getWarranty() {
+        return warranty;
     }
 
-    public void setGuarantee(int guarantee) {
-        this.guarantee = guarantee;
-        notifyPropertyChanged(BR.guarantee);
+    public void setWarranty(int warranty) {
+        this.warranty = warranty;
+        notifyPropertyChanged(BR.warranty);
     }
 
     @Bindable

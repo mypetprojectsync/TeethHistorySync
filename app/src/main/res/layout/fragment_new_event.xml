@@ -58,7 +58,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:hint="@string/guarantee_in_months"
+            android:hint="@string/warranty_in_months"
             app:counterEnabled="true"
             app:counterMaxLength="3"
             app:errorEnabled="true"
@@ -66,24 +66,24 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/guaranteeTIET"
+                android:id="@+id/warranty_TIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={`` + event.guarantee}"
+                android:text="@={`` + event.warranty}"
                 android:inputType="number"
-                android:labelFor="@id/guarantee_slider"
+                android:labelFor="@id/warranty_slider"
                 android:imeOptions="flagNoExtractUi"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/guarantee_slider"
+            android:id="@+id/warranty_slider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:valueFrom="0"
             android:valueTo="360"
             android:stepSize="1"
-            android:value="360"/>
+            android:value="@{event.warranty}"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

@@ -58,7 +58,7 @@ import java.util.List;
 
 public class EditEventFragment extends Fragment {
 
-    final int MAX_GUARANTEE = 360;
+    final int MAX_WARRANTY = 360;
 
     EditEventViewModel model;
     FragmentEditEventBinding binding;
@@ -138,7 +138,7 @@ public class EditEventFragment extends Fragment {
         model = new ViewModelProvider(this).get(EditEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getPhotosUri());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getWarranty(), model.getNotes(), model.getPhotosUri());
         binding.setEvent(event);
 
         setDatePicker(event);
@@ -147,13 +147,13 @@ public class EditEventFragment extends Fragment {
 
         binding.editToothActionACTV.setAdapter(adapter);
 
-        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions[position]));
+        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(position));
 
-        binding.editGuaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
+        binding.editWarrantySlider.addOnChangeListener((slider, value, fromUser) -> event.setWarranty(Math.round(value)));
 
         setTextActionACTV();
 
-        setGuaranteeTIET();
+        setWarrantyTIET();
 
         binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
@@ -167,9 +167,9 @@ public class EditEventFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void setGuaranteeTIET() {
+    private void setWarrantyTIET() {
 
-        binding.editGuaranteeTIET.addTextChangedListener(new TextWatcher() {
+        binding.editWarrantyTIET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -185,11 +185,11 @@ public class EditEventFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
                 if (s.toString().equals("")) {
-                    binding.editGuaranteeTIET.setText("0");
+                    binding.editWarrantyTIET.setText("0");
                     setSelectionWithDelay(1);
 
-                } else if (Integer.parseInt(s.toString()) > MAX_GUARANTEE) {
-                    event.setGuarantee(MAX_GUARANTEE);
+                } else if (Integer.parseInt(s.toString()) > MAX_WARRANTY) {
+                    event.setWarranty(MAX_WARRANTY);
                     setSelectionWithDelay(3);
                 }
             }
@@ -198,7 +198,7 @@ public class EditEventFragment extends Fragment {
 
     private void setSelectionWithDelay(int i) {
         Handler handler = new Handler();
-        handler.postDelayed(() -> binding.editGuaranteeTIET.setSelection(i),10);
+        handler.postDelayed(() -> binding.editWarrantyTIET.setSelection(i),10);
     }
 
     private String getPathFromUri(Uri data) {
@@ -431,7 +431,7 @@ public class EditEventFragment extends Fragment {
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         if (toothModel != null) {
 
-                binding.editToothActionACTV.setText(event.getAction(), false);
+                binding.editToothActionACTV.setText(getResources().getStringArray(R.array.actions)[event.getAction()], false);
                 adapter.notifyDataSetChanged();
 
         }
@@ -441,11 +441,11 @@ public class EditEventFragment extends Fragment {
         this.event.setId(event.getId());
         this.event.setDate(event.getDate());
         this.event.setAction(event.getAction());
-        this.event.setGuarantee(event.getGuarantee());
+        this.event.setWarranty(event.getWarranty());
         this.event.setNotes(event.getNotes());
         this.event.setPhotosUri(event.getPhotosUri());
 
-        binding.editToothActionACTV.setText(this.event.getAction(), false);
+        binding.editToothActionACTV.setText(getResources().getStringArray(R.array.actions)[this.event.getAction()], false);
         setTextActionACTV();
 
         model.clearPhotosListToDeleting();
@@ -461,7 +461,7 @@ public class EditEventFragment extends Fragment {
         model.setPosition(event.getPosition());
         model.setDate(event.getDate());
         model.setAction(event.getAction());
-        model.setGuarantee(event.getGuarantee());
+        model.setWarranty(event.getWarranty());
         model.setNotes(event.getNotes());
         model.setPhotosUri(event.getPhotosUri());
 

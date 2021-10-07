@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -30,8 +29,8 @@ public class EditEventViewModel extends ViewModel {
     private int id;
     private int position;
     private Date date;
-    private String action;
-    private int guarantee;
+    private int action;
+    private int warranty;
     private String notes;
     private List<String> photosUri;
     private List<String> photosListForDeleting;
@@ -52,20 +51,20 @@ public class EditEventViewModel extends ViewModel {
         this.date = date;
     }
 
-    public String getAction() {
+    public int getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(int action) {
         this.action = action;
     }
 
-    public int getGuarantee() {
-        return guarantee;
+    public int getWarranty() {
+        return warranty;
     }
 
-    public void setGuarantee(int guarantee) {
-        this.guarantee = guarantee;
+    public void setWarranty(int warranty) {
+        this.warranty = warranty;
     }
 
     public String getNotes() {
@@ -169,8 +168,8 @@ public class EditEventViewModel extends ViewModel {
 
         EventModel eventModel = toothModel.getEventModels().where().equalTo("id", event.getId()).findFirst();
 
-        String oldEventModelAction = eventModel.getAction();
-        String newEventModelAction = event.getAction();
+        int oldEventModelAction = eventModel.getAction();
+        int newEventModelAction = event.getAction();
 
         List<String> clearList = new ArrayList<>(event.getPhotosUri());
 
@@ -181,7 +180,7 @@ public class EditEventViewModel extends ViewModel {
 
         eventModel.setDate(event.getDate());
         eventModel.setAction(event.getAction());
-        eventModel.setGuarantee(event.getGuarantee());
+        eventModel.setWarranty(event.getWarranty());
         eventModel.setNotes(event.getNotes());
 
         RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
@@ -192,22 +191,22 @@ public class EditEventViewModel extends ViewModel {
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
         if (eventModelsResults.get(0).getId() == eventModel.getId()
-                && !oldEventModelAction.equals(newEventModelAction)) {
+                && oldEventModelAction != newEventModelAction) {
 
-            if (newEventModelAction.equals(context.getString(R.string.extracted))) {
+            if (newEventModelAction == EventModel.EXTRACTED) {
 
                 if (toothModel.getPosition() > 50)
                     toothModel.setPosition(toothModel.getPosition() - 40);
 
                 toothModel.setState(ToothModel.NO_TOOTH);
 
-            } else if (newEventModelAction.equals(context.getString(R.string.implanted))) {
+            } else if (newEventModelAction == EventModel.IMPLANTED) {
 
                 toothModel.setState(ToothModel.IMPLANTED);
 
-            } else if (newEventModelAction.equals(context.getString(R.string.grown))
-                    || newEventModelAction.equals(context.getString(R.string.cleaned))
-                    || newEventModelAction.equals(context.getString(R.string.other))) {
+            } else if (newEventModelAction == EventModel.GROWN
+                    || newEventModelAction == EventModel.CLEANED
+                    || newEventModelAction == EventModel.OTHER) {
 
                 toothModel.setState(ToothModel.NORMAL);
             }

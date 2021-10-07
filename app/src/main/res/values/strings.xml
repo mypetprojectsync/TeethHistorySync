@@ -32,7 +32,7 @@
     <string name="date">Date</string>
     <string name="add_new_event">Add new event</string>
     <string name="choose_action">Choose action</string>
-    <string name="guarantee_in_months">Guarantee in months</string>
+    <string name="warranty_in_months">Warranty in months</string>
     <string name="notes">Notes</string>
     <string name="create_event">Create event</string>
     <string name="implanting">Implanting</string>
@@ -49,6 +49,9 @@
     <string name="import_json">Import</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="days_of_warranty_left">" days of warranty left"</string>
+    <string name="warranty_expired">\nWarranty expired</string>
+    <string name="save">Save</string>
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="actions">

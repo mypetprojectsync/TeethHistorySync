@@ -57,7 +57,7 @@ import java.util.List;
 
 public class NewEventFragment extends Fragment {
 
-    final int MAX_GUARANTEE = 360;
+    final int MAX_WARRANTY = 360;
 
     NewEventViewModel model;
     public FragmentNewEventBinding binding;
@@ -143,7 +143,7 @@ public class NewEventFragment extends Fragment {
         model = new ViewModelProvider(this).get(NewEventViewModel.class);
         binding.setModel(model);
 
-        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getGuarantee(), model.getNotes(), model.getPhotosUri());
+        event = new Event(model.getId(), model.getPosition(), model.getDate(), model.getAction(), model.getWarranty(), model.getNotes(), model.getPhotosUri());
 
         binding.setEvent(event);
 
@@ -152,13 +152,13 @@ public class NewEventFragment extends Fragment {
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
         binding.toothActionACTV.setAdapter(adapter);
 
-        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(actions[position]));
+        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(position));
 
-        binding.guaranteeSlider.addOnChangeListener((slider, value, fromUser) -> event.setGuarantee(Math.round(value)));
+        binding.warrantySlider.addOnChangeListener((slider, value, fromUser) -> event.setWarranty(Math.round(value)));
 
         setTextActionACTV();
 
-        setGuaranteeTIET();
+        setWarrantyTIET();
 
         binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
@@ -398,7 +398,7 @@ public class NewEventFragment extends Fragment {
         if (toothModel != null) {
 
             binding.toothActionACTV.setText(actions[0], false);
-            binding.getEvent().setAction(actions[0]);
+            binding.getEvent().setAction(0);
 
             adapter.notifyDataSetChanged();
         }
@@ -410,20 +410,20 @@ public class NewEventFragment extends Fragment {
 
         if (toothModel != null) {
 
-            if (event.getAction() == null) {
+            if (event.getAction() == 0) {
                 binding.toothActionACTV.setText(actions[0], false);
-                event.setAction(actions[0]);
+                event.setAction(0);
             } else {
-                binding.toothActionACTV.setText(event.getAction(), false);
+                binding.toothActionACTV.setText(getResources().getStringArray(R.array.actions)[event.getAction()], false);
             }
 
             adapter.notifyDataSetChanged();
         }
     }
 
-    private void setGuaranteeTIET() {
+    private void setWarrantyTIET() {
 
-        binding.guaranteeTIET.addTextChangedListener(new TextWatcher() {
+        binding.warrantyTIET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -439,11 +439,11 @@ public class NewEventFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
                 if (s.toString().equals("")) {
-                    binding.guaranteeTIET.setText("0");
+                    binding.warrantyTIET.setText("0");
                     setSelectionWithDelay(1);
 
-                } else if (Integer.parseInt(s.toString()) > MAX_GUARANTEE) {
-                    event.setGuarantee(MAX_GUARANTEE);
+                } else if (Integer.parseInt(s.toString()) > MAX_WARRANTY) {
+                    event.setWarranty(MAX_WARRANTY);
                     setSelectionWithDelay(3);
                 }
             }
@@ -452,7 +452,7 @@ public class NewEventFragment extends Fragment {
 
     private void setSelectionWithDelay(int i) {
         Handler handler = new Handler();
-        handler.postDelayed(() -> binding.guaranteeTIET.setSelection(i), 10);
+        handler.postDelayed(() -> binding.warrantyTIET.setSelection(i), 10);
     }
 
     @Override
@@ -462,7 +462,7 @@ public class NewEventFragment extends Fragment {
         model.setPosition(event.getPosition());
         model.setDate(event.getDate());
         model.setAction(event.getAction());
-        model.setGuarantee(event.getGuarantee());
+        model.setWarranty(event.getWarranty());
         model.setNotes(event.getNotes());
         model.setPhotosUri(event.getPhotosUri());
     }

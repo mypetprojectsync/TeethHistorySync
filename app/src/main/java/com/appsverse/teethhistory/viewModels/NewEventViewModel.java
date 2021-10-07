@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
@@ -30,8 +29,8 @@ public class NewEventViewModel extends ViewModel {
     private int id;
     private int position;
     private Date date = new Date();
-    private String action;
-    private int guarantee = 12;
+    private int action;
+    private int warranty = 12;
     private String notes;
 
     private List<String> photosUri;
@@ -53,20 +52,20 @@ public class NewEventViewModel extends ViewModel {
         this.date = date;
     }
 
-    public String getAction() {
+    public int getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(int action) {
         this.action = action;
     }
 
-    public int getGuarantee() {
-        return guarantee;
+    public int getWarranty() {
+        return warranty;
     }
 
-    public void setGuarantee(int guarantee) {
-        this.guarantee = guarantee;
+    public void setWarranty(int warranty) {
+        this.warranty = warranty;
     }
 
     public String getNotes() {
@@ -144,16 +143,16 @@ public class NewEventViewModel extends ViewModel {
 
     private void setDefaultValues(Event event, MainActivity mainActivity) {
         setDate(new Date());
-        setGuarantee(12);
+        setWarranty(12);
         setNotes("");
 
         event.setDate(getDate());
-        event.setGuarantee(getGuarantee());
+        event.setWarranty(getWarranty());
         event.setNotes(getNotes());
 
         mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
 
-        mainActivity.binding.getNewEventFragment().binding.guaranteeSlider.setValue(event.getGuarantee());
+        mainActivity.binding.getNewEventFragment().binding.warrantySlider.setValue(event.getWarranty());
 
         if (event.getPhotosUri() != null) event.getPhotosUri().clear();
 
@@ -184,7 +183,7 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setPosition(toothModel.getPosition());
         eventModel.setDate(event.getDate());
         eventModel.setAction(event.getAction());
-        eventModel.setGuarantee(event.getGuarantee());
+        eventModel.setWarranty(event.getWarranty());
         eventModel.setNotes(event.getNotes());
 
         RealmList<String> eventModelRealmList = eventModel.getPhotosUri();
@@ -215,7 +214,7 @@ public class NewEventViewModel extends ViewModel {
     }
 
     private void setToothModelState(Event event, Context context, ToothModel toothModel) {
-        if (event.getAction().equals(context.getString(R.string.extracted))) {
+        if (event.getAction() == EventModel.EXTRACTED) {
 
             if (toothModel.getPosition() > 50) {
 
@@ -228,17 +227,17 @@ public class NewEventViewModel extends ViewModel {
                 toothModel.setState(ToothModel.NO_TOOTH);
             }
 
-        } else if (event.getAction().equals(context.getString(R.string.filled))) {
+        } else if (event.getAction() == EventModel.FILLED) {
 
             toothModel.setState(ToothModel.FILLED);
 
-        } else if (event.getAction().equals(context.getString(R.string.implanted))) {
+        } else if (event.getAction() == EventModel.IMPLANTED) {
 
             toothModel.setState(ToothModel.IMPLANTED);
 
-        } else if (event.getAction().equals(context.getString(R.string.grown))
-                || event.getAction().equals(context.getString(R.string.cleaned))
-                || event.getAction().equals(context.getString(R.string.other))) {
+        } else if (event.getAction() == EventModel.GROWN
+                || event.getAction() == EventModel.CLEANED
+                || event.getAction() == EventModel.OTHER) {
 
             toothModel.setState(ToothModel.NORMAL);
 

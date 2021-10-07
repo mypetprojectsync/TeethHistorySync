@@ -41,23 +41,23 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             EventModel event = eventModels.get(position);
 
-            Date guarantyLastDate = getGuarantyLastDate(event);
-            long guarantyDaysLeft = TimeUnit.DAYS.convert(guarantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+            Date warrantyLastDate = getWarrantyLastDate(event);
+            long warrantyDaysLeft = TimeUnit.DAYS.convert(warrantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
 
-            if (guarantyDaysLeft>0) {
-                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + "\n" + guarantyDaysLeft + " days of guarantee left");
-            }else {
-                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()));
+            if (warrantyDaysLeft>0) {
+                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + "\n" + warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left));
+            } else {
+                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + holder.itemView.getContext().getString(R.string.warranty_expired));
             }
 
-        holder.actionTV.setText(event.getAction());
+        holder.actionTV.setText(holder.itemView.getContext().getResources().getStringArray(R.array.actions)[event.getAction()]);
     }
 
-    private Date getGuarantyLastDate(EventModel event) {
+    private Date getWarrantyLastDate(EventModel event) {
         Date referenceDate = event.getDate();
         Calendar c = Calendar.getInstance();
         c.setTime(referenceDate);
-        c.add(Calendar.MONTH, event.getGuarantee());
+        c.add(Calendar.MONTH, event.getWarranty());
         return c.getTime();
     }
 

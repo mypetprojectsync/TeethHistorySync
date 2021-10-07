@@ -10,7 +10,6 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
-import com.appsverse.teethhistory.R;
 import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.repository.UserModel;
@@ -219,26 +218,26 @@ public class MainActivityViewModel extends ViewModel implements Observable {
 
         if (eventModelsResults.get(0).getId() == eventModel.getId() && toothModel.getEventModels().size() > 1) {
 
-            String lastAction = eventModelsResults.get(1).getAction();
+            int lastAction = eventModelsResults.get(1).getAction();
 
-            if (lastAction.equals(mainActivity.getResources().getString(R.string.extracted))) {
+            if (lastAction == EventModel.EXTRACTED) {
 
                 toothModel.setState(ToothModel.NO_TOOTH);
 
                 if (toothModel.getPosition() < 50)
                     toothModel.setPosition(toothModel.getPosition() + 40);
 
-            } else if (lastAction.equals(mainActivity.getResources().getString(R.string.cleaned))
-                    || lastAction.equals(mainActivity.getResources().getString(R.string.grown))
-                    || lastAction.equals(mainActivity.getResources().getString(R.string.other))) {
+            } else if (lastAction == EventModel.CLEANED
+                    || lastAction == EventModel.GROWN
+                    || lastAction == EventModel.OTHER) {
 
                 toothModel.setState(ToothModel.NORMAL);
 
-            } else if (lastAction.equals(mainActivity.getResources().getString(R.string.filled))) {
+            } else if (lastAction == EventModel.FILLED) {
 
                 toothModel.setState(ToothModel.FILLED);
 
-            } else if (lastAction.equals(mainActivity.getResources().getString(R.string.implanted))) {
+            } else if (lastAction == EventModel.IMPLANTED) {
 
                 toothModel.setState(ToothModel.IMPLANTED);
             }
