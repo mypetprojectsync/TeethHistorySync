@@ -211,12 +211,16 @@ public class MainActivityViewModel extends ViewModel implements Observable {
     public void deleteEvent(EventModel eventModel, MainActivity mainActivity) {
         realm.beginTransaction();
 
+
+
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) {
-            String lastAction = eventModelsResults.get(0).getAction();
+        if (eventModelsResults.get(0).getId() == eventModel.getId() && toothModel.getEventModels().size() > 1) {
+
+            String lastAction = eventModelsResults.get(1).getAction();
+
             if (lastAction.equals(mainActivity.getResources().getString(R.string.extracted))) {
 
                 toothModel.setState(ToothModel.NO_TOOTH);
@@ -242,14 +246,13 @@ public class MainActivityViewModel extends ViewModel implements Observable {
 
         eventModel.deleteFromRealm();
 
-
         if (toothModel.getEventModels().size() == 0) {
             resetToothState(toothModel);
-
-            mainActivity.binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
-
-            mainActivity.binding.getTeethFormulaFragment().binding.getTooth().setState(toothModel.getState());
         }
+
+        mainActivity.binding.getTeethFormulaFragment().setPositionIVById(toothModel.getId(), toothModel.getPosition());
+
+        mainActivity.binding.getTeethFormulaFragment().binding.getTooth().setState(toothModel.getState());
 
         realm.commitTransaction();
 

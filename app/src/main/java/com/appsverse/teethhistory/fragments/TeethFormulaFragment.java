@@ -358,10 +358,13 @@ public class TeethFormulaFragment extends Fragment {
     }
 
     private void setVisibilitiesAfterDeleteEvent() {
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.VISIBLE);
+        }
+
         mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.GONE);
         mainActivity.binding.getModel().setNewEventFragmentVisibility(View.GONE);
-
-        mainActivity.binding.getModel().setEventsListFragmentVisibilityData(View.VISIBLE);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
         mainActivity.binding.getEventsListFragment().refillEventsList();
