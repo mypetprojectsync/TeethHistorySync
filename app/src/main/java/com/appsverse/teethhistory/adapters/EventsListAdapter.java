@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,18 +40,38 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            EventModel event = eventModels.get(position);
+        EventModel event = eventModels.get(position);
 
-            Date warrantyLastDate = getWarrantyLastDate(event);
-            long warrantyDaysLeft = TimeUnit.DAYS.convert(warrantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+        Date warrantyLastDate = getWarrantyLastDate(event);
+        long warrantyDaysLeft = TimeUnit.DAYS.convert(warrantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
 
-            if (warrantyDaysLeft>0) {
-                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + "\n" + warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left));
-            } else {
-                holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + holder.itemView.getContext().getString(R.string.warranty_expired));
-            }
+        if (warrantyDaysLeft > 0) {
+            holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + "\n" + warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left));
+        } else {
+            holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + holder.itemView.getContext().getString(R.string.warranty_expired));
+        }
 
         holder.actionTV.setText(holder.itemView.getContext().getResources().getStringArray(R.array.actions)[event.getAction()]);
+
+        switch (event.getAction()) {
+            case EventModel.CLEANED:
+                holder.icon.setImageResource(R.drawable.ic_cleaned);
+                break;
+            case EventModel.EXTRACTED:
+                holder.icon.setImageResource(R.drawable.ic_extracted);
+                break;
+            case EventModel.FILLED:
+                holder.icon.setImageResource(R.drawable.ic_filled);
+                break;
+            case EventModel.GROWN:
+                holder.icon.setImageResource(R.drawable.ic_grown);
+                break;
+            case EventModel.IMPLANTED:
+                holder.icon.setImageResource(R.drawable.ic_implanted);
+                break;
+            default:
+                holder.icon.setImageResource(R.drawable.ic_other);
+        }
     }
 
     private Date getWarrantyLastDate(EventModel event) {
@@ -63,14 +84,16 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public int getItemCount() {
-         return eventModels.size();
+        return eventModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView dateTV, actionTV, optionsMenu;
+        final ImageView icon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            icon = itemView.findViewById(R.id.holder_icon);
             dateTV = itemView.findViewById(R.id.item_event_date);
             actionTV = itemView.findViewById(R.id.item_event_action);
             optionsMenu = itemView.findViewById(R.id.itemEventOptions);

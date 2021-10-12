@@ -243,5 +243,5 @@ public class MainActivity extends AppCompatActivity {
 
 //TODO Set app colors and don't forget background color
 //TODO Maybe set better holder for events
-//TODO Maybe add icon of action to event holder
+
 
