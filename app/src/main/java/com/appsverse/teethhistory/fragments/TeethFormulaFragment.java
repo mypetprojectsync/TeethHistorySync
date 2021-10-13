@@ -16,13 +16,11 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.R;
+import com.appsverse.teethhistory.adapters.EventsListAdapter;
 import com.appsverse.teethhistory.data.Tooth;
 import com.appsverse.teethhistory.databinding.ActivityMainBinding;
 import com.appsverse.teethhistory.databinding.DialogToothStateBinding;
@@ -288,12 +286,6 @@ public class TeethFormulaFragment extends Fragment {
 
         recyclerView = binding.eventsList;
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation());
-
-
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new EventsListAdapter(this.getContext(), eventModels);
 
         adapter.setClickListener((view, position) -> {
@@ -333,6 +325,9 @@ public class TeethFormulaFragment extends Fragment {
                 });
                 popupMenu.show();
             } else {
+
+                setSelection(position);
+
                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                 setVisibilities();
@@ -355,6 +350,19 @@ public class TeethFormulaFragment extends Fragment {
 
             }
         });
+    }
+
+    public void setSelection(int position) {
+
+        int oldPos = EventsListAdapter.selectedPos;
+
+        EventsListAdapter.selectedPos = position;
+
+        adapter.notifyItemChanged(oldPos);
+        adapter.notifyItemChanged(EventsListAdapter.selectedPos);
+
+        recyclerView.smoothScrollToPosition(position);
+
     }
 
     private void setVisibilitiesAfterDeleteEvent() {
@@ -394,6 +402,9 @@ public class TeethFormulaFragment extends Fragment {
         } else {
             if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
         }
+
+        recyclerView.scrollToPosition(EventsListAdapter.selectedPos);
+
         adapter.notifyDataSetChanged();
     }
 

@@ -26,6 +26,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     private ItemClickListener itemClickListener;
 
+    public static int selectedPos = RecyclerView.NO_POSITION;
+
     public EventsListAdapter(Context context, List<EventModel> eventModels) {
         this.eventModels = eventModels;
         this.inflater = LayoutInflater.from(context);
@@ -72,6 +74,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
             default:
                 holder.icon.setImageResource(R.drawable.ic_other);
         }
+
+        holder.itemView.setSelected(selectedPos == position);
     }
 
     private Date getWarrantyLastDate(EventModel event) {

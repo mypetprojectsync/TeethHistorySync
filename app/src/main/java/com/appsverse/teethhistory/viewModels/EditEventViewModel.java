@@ -133,6 +133,7 @@ public class EditEventViewModel extends ViewModel {
         if (photosListForDeleting != null) photosListForDeleting.clear();
 
         setVisibilities(context);
+
     }
 
     private boolean checkUriInOtherEvents(String uri) {
@@ -222,7 +223,6 @@ public class EditEventViewModel extends ViewModel {
         if (photosListForDeleting != null) {
             deleteSelectedPhotos();
         }
-
     }
 
       private void setVisibilities(Context context) {

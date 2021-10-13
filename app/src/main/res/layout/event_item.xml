@@ -3,9 +3,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@color/purple_200">
+    android:background="@drawable/holder_events_list_background"
+    android:elevation="5dp">
 
-    <!-- TODO Убрать divider, изменить цвет фона холдера, скруглить края, возможно добаить тень -->
+    <!-- TODO Изменить цвет фона холдера -->
     <!-- TODO Вынести размеры в dimension  -->
 
     <ImageView

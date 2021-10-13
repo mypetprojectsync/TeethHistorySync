@@ -11,8 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -91,10 +89,6 @@ public class EventsListFragment extends Fragment {
 
         recyclerView = binding.eventsList;
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         adapter = new EventsListAdapter(this.getContext(), eventModels);
         adapter.setClickListener((view, position) -> {
 
@@ -129,6 +123,9 @@ public class EventsListFragment extends Fragment {
                 });
                 popupMenu.show();
             } else {
+
+                setSelection(position);
+
                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                 setVisibilities();
@@ -157,6 +154,12 @@ public class EventsListFragment extends Fragment {
         });
     }
 
+    public void setSelection(int position) {
+
+        EventsListAdapter.selectedPos = position;
+        recyclerView.smoothScrollToPosition(position);
+    }
+
     private void setVisibilities() {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             activityMainBinding.getModel().setTeethFormulaFragmentVisibility(View.GONE);
@@ -175,6 +178,10 @@ public class EventsListFragment extends Fragment {
             eventModels.clear();
             eventModels.addAll(mainActivity.getSortedEventsList());
             adapter.notifyDataSetChanged();
+
+            recyclerView.scrollToPosition(0);
+
+            EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
         }
     }
 
