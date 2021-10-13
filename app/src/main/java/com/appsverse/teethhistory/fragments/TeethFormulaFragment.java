@@ -74,12 +74,10 @@ public class TeethFormulaFragment extends Fragment {
         model = new ViewModelProvider(this).get(TeethFormulaFragmentViewModel.class);
         binding.setModel(model);
 
-        if (model.getEventsListSelectedPosition() != RecyclerView.NO_POSITION) {
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                EventsListAdapter.selectedPos = model.getEventsListSelectedPosition();
-            } else {
-                EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
-            }
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            EventsListAdapter.selectedPos = model.getEventsListSelectedPosition();
+        } else {
+            EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
         }
 
         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
@@ -360,7 +358,7 @@ public class TeethFormulaFragment extends Fragment {
                         binding.floatingActionButton.hide();
                 } else {
                     if (!binding.floatingActionButton.isShown())
-                        binding.floatingActionButton.show();
+                        if (eventModels.size() > 0) binding.floatingActionButton.show();
                 }
 
             }

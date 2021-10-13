@@ -243,6 +243,6 @@ public class MainActivity extends AppCompatActivity {
 
 //TODO Set app colors and don't forget background color
 //TODO Maybe set better holder for events
-//TODO BUG скрол вниз, исчезает floatbutton, отмена на editevent и floatbutton опять появляется на teethformulafragment
+
 
 
