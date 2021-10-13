@@ -74,6 +74,14 @@ public class TeethFormulaFragment extends Fragment {
         model = new ViewModelProvider(this).get(TeethFormulaFragmentViewModel.class);
         binding.setModel(model);
 
+        if (model.getEventsListSelectedPosition() != RecyclerView.NO_POSITION) {
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                EventsListAdapter.selectedPos = model.getEventsListSelectedPosition();
+            } else {
+                EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
+            }
+        }
+
         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
         if (user_id >= 0) {
@@ -108,6 +116,10 @@ public class TeethFormulaFragment extends Fragment {
 
             activityMainBinding.getNewEventFragment().event.setDate(new Date());
             activityMainBinding.getNewEventFragment().event.setPosition(tooth.getPosition());
+
+            EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
+            model.setEventsListSelectedPosition(RecyclerView.NO_POSITION);
+            adapter.notifyDataSetChanged();
         });
 
         if (model.getChosenToothID() > 0) {
@@ -165,7 +177,7 @@ public class TeethFormulaFragment extends Fragment {
 
         toothPositionIV.setImageResource(id);
         toothPositionIV.setAdjustViewBounds(true);
-        toothPositionIV.setId(toothModels.get(i).getId()+MINIMAL_POSITION_IMAGE_ID);
+        toothPositionIV.setId(toothModels.get(i).getId() + MINIMAL_POSITION_IMAGE_ID);
 
         return toothPositionIV;
     }
@@ -193,7 +205,8 @@ public class TeethFormulaFragment extends Fragment {
             setPositionIVById(tooth.getId(), tooth.getPosition());
         });
 
-        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
+        dialogBuilder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+        });
         dialogBuilder.show();
     }
 
@@ -326,11 +339,13 @@ public class TeethFormulaFragment extends Fragment {
                 popupMenu.show();
             } else {
 
-                setSelection(position);
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) setSelection(position);
 
                 mainActivity.binding.getEditEventFragment().setEvent(eventModels.get(position));
 
                 setVisibilities();
+
+                model.setEventsListSelectedPosition(position);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -362,7 +377,6 @@ public class TeethFormulaFragment extends Fragment {
         adapter.notifyItemChanged(EventsListAdapter.selectedPos);
 
         recyclerView.smoothScrollToPosition(position);
-
     }
 
     private void setVisibilitiesAfterDeleteEvent() {

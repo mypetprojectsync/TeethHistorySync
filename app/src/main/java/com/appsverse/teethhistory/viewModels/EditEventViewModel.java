@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.view.View;
 
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsverse.teethhistory.MainActivity;
 import com.appsverse.teethhistory.data.Event;
@@ -237,6 +238,8 @@ public class EditEventViewModel extends ViewModel {
         }
 
         mainActivity.binding.getModel().setEditEventFragmentVisibilityData(View.GONE);
+
+        mainActivity.binding.getTeethFormulaFragment().binding.getModel().setEventsListSelectedPosition(RecyclerView.NO_POSITION);
 
         mainActivity.binding.getTeethFormulaFragment().refillEventsList();
         mainActivity.binding.getEventsListFragment().refillEventsList();

@@ -19,6 +19,8 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     private int chosenToothPosition;
     private String chosenToothState;
 
+    private int eventsListSelectedPosition;
+
     public int getChosenToothID() {
         return chosenToothID;
     }
@@ -75,5 +77,13 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
 
     public void setChosenToothState(String chosenToothState) {
         this.chosenToothState = chosenToothState;
+    }
+
+    public int getEventsListSelectedPosition() {
+        return eventsListSelectedPosition;
+    }
+
+    public void setEventsListSelectedPosition(int eventsListSelectedPosition) {
+        this.eventsListSelectedPosition = eventsListSelectedPosition;
     }
 }
