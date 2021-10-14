@@ -31,81 +31,80 @@
         android:id="@+id/main_activity_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:background="?attr/colorOnSecondary">
 
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/main_ll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_above="@+id/adView">
-
-
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/teeth_formula_fragment"
-            android:name="com.appsverse.teethhistory.fragments.TeethFormulaFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/teal_200"
-            android:visibility="@{model.teethFormulaFragmentVisibility}" />
+            android:layout_height="match_parent">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="@{model.eventFragmentVisibilityData}">
-
-            <androidx.core.widget.NestedScrollView
+            <LinearLayout
+                android:id="@+id/main_ll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{model.newEventFragmentVisibility}">
+                android:layout_above="@+id/adView"
+                android:orientation="horizontal">
+
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/new_event_fragment"
-                    android:name="com.appsverse.teethhistory.fragments.NewEventFragment"
+                    android:id="@+id/teeth_formula_fragment"
+                    android:name="com.appsverse.teethhistory.fragments.TeethFormulaFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="@{model.teethFormulaFragmentVisibility}" />
 
-            </androidx.core.widget.NestedScrollView>
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="@{model.editEventFragmentVisibilityData}">
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/edit_event_fragment"
-                    android:name="com.appsverse.teethhistory.fragments.EditEventFragment"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.core.widget.NestedScrollView>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="@{model.eventFragmentVisibilityData}">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/events_list_fragment"
-                android:name="com.appsverse.teethhistory.fragments.EventsListFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="@{model.eventsListFragmentVisibilityData}" />
-        </FrameLayout>
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="@{model.newEventFragmentVisibility}">
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/new_event_fragment"
+                            android:name="com.appsverse.teethhistory.fragments.NewEventFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </androidx.core.widget.NestedScrollView>
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="@{model.editEventFragmentVisibilityData}">
+
+                        <androidx.fragment.app.FragmentContainerView
+                            android:id="@+id/edit_event_fragment"
+                            android:name="com.appsverse.teethhistory.fragments.EditEventFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </androidx.core.widget.NestedScrollView>
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/events_list_fragment"
+                        android:name="com.appsverse.teethhistory.fragments.EventsListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="@{model.eventsListFragmentVisibilityData}" />
+                </FrameLayout>
 
 
-    </LinearLayout>
+            </LinearLayout>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id"/>
-</RelativeLayout>
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id" />
+        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

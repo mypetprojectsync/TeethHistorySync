@@ -371,8 +371,8 @@ public class TeethFormulaFragment extends Fragment {
 
         EventsListAdapter.selectedPos = position;
 
-        adapter.notifyItemChanged(oldPos);
         adapter.notifyItemChanged(EventsListAdapter.selectedPos);
+        adapter.notifyItemChanged(oldPos);
 
         recyclerView.smoothScrollToPosition(position);
     }

@@ -5,21 +5,21 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/holder_events_list_background_radius"/>
-            <solid android:color="@color/holder_events_list_background_pressed" />
+            <solid android:color="?attr/colorEventsListHolderPressed" />
         </shape>
     </item>
 
     <item android:state_selected="true">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/holder_events_list_background_radius"/>
-            <solid android:color="@color/holder_events_list_background_selected" />
+            <solid android:color="?attr/colorEventsListHolderSelected" />
         </shape>
     </item>
 
     <item android:state_selected="false">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/holder_events_list_background_radius"/>
-            <solid android:color="@color/holder_events_list_background_unselected" />
+            <solid android:color="?attr/colorEventsListHolderUnselected" />
         </shape>
     </item>
 

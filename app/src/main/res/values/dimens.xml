@@ -23,7 +23,7 @@
 
     <dimen name="fragment_edit_event_edit_event_TIL_margin_top">10dp</dimen>
     <dimen name="fragment_edit_event_edit_event_action_menu_margin_top">10dp</dimen>
-    <dimen name="fragment_edit_event_warranty_TIL_width">160dp</dimen>
+    <dimen name="fragment_edit_event_warranty_TIL_width">120dp</dimen>
     <dimen name="fragment_edit_event_warranty_TIL_margin_top">10dp</dimen>
     <dimen name="fragment_edit_event_notes_TIL_margin_top">10dp</dimen>
     <dimen name="fragment_edit_event_buttons_margin_start">40dp</dimen>
@@ -33,9 +33,11 @@
     <dimen name="fragment_events_list_margin_bottom">15dp</dimen>
     <dimen name="fragment_events_list_margin_end">30dp</dimen>
 
+    <dimen name="event_fragment_name_text_size">24sp</dimen>
+
     <dimen name="fragment_new_event_date_TIL_margin_top">10dp</dimen>
     <dimen name="fragment_new_event_action_menu_margin_top">10dp</dimen>
-    <dimen name="fragment_new_event_warranty_width">160dp</dimen>
+    <dimen name="fragment_new_event_warranty_width">120dp</dimen>
     <dimen name="fragment_new_event_warranty_margin_top">10dp</dimen>
     <dimen name="fragment_new_event_notes_margin_top">10dp</dimen>
     <dimen name="fragment_new_event_buttons_margin_top">10dp</dimen>
@@ -45,9 +47,11 @@
 
     <dimen name="fragment_teeth_formula_FAB_margin_end">30dp</dimen>
     <dimen name="fragment_teeth_formula_FAB_margin_bottom">15dp</dimen>
-    <dimen name="fragment_teeth_formula_parent_teeth_formula_LL_margin_top">20dp</dimen>
+    <dimen name="fragment_teeth_formula_parent_teeth_formula_LL_margin_top">0dp</dimen>
     <dimen name="fragment_teeth_formula_ll_teeth_second_row_margin_top">5dp</dimen>
 
     <dimen name="item_event_photo_image_button_margin">5dp</dimen>
-
+    <dimen name="fragment_margin">3dp</dimen>
+    <dimen name="new_and_edit_fragments_items_margin_start">5dp</dimen>
+    <dimen name="fragments_buttons_margin_top">10dp</dimen>
 </resources>

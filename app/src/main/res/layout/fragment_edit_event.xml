@@ -18,13 +18,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/fragment_margin"
+        android:background="@drawable/border"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
+            android:text="@string/edit_event"
+            android:textColor="?attr/colorPrimaryDark"
+            android:textSize="@dimen/event_fragment_name_text_size" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_event_date_TIL"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_edit_event_edit_event_TIL_margin_top"
             android:hint="@string/date">
 
@@ -44,6 +56,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_edit_event_edit_event_action_menu_margin_top"
             android:hint="@string/choose_action">
 
@@ -59,6 +72,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="@dimen/fragment_edit_event_warranty_TIL_width"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_edit_event_warranty_TIL_margin_top"
             android:hint="@string/warranty_in_months"
             app:counterEnabled="true"
@@ -89,14 +103,16 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_edit_event_notes_TIL_margin_top"
+            android:layout_marginEnd="@dimen/new_and_edit_fragments_items_margin_start"
             android:hint="@string/notes"
             app:counterEnabled="true"
             app:counterMaxLength="1000"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNotesTIET"
+                android:id="@+id/edit_notes_TIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
@@ -107,10 +123,11 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/photoButton"
+                android:id="@+id/photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_add_a_photo_24" />
@@ -126,33 +143,36 @@
             android:id="@+id/list_event_photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:orientation="horizontal"
             android:scrollbars="horizontal" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/fragments_buttons_margin_top"
+            android:layout_marginBottom="@dimen/fragments_buttons_margin_top"
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/fragment_edit_event_cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fragment_edit_event_buttons_margin_start"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(event, context)}"
-                android:text="@string/cancel" />
+                android:text="@string/cancel"
+                android:textColor="?attr/colorOnSecondary" />
 
             <Button
                 android:id="@+id/fragment_edit_event_save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fragment_edit_event_buttons_margin_start"
+                android:layout_centerInParent="true"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
-                android:text="@string/save" />
+                android:text="@string/save"
+                android:textColor="?attr/colorOnSecondary" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

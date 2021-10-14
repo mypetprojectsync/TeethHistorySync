@@ -35,7 +35,7 @@
     <string name="choose_action">Выберите действие</string>
     <string name="warranty_in_months">Гарантия, мес.</string>
     <string name="notes">Комментарий</string>
-    <string name="create_event">Создать событие</string>
+    <string name="create_event">Сохранить</string>
     <string name="implanting">Имплантирование</string>
     <string name="cleaned">Чистка</string>
     <string name="filled">Запломбирован</string>
@@ -58,6 +58,8 @@
     <string name="warranty_expired">Гарантия истекла</string>
     <string name="save">Сохранить</string>
     <string name="new_user">Новый пользователь</string>
+    <string name="edit_event"><b>Изменить событие</b></string>
+    <string name="new_event"><b>Создать событие</b></string>
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 

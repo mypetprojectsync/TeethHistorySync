@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="colorEventsListHolderPressed" format="color" />
+    <attr name="colorEventsListHolderSelected" format="color" />
+    <attr name="colorEventsListHolderUnselected" format="color" />
+
+</resources>
