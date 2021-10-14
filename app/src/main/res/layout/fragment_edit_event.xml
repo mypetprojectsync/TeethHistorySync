@@ -25,7 +25,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/fragment_edit_event_edit_event_TIL_margin_top"
             android:hint="@string/date">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -35,8 +35,7 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:inputType="date"
-                android:text="@{@string/format(event.date)}"
-                />
+                android:text="@{@string/format(event.date)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +44,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/fragment_edit_event_edit_event_action_menu_margin_top"
             android:hint="@string/choose_action">
 
             <com.appsverse.teethhistory.ExposedDropdownMenu
@@ -58,9 +57,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_warranty_TIL"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="160dp"
+            android:layout_width="@dimen/fragment_edit_event_warranty_TIL_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/fragment_edit_event_warranty_TIL_margin_top"
             android:hint="@string/warranty_in_months"
             app:counterEnabled="true"
             app:counterMaxLength="3"
@@ -70,10 +69,10 @@
                 android:id="@+id/edit_warranty_TIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
                 android:inputType="number"
                 android:labelFor="@id/edit_warranty_slider"
-                android:text="@={`` + event.warranty}"
-                android:imeOptions="flagNoExtractUi"/>
+                android:text="@={`` + event.warranty}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,14 +82,14 @@
             android:layout_height="match_parent"
             android:stepSize="1"
             android:value="@{event.warranty}"
-            android:valueFrom="0"
-            android:valueTo="360" />
+            android:valueFrom="@dimen/fragment_edit_event_warranty_slider_value_from"
+            android:valueTo="@dimen/fragment_edit_event_warranty_slider_value_to" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/fragment_edit_event_notes_TIL_margin_top"
             android:hint="@string/notes"
             app:counterEnabled="true"
             app:counterMaxLength="1000"
@@ -100,8 +99,8 @@
                 android:id="@+id/editNotesTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={event.notes}"
-                android:imeOptions="flagNoExtractUi"/>
+                android:imeOptions="flagNoExtractUi"
+                android:text="@={event.notes}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,9 +127,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:scrollbars="horizontal"
-            />
-       <!-- app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            android:scrollbars="horizontal" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +139,7 @@
                 android:id="@+id/fragment_edit_event_cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="@dimen/fragment_edit_event_buttons_margin_start"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(event, context)}"
                 android:text="@string/cancel" />
@@ -150,11 +148,10 @@
                 android:id="@+id/fragment_edit_event_save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="@dimen/fragment_edit_event_buttons_margin_start"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
                 android:text="@string/save" />
-
 
         </LinearLayout>
     </LinearLayout>

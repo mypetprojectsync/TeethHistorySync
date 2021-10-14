@@ -25,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="@dimen/fragment_teeth_formula_FAB_margin_end"
+            android:layout_marginBottom="@dimen/fragment_teeth_formula_FAB_margin_bottom"
             android:clickable="true"
             android:focusable="true"
             android:tooltipText="@string/add_new_event"
@@ -34,18 +34,18 @@
             app:srcCompat="@drawable/ic_baseline_add_24" />
 
         <LinearLayout
-            android:id="@+id/parentTeethFormulaLL"
+            android:id="@+id/parent_teeth_formula_LL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/fragment_teeth_formula_parent_teeth_formula_LL_margin_top"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/teethFormulaLL"
+                android:id="@+id/teeth_formula_LL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/ll_teeth_first_row"
@@ -57,7 +57,7 @@
                     android:id="@+id/ll_teeth_second_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/fragment_teeth_formula_ll_teeth_second_row_margin_top"
                     android:orientation="horizontal" />
             </LinearLayout>
 
@@ -66,8 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </LinearLayout>
 
 

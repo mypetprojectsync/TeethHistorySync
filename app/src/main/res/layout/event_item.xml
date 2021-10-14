@@ -2,27 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="@dimen/events_list_holder_margin"
     android:background="@drawable/holder_events_list_background"
-    android:elevation="5dp">
+    android:elevation="@dimen/events_list_holder_elevation">
 
     <!-- TODO Изменить цвет фона холдера -->
-    <!-- TODO Вынести размеры в dimension  -->
 
     <ImageView
         android:id="@+id/holder_icon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/events_list_holder_icon_width"
+        android:layout_height="@dimen/events_list_holder_icon_height"
         android:layout_centerVertical="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp" />
+        android:layout_marginStart="@dimen/events_list_holder_icon_margin_start"
+        android:layout_marginEnd="@dimen/events_list_holder_icon_margin_end" />
 
     <TextView
         android:id="@+id/item_event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/holder_icon"
-        android:textSize="16sp" />
+        android:textSize="@dimen/events_list_holder_date_tv_text_size" />
 
     <TextView
         android:id="@+id/item_event_action"
@@ -30,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/item_event_date"
         android:layout_toEndOf="@+id/holder_icon"
-        android:textSize="14sp" />
+        android:textSize="@dimen/events_list_holder_action_tv_text_size" />
 
     <TextView
         android:id="@+id/itemEventOptions"
@@ -38,8 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingEnd="@dimen/events_list_holder_options_icon_padding_end"
         android:text="@string/triple_dots"
         android:textAppearance="?android:textAppearanceLarge" />
 

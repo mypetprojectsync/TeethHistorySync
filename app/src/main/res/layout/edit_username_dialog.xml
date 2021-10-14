@@ -10,10 +10,11 @@
             type="com.appsverse.teethhistory.viewModels.MainActivityViewModel" />
 
     </data>
+
     <LinearLayout
         android:id="@+id/activity_main_edit_username_dialog_ll"
-   android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -23,18 +24,17 @@
             android:hint="@string/username"
             app:counterEnabled="true"
             app:counterMaxLength="20"
-            app:errorEnabled="true"
-            >
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNameTIET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{model.username}"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@{model.username}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
 </layout>

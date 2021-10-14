@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
 //TODO Set app colors and don't forget background color
 //TODO Maybe set better holder for events
+//TODO If tooth grown - no warranty
 
 
 

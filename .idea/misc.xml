@@ -3,12 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2140625" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/holder_events_list_background.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_11g.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_28.xml" value="0.190625" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_28g.xml" value="0.190625" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_81.xml" value="0.190625" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2140625" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_extracted.xml" value="0.2140625" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_filled.xml" value="0.2140625" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2140625" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/ic_other.xml" value="0.2140625" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/item_background.xml" value="0.24270833333333333" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/drawable/item_photos_list_background.xml" value="0.2140625" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/activity_create_new_user.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/activity_main.xml" value="0.2296875" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/dialog_reset_tooth.xml" value="0.3546875" />
@@ -18,6 +25,7 @@
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/fragment_events_list.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/fragment_teeth_formula.xml" value="0.20729166666666668" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/layout/tooth_state_dialog.xml" value="0.3546875" />
+        <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/menu/action_bar_photo_selected.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/menu/event_item_options_menu.xml" value="0.20729166666666668" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/menu/fragment_new_event_type.xml" value="0.20729166666666668" />
         <entry key="..\:/Users/Poopybutthole/StudioProjects/TeethHistory/app/src/main/res/menu/top_app_bar_main_activity.xml" value="0.20729166666666668" />

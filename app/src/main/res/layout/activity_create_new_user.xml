@@ -73,7 +73,7 @@
                 android:id="@+id/activity_create_new_user_cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="@dimen/activity_create_new_user_buttons_margin_start"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(context)}"
                 android:text="@string/cancel" />
@@ -82,7 +82,7 @@
                 android:id="@+id/create_new_user_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="@dimen/activity_create_new_user_buttons_margin_start"
                 android:enabled="false"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(context)}"

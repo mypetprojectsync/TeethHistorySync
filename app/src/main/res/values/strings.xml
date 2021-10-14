@@ -53,6 +53,7 @@
     <string name="warranty_expired">\nWarranty expired</string>
     <string name="save">Save</string>
     <string name="new_user">New user</string>
+
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
     <string-array name="actions">
