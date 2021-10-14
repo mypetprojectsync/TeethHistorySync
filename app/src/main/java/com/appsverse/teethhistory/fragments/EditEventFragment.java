@@ -147,7 +147,16 @@ public class EditEventFragment extends Fragment {
 
         binding.editToothActionACTV.setAdapter(adapter);
 
-        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(position));
+        binding.editToothActionACTV.setOnItemClickListener((parent, view, position, id) -> {
+
+            event.setAction(position);
+
+            if (position == EventModel.GROWN) {
+                event.setWarranty(0);
+            } else if (event.getWarranty() == 0) {
+                event.setWarranty(12);
+            }
+        });
 
         binding.editWarrantySlider.addOnChangeListener((slider, value, fromUser) -> event.setWarranty(Math.round(value)));
 

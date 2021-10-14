@@ -44,14 +44,9 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventModel event = eventModels.get(position);
 
-        Date warrantyLastDate = getWarrantyLastDate(event);
-        long warrantyDaysLeft = TimeUnit.DAYS.convert(warrantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+        holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()));
 
-        if (warrantyDaysLeft > 0) {
-            holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + "\n" + warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left));
-        } else {
-            holder.dateTV.setText(new SimpleDateFormat("dd.MM.yyyy").format(event.getDate()) + holder.itemView.getContext().getString(R.string.warranty_expired));
-        }
+        setWarrantyTV(holder, event);
 
         holder.actionTV.setText(holder.itemView.getContext().getResources().getStringArray(R.array.actions)[event.getAction()]);
 
@@ -78,6 +73,37 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         holder.itemView.setSelected(selectedPos == position);
     }
 
+    private void setWarrantyTV(@NonNull ViewHolder holder, EventModel event) {
+
+        Date warrantyLastDate = getWarrantyLastDate(event);
+        long warrantyDaysLeft = TimeUnit.DAYS.convert(warrantyLastDate.getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+
+        if (event.getAction() == EventModel.GROWN) {
+            holder.warrantyTV.setVisibility(View.GONE);
+        } else {
+            holder.warrantyTV.setVisibility(View.VISIBLE);
+        }
+
+        if (warrantyDaysLeft % 100 < 1) {
+            holder.warrantyTV.setText(holder.itemView.getContext().getString(R.string.warranty_expired));
+        } else if (warrantyDaysLeft % 100 == 1) {
+            holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_1));
+        } else if (warrantyDaysLeft % 100 > 1 && warrantyDaysLeft % 100 < 5) {
+            holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_2_4));
+        }else if (warrantyDaysLeft % 100 > 4 && warrantyDaysLeft % 100 < 21) {
+            holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_5_20));
+        } else {
+
+            if (warrantyDaysLeft % 10 == 1) {
+                holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_1));
+            } else if (warrantyDaysLeft % 10 > 1 && warrantyDaysLeft % 10 < 5) {
+                holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_2_4));
+            } else {
+                holder.warrantyTV.setText(warrantyDaysLeft + holder.itemView.getContext().getString(R.string.days_of_warranty_left_5_20));
+            }
+        }
+    }
+
     private Date getWarrantyLastDate(EventModel event) {
         Date referenceDate = event.getDate();
         Calendar c = Calendar.getInstance();
@@ -92,13 +118,14 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView dateTV, actionTV, optionsMenu;
+        final TextView dateTV, warrantyTV, actionTV, optionsMenu;
         final ImageView icon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.holder_icon);
             dateTV = itemView.findViewById(R.id.item_event_date);
+            warrantyTV = itemView.findViewById(R.id.item_warranty);
             actionTV = itemView.findViewById(R.id.item_event_action);
             optionsMenu = itemView.findViewById(R.id.itemEventOptions);
             optionsMenu.setOnClickListener(this);

@@ -45,6 +45,7 @@ import com.appsverse.teethhistory.adapters.EventPhotosListAdapter;
 import com.appsverse.teethhistory.adapters.PhotoItemDetailsLookup;
 import com.appsverse.teethhistory.data.Event;
 import com.appsverse.teethhistory.databinding.FragmentNewEventBinding;
+import com.appsverse.teethhistory.repository.EventModel;
 import com.appsverse.teethhistory.repository.ToothModel;
 import com.appsverse.teethhistory.viewModels.NewEventViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -152,7 +153,16 @@ public class NewEventFragment extends Fragment {
         adapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_menu_popup_item, actions);
         binding.toothActionACTV.setAdapter(adapter);
 
-        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> event.setAction(position));
+        binding.toothActionACTV.setOnItemClickListener((parent, view, position, id) -> {
+
+            event.setAction(position);
+
+            if (position == EventModel.GROWN) {
+                event.setWarranty(0);
+            } else if (event.getWarranty() == 0) {
+                event.setWarranty(12);
+            }
+        });
 
         binding.warrantySlider.addOnChangeListener((slider, value, fromUser) -> event.setWarranty(Math.round(value)));
 

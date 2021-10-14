@@ -9,7 +9,8 @@
     <dimen name="events_list_holder_icon_margin_start">5dp</dimen>
     <dimen name="events_list_holder_icon_margin_end">5dp</dimen>
     <dimen name="events_list_holder_date_tv_text_size">16sp</dimen>
-    <dimen name="events_list_holder_action_tv_text_size">14sp</dimen>
+    <dimen name="events_list_holder_warranty_tv_text_size">15sp</dimen>
+    <dimen name="events_list_holder_action_tv_text_size">16sp</dimen>
     <dimen name="events_list_holder_options_icon_padding_end">15dp</dimen>
 
     <dimen name="activity_create_new_user_buttons_margin_start">40dp</dimen>

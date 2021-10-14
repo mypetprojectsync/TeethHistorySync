@@ -50,8 +50,12 @@
     <string name="import_json">Импортировать</string>
     <string name="delete">Удалить</string>
     <string name="edit">Изменить</string>
-    <string name="days_of_warranty_left">" дней гарантии осталось"</string>
-    <string name="warranty_expired">\nГарантия истекла</string>
+
+    <string name="days_of_warranty_left_1">" день гарантии остался"</string>
+    <string name="days_of_warranty_left_2_4">" дня гарантии осталось"</string>
+    <string name="days_of_warranty_left_5_20">" дней гарантии осталось"</string>
+
+    <string name="warranty_expired">Гарантия истекла</string>
     <string name="save">Сохранить</string>
     <string name="new_user">Новый пользователь</string>
 

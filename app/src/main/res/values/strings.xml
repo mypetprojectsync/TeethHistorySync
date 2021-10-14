@@ -49,8 +49,12 @@
     <string name="import_json">Import</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
-    <string name="days_of_warranty_left">" days of warranty left"</string>
-    <string name="warranty_expired">\nWarranty expired</string>
+
+    <string name="days_of_warranty_left_1">" days of warranty left"</string>
+    <string name="days_of_warranty_left_2_4">" days of warranty left"</string>
+    <string name="days_of_warranty_left_5_20">" days of warranty left"</string>
+
+    <string name="warranty_expired">Warranty expired</string>
     <string name="save">Save</string>
     <string name="new_user">New user</string>
 
