@@ -53,6 +53,7 @@
     <string name="days_of_warranty_left">" дней гарантии осталось"</string>
     <string name="warranty_expired">\nГарантия истекла</string>
     <string name="save">Сохранить</string>
+    <string name="new_user">Новый пользователь</string>
 
     <!--<string name="banner_ad_unit_id">ca-app-pub-7134894477715486/4774729002</string>-->
 
