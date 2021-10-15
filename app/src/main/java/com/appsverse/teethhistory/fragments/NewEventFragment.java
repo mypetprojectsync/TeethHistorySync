@@ -208,25 +208,33 @@ public class NewEventFragment extends Fragment {
     }
 
     private String getPathFromUri(Uri data) {
+
         Context context = getContext();
         Cursor cursor = context.getContentResolver().query(data, null, null, null, null);
         cursor.moveToFirst();
         String image_id = cursor.getString(0);
         image_id = image_id.substring(image_id.lastIndexOf(":") + 1);
         cursor.close();
-        cursor = context.getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-        cursor.moveToFirst();
 
-        //TODO crash when choose photo from gallery MIUI
-        try {
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            cursor.close();
-            return path;
-        } catch (Exception e) {
-            e.printStackTrace();
+        cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+
+        String path = "";
+        if (cursor == null) {
+            path = data.getPath();
+
+        } else {
+            cursor.moveToFirst();
+
+            try {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                cursor.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        return null;
+        //replacement for gallery miui bug
+        return ((path == null || path.isEmpty()) ? (data.getPath().replace("/raw/","")) : path);
     }
 
     private void createEventPhotosList() {
@@ -349,6 +357,9 @@ public class NewEventFragment extends Fragment {
         }
         return selectedIdList;
     }
+
+
+    //todo проблема с разрешением, на телефоне пришлось вручную выставить разрешение на доступ к данным
 
     private void galleryButtonClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
