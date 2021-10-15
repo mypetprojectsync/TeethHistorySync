@@ -53,5 +53,7 @@
     <dimen name="item_event_photo_image_button_margin">5dp</dimen>
     <dimen name="fragment_margin">3dp</dimen>
     <dimen name="new_and_edit_fragments_items_margin_start">5dp</dimen>
+    <dimen name="new_and_edit_fragments_name_tv_margin_top">5dp</dimen>
     <dimen name="fragments_buttons_margin_top">10dp</dimen>
+    <dimen name="item_photos_list_background_radius">0dp</dimen>
 </resources>

@@ -3,13 +3,13 @@
     <!--<style name="Theme.TeethHistory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">-->
     <style name="Theme.TeethHistory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#1976d2</item>
-        <item name="colorPrimaryVariant">#004ba0</item>
-        <item name="colorOnPrimary">#63a4ff</item>
+        <item name="colorPrimary">@color/blue_700</item>
+        <item name="colorPrimaryVariant">@color/blue_700_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#cbae82</item>
-        <item name="colorSecondaryVariant">#ffe0b2</item>
-        <item name="colorOnSecondary">@color/lotion</item>
+        <item name="colorSecondary">@color/orange_100</item>
+        <item name="colorSecondaryVariant">@color/orange_100_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
@@ -17,6 +17,8 @@
         <item name="colorEventsListHolderPressed">@color/holder_events_list_background_pressed</item>
         <item name="colorEventsListHolderSelected">@color/holder_events_list_background_selected</item>
         <item name="colorEventsListHolderUnselected">@color/holder_events_list_background_unselected</item>
+
+        <item name="android:colorBackground">@color/grey_50</item>
 
     </style>
 

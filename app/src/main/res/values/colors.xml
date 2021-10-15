@@ -8,10 +8,23 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="pastel_orange">#ffb74d</color>
-    <color name="ochre">#c88719</color>
-    <color name="crayola_yellow">#ffe97d</color>
-    <color name="lotion">#fafafa</color>
+    <color name="grey_50">#fafafa</color>
+
+    <color name="indigo_900">#1a237e</color>
+    <color name="indigo_900_dark">#000051</color>
+    <color name="indigo_900_light">#534bae</color>
+
+    <color name="brown_700">#5d4037</color>
+    <color name="brown_700_dark">#321911</color>
+    <color name="brown_700_light">#8b6b61</color>
+
+    <color name="blue_700">#1976d2</color>
+    <color name="blue_700_dark">#004ba0</color>
+    <color name="blue_700_light">#63a4ff</color>
+
+    <color name="orange_100">#ffe0b2</color>
+    <color name="orange_100_dark">#cbae82</color>
+    <color name="orange_100_light">#ffffe4</color>
 
     <color name="selected_tooth">#2ce2f2</color>
 

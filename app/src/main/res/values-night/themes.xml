@@ -3,20 +3,26 @@
     <!--<style name="Theme.TeethHistory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">-->
     <style name="Theme.TeethHistory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/indigo_900</item>
+        <item name="colorPrimaryVariant">@color/indigo_900_dark</item>
+        <item name="colorOnPrimary">@color/grey_50</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/design_default_color_primary_dark</item>
+        <item name="colorSecondary">@color/brown_700</item>
+        <item name="colorSecondaryVariant">@color/brown_700_dark</item>
+        <item name="colorOnSecondary">@color/grey_50</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
-        <item name="colorEventsListHolderPressed">@color/holder_events_list_background_pressed</item>
-        <item name="colorEventsListHolderSelected">@color/holder_events_list_background_selected</item>
-        <item name="colorEventsListHolderUnselected">@color/holder_events_list_background_unselected</item>
-        
+        <item name="colorEventsListHolderPressed">?attr/colorPrimaryVariant</item>
+        <item name="colorEventsListHolderSelected">?attr/colorSecondary</item>
+        <item name="colorEventsListHolderUnselected">?attr/colorPrimary</item>
+
+        <!-- App bar background color -->
+        <item name="colorSurface">?attr/colorPrimary</item>
+
+        <item name="android:colorBackground">?attr/colorPrimaryVariant</item>
+        <item name="colorOnBackground">colorOnPrimary</item>
+
     </style>
 </resources>

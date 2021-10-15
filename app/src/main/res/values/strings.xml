@@ -50,7 +50,7 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
 
-    <string name="days_of_warranty_left_1">" days of warranty left"</string>
+    <string name="days_of_warranty_left_1">" day of warranty left"</string>
     <string name="days_of_warranty_left_2_4">" days of warranty left"</string>
     <string name="days_of_warranty_left_5_20">" days of warranty left"</string>
 

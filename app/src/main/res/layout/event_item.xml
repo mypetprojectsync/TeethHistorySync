@@ -6,8 +6,6 @@
     android:background="@drawable/holder_events_list_background"
     android:elevation="@dimen/events_list_holder_elevation">
 
-    <!-- TODO Изменить цвет фона холдера -->
-
     <ImageView
         android:id="@+id/holder_icon"
         android:layout_width="@dimen/events_list_holder_icon_width"

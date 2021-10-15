@@ -27,8 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
+            android:layout_marginTop="@dimen/new_and_edit_fragments_name_tv_margin_top"
             android:text="@string/edit_event"
-            android:textColor="?attr/colorPrimaryDark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="@dimen/event_fragment_name_text_size" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -160,8 +161,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(event, context)}"
-                android:text="@string/cancel"
-                android:textColor="?attr/colorOnSecondary" />
+                android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/fragment_edit_event_save_button"
@@ -170,8 +170,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
-                android:text="@string/save"
-                android:textColor="?attr/colorOnSecondary" />
+                android:text="@string/save" />
 
         </RelativeLayout>
     </LinearLayout>

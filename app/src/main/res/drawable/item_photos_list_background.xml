@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/holo_blue_light" android:state_activated="true" />
-    <item android:drawable="?attr/colorOnSecondary" />
+
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/item_photos_list_background_radius" />
+            <solid android:color="?attr/colorPrimary" />
+        </shape>
+    </item>
+
+    <item android:state_activated="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/item_photos_list_background_radius" />
+            <solid android:color="?android:colorBackground" />
+        </shape>
+    </item>
+
 </selector>

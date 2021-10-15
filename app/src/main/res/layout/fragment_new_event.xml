@@ -18,27 +18,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_margin="@dimen/fragment_margin"
-        android:background="@drawable/border">
+        android:background="@drawable/border"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/event_fragment_name_text_size"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
+            android:layout_marginTop="@dimen/new_and_edit_fragments_name_tv_margin_top"
             android:text="@string/new_event"
-            android:textColor="?attr/colorPrimaryDark"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"/>
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/event_fragment_name_text_size" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_event_date_TIL"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_new_event_date_TIL_margin_top"
-            android:hint="@string/date"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start">
+            android:hint="@string/date">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_event_date_tv"
@@ -56,9 +57,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_new_event_action_menu_margin_top"
-            android:hint="@string/choose_action"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start">
+            android:hint="@string/choose_action">
 
             <com.appsverse.teethhistory.ExposedDropdownMenu
                 android:id="@+id/tooth_action_ACTV"
@@ -71,12 +72,12 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="@dimen/fragment_new_event_warranty_width"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_new_event_warranty_margin_top"
             android:hint="@string/warranty_in_months"
             app:counterEnabled="true"
             app:counterMaxLength="3"
-            app:errorEnabled="true"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/warranty_TIET"
@@ -102,13 +103,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:layout_marginTop="@dimen/fragment_new_event_notes_margin_top"
+            android:layout_marginEnd="@dimen/new_and_edit_fragments_items_margin_start"
             android:hint="@string/notes"
             app:counterEnabled="true"
             app:counterMaxLength="1000"
-            app:errorEnabled="true"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
-            android:layout_marginEnd="@dimen/new_and_edit_fragments_items_margin_start">
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/notes_TIET"
@@ -122,8 +123,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start">
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/photo_button"
@@ -142,9 +143,9 @@
             android:id="@+id/list_event_photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             android:orientation="horizontal"
             android:scrollbars="horizontal"
-            android:layout_marginStart="@dimen/new_and_edit_fragments_items_margin_start"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <RelativeLayout
@@ -160,8 +161,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(event, context)}"
-                android:text="@string/cancel"
-                android:textColor="?attr/colorOnSecondary"/>
+                android:text="@string/cancel"/>
 
             <Button
                 android:id="@+id/fragment_create_new_event_button"
@@ -170,8 +170,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
-                android:text="@string/create_event"
-                android:textColor="?attr/colorOnSecondary"/>
+                android:text="@string/create_event"/>
 
         </RelativeLayout>
     </LinearLayout>

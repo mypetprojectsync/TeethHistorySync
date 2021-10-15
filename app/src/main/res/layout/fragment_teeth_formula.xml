@@ -33,7 +33,7 @@
             android:tooltipText="@string/add_new_event"
             android:visibility="gone"
             app:srcCompat="@drawable/ic_baseline_add_24"
-            android:backgroundTint="?attr/colorPrimary"/>
+            />
 
         <LinearLayout
             android:id="@+id/parent_teeth_formula_LL"
