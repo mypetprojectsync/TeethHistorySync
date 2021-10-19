@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -109,7 +110,8 @@ public class EditEventFragment extends Fragment {
                             event.setPhotosUri(photosUri);
                             eventPhotosListAdapter.notifyDataSetChanged();
 
-                            if (model.getPhotosListForDeleting() != null) model.removeItemFromListToPhotosListToDeleting(uri);
+                            if (model.getPhotosListForDeleting() != null)
+                                model.removeItemFromListToPhotosListToDeleting(uri);
                         }
                     }
                 }
@@ -126,6 +128,10 @@ public class EditEventFragment extends Fragment {
 
         if (permission[0]) mGetContent.launch(generateFileUri());
     });
+
+    ActivityResultLauncher<String[]> galleryPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> result.forEach((k, v) -> {
+        if (v) galleryButtonClicked();
+    }));
 
     @Nullable
     @Override
@@ -166,7 +172,13 @@ public class EditEventFragment extends Fragment {
 
         binding.photoButton.setOnClickListener(v -> verifyCameraPermissions());
 
-        binding.galleryButton.setOnClickListener(v -> galleryButtonClicked());
+        binding.galleryButton.setOnClickListener(v -> {
+
+            galleryPermissionLauncher.launch(new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            });
+
+        });
 
         createDirectory();
         createEventPhotosList();
@@ -207,7 +219,7 @@ public class EditEventFragment extends Fragment {
 
     private void setSelectionWithDelay(int i) {
         Handler handler = new Handler();
-        handler.postDelayed(() -> binding.editWarrantyTIET.setSelection(i),10);
+        handler.postDelayed(() -> binding.editWarrantyTIET.setSelection(i), 10);
     }
 
     private String getPathFromUri(Uri data) {
@@ -226,7 +238,7 @@ public class EditEventFragment extends Fragment {
 
     private void verifyCameraPermissions() {
 
-        if (android.os.Build.VERSION.SDK_INT <= 29) {
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             permissionLauncher.launch(new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -306,7 +318,8 @@ public class EditEventFragment extends Fragment {
                     actionMode.finish();
                     actionMode = null;
                 } else {
-                    if (actionMode != null) actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                    if (actionMode != null)
+                        actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
                 }
             }
 
@@ -358,18 +371,18 @@ public class EditEventFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-                List<String> listForRemove = new ArrayList<>();
+            List<String> listForRemove = new ArrayList<>();
 
-                for (int i : getSelectedItemsIndexList()) {
-                    listForRemove.add(photosUri.get(i));
-                }
+            for (int i : getSelectedItemsIndexList()) {
+                listForRemove.add(photosUri.get(i));
+            }
 
-                if (model.getPhotosListForDeleting() == null) {
-                    model.setPhotosListForDeleting(listForRemove);
-                } else {
-                    model.addListToPhotosListToDeleting(listForRemove);
-                }
-                photosUri.removeAll(listForRemove);
+            if (model.getPhotosListForDeleting() == null) {
+                model.setPhotosListForDeleting(listForRemove);
+            } else {
+                model.addListToPhotosListToDeleting(listForRemove);
+            }
+            photosUri.removeAll(listForRemove);
 
             actionMode.finish();
 
@@ -440,8 +453,8 @@ public class EditEventFragment extends Fragment {
         ToothModel toothModel = model.getToothModel((MainActivity) getActivity());
         if (toothModel != null) {
 
-                binding.editToothActionACTV.setText(getResources().getStringArray(R.array.actions)[event.getAction()], false);
-                adapter.notifyDataSetChanged();
+            binding.editToothActionACTV.setText(getResources().getStringArray(R.array.actions)[event.getAction()], false);
+            adapter.notifyDataSetChanged();
 
         }
     }

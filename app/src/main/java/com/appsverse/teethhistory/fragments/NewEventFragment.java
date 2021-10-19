@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -174,13 +175,10 @@ public class NewEventFragment extends Fragment {
 
         binding.galleryButton.setOnClickListener(v -> {
 
-            if (android.os.Build.VERSION.SDK_INT > 29) {
-                galleryButtonClicked();
-            } else {
-                galleryPermissionLauncher.launch(new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                });
-            }
+            galleryPermissionLauncher.launch(new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            });
+
         });
 
         createDirectory();
@@ -234,7 +232,7 @@ public class NewEventFragment extends Fragment {
         }
 
         //replacement for gallery miui bug
-        return ((path == null || path.isEmpty()) ? (data.getPath().replace("/raw/","")) : path);
+        return ((path == null || path.isEmpty()) ? (data.getPath().replace("/raw/", "")) : path);
     }
 
     private void createEventPhotosList() {
@@ -358,9 +356,6 @@ public class NewEventFragment extends Fragment {
         return selectedIdList;
     }
 
-
-    //todo проблема с разрешением, на телефоне пришлось вручную выставить разрешение на доступ к данным
-
     private void galleryButtonClicked() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mGetGalleryContent.launch(intent);
@@ -386,7 +381,7 @@ public class NewEventFragment extends Fragment {
 
     private void verifyCameraPermissions() {
 
-        if (android.os.Build.VERSION.SDK_INT <= 29) {
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             permissionLauncher.launch(new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -496,3 +491,7 @@ public class NewEventFragment extends Fragment {
         model.setPhotosUri(event.getPhotosUri());
     }
 }
+
+//todo change radiobutton colors
+
+//TODO implement working with external files in sdk ver. 30
