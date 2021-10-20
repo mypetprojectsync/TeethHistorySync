@@ -121,7 +121,7 @@ public class OnClickHandler {
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/*");
