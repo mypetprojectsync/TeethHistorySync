@@ -14,9 +14,13 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <queries>
+        <package android:name="org.telegram.messenger"/>
+        <package android:name="com.mi.android.globalFileexplorer"/>
+        <package android:name="com.whatsapp"/>
+
         <intent>
             <action android:name="android.intent.action.SEND" />
-            <data android:mimeType="*/*" />
+            <data android:mimeType="text/*" />
         </intent>
     </queries>
 

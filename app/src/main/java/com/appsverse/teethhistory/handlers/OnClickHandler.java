@@ -111,7 +111,6 @@ public class OnClickHandler {
             bufferedWriter.write(model.getDatabaseInJson());
             bufferedWriter.close();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
