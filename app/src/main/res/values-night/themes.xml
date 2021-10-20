@@ -7,9 +7,9 @@
         <item name="colorPrimaryVariant">@color/indigo_900_dark</item>
         <item name="colorOnPrimary">@color/grey_50</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/brown_700</item>
-        <item name="colorSecondaryVariant">@color/brown_700_dark</item>
-        <item name="colorOnSecondary">@color/grey_50</item>
+        <item name="colorSecondary">@color/deep_orange_300</item>
+        <item name="colorSecondaryVariant">@color/deep_orange_300_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
@@ -25,4 +25,20 @@
         <item name="colorOnBackground">colorOnPrimary</item>
 
     </style>
+
+    <!-- Alert Dialog -->
+    <style name="MyThemeOverlay.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>

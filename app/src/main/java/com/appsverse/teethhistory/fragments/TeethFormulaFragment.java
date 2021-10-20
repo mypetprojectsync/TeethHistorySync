@@ -185,7 +185,7 @@ public class TeethFormulaFragment extends Fragment {
         dialogToothStateBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.dialog_tooth_state, null, false);
         dialogToothStateBinding.setTooth(tooth);
 
-        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity());
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity(), R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog);
 
         dialogBuilder.setView(dialogToothStateBinding.getRoot().getRootView());
 

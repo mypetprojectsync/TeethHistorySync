@@ -6,6 +6,10 @@
 
         <import type="android.text.TextUtils" />
 
+        <import type="android.os.Build" />
+
+        <import type="android.view.View" />
+
         <variable
             name="event"
             type="com.appsverse.teethhistory.data.Event" />
@@ -136,7 +140,8 @@
                 android:id="@+id/galleryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_collections_24" />
+                android:src="@drawable/ic_baseline_collections_24"
+                android:visibility="@{android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q ? View.GONE : View.VISIBLE}" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -161,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickCancelButton(event, context)}"
-                android:text="@string/cancel"/>
+                android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/fragment_create_new_event_button"
@@ -170,7 +175,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:onClick="@{() -> model.onClickSaveButton(event, context)}"
-                android:text="@string/create_event"/>
+                android:text="@string/create_event" />
 
         </RelativeLayout>
     </LinearLayout>

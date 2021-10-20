@@ -492,6 +492,4 @@ public class NewEventFragment extends Fragment {
     }
 }
 
-//todo change radiobutton colors
-
 //TODO implement working with external files in sdk ver. 30

@@ -19,7 +19,7 @@
         android:id="@+id/cl_teeth_formula_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/fragment_margin">
+        >
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
