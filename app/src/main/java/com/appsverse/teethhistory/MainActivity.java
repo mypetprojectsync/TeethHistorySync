@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAdView = binding.adView;
 
-
         TeethFormulaFragment fragment = (TeethFormulaFragment) getSupportFragmentManager().findFragmentById(R.id.teeth_formula_fragment);
         binding.setTeethFormulaFragment(fragment);
 
@@ -138,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 
         NewEventFragment newEventFragment = (NewEventFragment) getSupportFragmentManager().findFragmentById(R.id.new_event_fragment);
         binding.setNewEventFragment(newEventFragment);
-
     }
 
     private void setFragmentsVisibilities(AdRequest adRequest) {

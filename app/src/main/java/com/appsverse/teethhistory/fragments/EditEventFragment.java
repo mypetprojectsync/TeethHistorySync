@@ -174,9 +174,15 @@ public class EditEventFragment extends Fragment {
 
         binding.galleryButton.setOnClickListener(v -> {
 
-            galleryPermissionLauncher.launch(new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            });
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+                galleryPermissionLauncher.launch(new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                });
+            } else {
+                galleryPermissionLauncher.launch(new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                });
+            }
 
         });
 
