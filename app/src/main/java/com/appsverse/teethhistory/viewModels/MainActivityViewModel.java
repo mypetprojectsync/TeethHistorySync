@@ -296,7 +296,7 @@ public class MainActivityViewModel extends ViewModel implements Observable {
     }
 
 
-    public String getDatabaseInJson() {
+    public String getChosenUserDatabaseInJson() {
         List<UserModel> userModels = realm.where(UserModel.class).findAll();
         String json = new Gson().toJson(realm.copyFromRealm(userModels));
         return "{\"userModels\":" + json + "}";

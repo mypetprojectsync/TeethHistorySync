@@ -76,7 +76,6 @@ public class OnClickHandler {
         ((MainActivity) binding.getRoot().getContext()).permissionLauncher.launch(new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE
         });
-            //todo! bug in toolbar menu (choose user) when file imported
     }
 
     private void shareDatabase(ActivityMainBinding binding) {
@@ -86,8 +85,8 @@ public class OnClickHandler {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(
                     new OutputStreamWriter(
-                            binding.getRoot().getContext().openFileOutput("fileForShare.txt", Context.MODE_PRIVATE)));
-            bufferedWriter.write(model.getDatabaseInJson());
+                            binding.getRoot().getContext().openFileOutput(binding.getModel().getUsername() + "_TeethHistory_backup.txt", Context.MODE_PRIVATE)));
+            bufferedWriter.write(model.getChosenUserDatabaseInJson());
             bufferedWriter.close();
 
         } catch (IOException e) {
@@ -100,7 +99,6 @@ public class OnClickHandler {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.setType("text/*");
 
@@ -119,6 +117,7 @@ public class OnClickHandler {
         int user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
         SubMenu subMenu = item.getSubMenu();
+        subMenu.clear();
 
         for (UserModel user_model : binding.getModel().getAllUsers()) {
             if (user_model.getId() != user_id)

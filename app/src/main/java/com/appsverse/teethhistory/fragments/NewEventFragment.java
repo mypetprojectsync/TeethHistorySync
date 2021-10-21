@@ -496,5 +496,3 @@ public class NewEventFragment extends Fragment {
         model.setPhotosUri(event.getPhotosUri());
     }
 }
-
-//TODO implement working with external files in sdk ver. 30

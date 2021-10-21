@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
         model = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
         if (user_id >= 0 && model.getUsername() == null) {
             model.setMainActivityViewModelData(user_id);
         }
