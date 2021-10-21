@@ -179,11 +179,11 @@ public class NewEventFragment extends Fragment {
                 galleryPermissionLauncher.launch(new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 });
-            } /*else {
+            } else {
                 galleryPermissionLauncher.launch(new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE
                 });
-            }*/
+            }
         });
 
         createDirectory();

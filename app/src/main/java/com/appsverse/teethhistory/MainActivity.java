@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     if (uri != null) {
 
                         File file = new File(uri.getPath());
+
                         if (file.exists()) {
                             FileInputStream fin = null;
                             try {

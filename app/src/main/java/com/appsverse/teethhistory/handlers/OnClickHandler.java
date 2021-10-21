@@ -74,6 +74,7 @@ public class OnClickHandler {
             }
     }
 
+    //TODO сделать через permission launcher
     public void verifyStoragePermissions(Activity activity, ActivityResultLauncher<String> mGetContent) {
 
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
