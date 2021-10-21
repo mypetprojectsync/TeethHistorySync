@@ -31,10 +31,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -51,36 +47,26 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
-
                     if (uri != null) {
+                        try {
+                            InputStream  inputStream = getContentResolver().openInputStream(uri);
 
-                        File file = new File(uri.getPath());
+                            String ret = convertStreamToString(inputStream);
 
-                        if (file.exists()) {
-                            FileInputStream fin = null;
-                            try {
-                                fin = new FileInputStream(file);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                            String ret = "";
-                            try {
-                                ret = convertStreamToString(fin);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            try {
-                                fin.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            inputStream.close();
 
                             model.copyJsonToRealm(ret);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
             });
+
+    public ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result  -> result.forEach((k, v) -> {
+        if (v) importFile(mGetContent);
+    }));
 
     public String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -191,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         OnClickHandler handler = new OnClickHandler();
-        handler.onMainActivityClick(binding, mGetContent, item);
+        handler.onMainActivityClick(binding, item);
 
         return super.onOptionsItemSelected(item);
     }
@@ -206,6 +192,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void deleteEvent(EventModel eventModel) {
         model.deleteEvent(eventModel, this);
+    }
+
+    private void importFile(ActivityResultLauncher<String> mGetContent) {
+        mGetContent.launch("text/*");
     }
 
     @Override

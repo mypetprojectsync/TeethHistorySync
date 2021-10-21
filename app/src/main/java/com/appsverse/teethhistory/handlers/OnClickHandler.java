@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -19,8 +18,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
@@ -43,17 +40,17 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OnClickHandler {
 
-    private final int REQUEST_FOCUS_DELAY = 300;
+    private static final int REQUEST_FOCUS_DELAY = 300;
 
     @SuppressLint("NonConstantResourceId")
-    public void onMainActivityClick(ActivityMainBinding binding, ActivityResultLauncher<String> mGetContent, MenuItem item) {
+    public void onMainActivityClick(ActivityMainBinding binding, MenuItem item) {
 
             switch (item.getItemId()) {
                 case R.id.share_database_menu_item:
                     shareDatabase(binding);
                     break;
                 case R.id.import_menu_item:
-                    verifyStoragePermissions((MainActivity) binding.getRoot().getContext(), mGetContent);
+                    verifyStoragePermissions(binding);
                     break;
                 case R.id.create_new_user_menu_item:
                     createNewUserActivityStart(binding);
@@ -74,32 +71,13 @@ public class OnClickHandler {
             }
     }
 
-    //TODO сделать через permission launcher
-    public void verifyStoragePermissions(Activity activity, ActivityResultLauncher<String> mGetContent) {
+    public void verifyStoragePermissions(ActivityMainBinding binding) {
 
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            String[] PERMISSIONS_STORAGE = {
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-            };
-
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    1
-            );
-        } else {
+        ((MainActivity) binding.getRoot().getContext()).permissionLauncher.launch(new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        });
             //todo! bug in toolbar menu (choose user) when file imported
-            importFile(mGetContent);
-        }
     }
-
-    private void importFile(ActivityResultLauncher<String> mGetContent) {
-        mGetContent.launch("text/*");
-    }
-
-
 
     private void shareDatabase(ActivityMainBinding binding) {
 
