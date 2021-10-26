@@ -18,8 +18,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cl_teeth_formula_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
@@ -31,9 +30,8 @@
             android:clickable="true"
             android:focusable="true"
             android:tooltipText="@string/add_new_event"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_baseline_add_24"
-            />
+            android:visibility="@{tooth.id>0 ? View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_baseline_add_24" />
 
         <LinearLayout
             android:id="@+id/parent_teeth_formula_LL"
@@ -47,8 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
-                android:orientation="vertical"
-                android:background="#c7c7c7">
+                android:background="#c7c7c7"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/ll_teeth_first_row"
@@ -68,9 +66,9 @@
                 android:id="@+id/events_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fragment_margin"
                 android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_marginTop="@dimen/fragment_margin"/>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </LinearLayout>
 
 

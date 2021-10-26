@@ -362,7 +362,7 @@ public class TeethFormulaFragment extends Fragment {
                     if (binding.floatingActionButton.isShown())
                         binding.floatingActionButton.hide();
                 } else {
-                    if (!binding.floatingActionButton.isShown())
+                    if (!binding.floatingActionButton.isShown() && tooth.getId() > 0)
                         if (eventModels.size() > 0) binding.floatingActionButton.show();
                 }
 

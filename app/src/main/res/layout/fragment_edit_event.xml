@@ -121,6 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="flagNoExtractUi"
+                android:inputType="textCapSentences"
                 android:text="@={event.notes}" />
 
         </com.google.android.material.textfield.TextInputLayout>

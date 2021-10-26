@@ -148,7 +148,7 @@ public class EventsListFragment extends Fragment {
                 if (dy > 0) {
                     if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
                 } else {
-                    if (!binding.floatingActionButton.isShown())
+                    if (!binding.floatingActionButton.isShown() && binding.getTooth().getId() > 0)
                         binding.floatingActionButton.show();
                 }
             }

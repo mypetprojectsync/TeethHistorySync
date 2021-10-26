@@ -3,6 +3,7 @@ package com.appsverse.teethhistory.viewModels;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.lifecycle.ViewModel;
 
@@ -198,7 +199,8 @@ public class NewEventViewModel extends ViewModel {
 
         RealmResults<EventModel> eventModelsResults = toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
 
-        if (eventModelsResults.get(0).getId() == eventModel.getId()) setToothModelState(event, context, toothModel);
+        if (eventModelsResults.get(0).getId() == eventModel.getId())
+            setToothModelState(event, context, toothModel);
 
         realm.commitTransaction();
 
@@ -211,6 +213,17 @@ public class NewEventViewModel extends ViewModel {
         }
 
         setDefaultValues(event, mainActivity);
+
+        hideKeyboard(mainActivity);
+    }
+
+    private void hideKeyboard(MainActivity mainActivity) {
+        InputMethodManager inputManager = (InputMethodManager)
+                mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (inputManager != null) {
+            inputManager.hideSoftInputFromWindow(mainActivity.binding.getRoot().getWindowToken(), 0);
+        }
     }
 
     private void setToothModelState(Event event, Context context, ToothModel toothModel) {

@@ -266,7 +266,13 @@ public class CreateNewUserViewModel extends ViewModel {
     }
 
     public void onClickCancelButton(Context context) {
-        ((Activity) context).finish();
-    }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int user_id = sharedPreferences.getInt("chosen_user_id", -1);
 
+        if (user_id == -1) {
+            ((Activity) context).finishAffinity();
+        } else {
+            ((Activity) context).finish();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.appsverse.teethhistory.viewModels;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
@@ -206,6 +207,10 @@ public class EditEventViewModel extends ViewModel {
 
                 toothModel.setState(ToothModel.IMPLANTED);
 
+            } else if (newEventModelAction == EventModel.FILLED) {
+
+                toothModel.setState(ToothModel.FILLED);
+
             } else if (newEventModelAction == EventModel.GROWN
                     || newEventModelAction == EventModel.CLEANED
                     || newEventModelAction == EventModel.OTHER) {
@@ -223,6 +228,17 @@ public class EditEventViewModel extends ViewModel {
 
         if (photosListForDeleting != null) {
             deleteSelectedPhotos();
+        }
+
+        hideKeyboard(mainActivity);
+    }
+
+    private void hideKeyboard(MainActivity mainActivity) {
+        InputMethodManager inputManager = (InputMethodManager)
+                mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (inputManager != null) {
+            inputManager.hideSoftInputFromWindow(mainActivity.binding.getRoot().getWindowToken(), 0);
         }
     }
 
