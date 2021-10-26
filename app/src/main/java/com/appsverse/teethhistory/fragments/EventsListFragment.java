@@ -37,7 +37,6 @@ public class EventsListFragment extends Fragment {
     EventsListAdapter adapter;
 
     int userID;
-    public int chosenToothId;
 
     List<EventModel> eventModels = new ArrayList<>();
 
@@ -51,7 +50,6 @@ public class EventsListFragment extends Fragment {
         activityMainBinding = mainActivity.getBinding();
 
         userID = mainActivity.user_id;
-        chosenToothId = activityMainBinding.getModel().getChosenToothID();
 
         orientation = getResources().getConfiguration().orientation;
 
@@ -78,9 +76,7 @@ public class EventsListFragment extends Fragment {
 
         if (userID >= 0) createEventsList();
 
-        if (chosenToothId > 0) {
-            refillEventsList();
-        }
+        refillEventsList();
 
         return binding.getRoot();
     }
@@ -123,6 +119,11 @@ public class EventsListFragment extends Fragment {
                 });
                 popupMenu.show();
             } else {
+
+                if (activityMainBinding.getModel().getChosenToothID() == 0) {
+                    activityMainBinding.getModel().setChosenToothID(eventModels.get(position).getId()%100);
+                    activityMainBinding.getTeethFormulaFragment().setTooth();
+                }
 
                 setSelection(position);
 
@@ -175,8 +176,15 @@ public class EventsListFragment extends Fragment {
 
     public void refillEventsList() {
         if (mainActivity.binding.getModel().getEventsListFragmentVisibilityData() == View.VISIBLE) {
+
             eventModels.clear();
-            eventModels.addAll(mainActivity.getSortedEventsList());
+
+            if (activityMainBinding.getModel().getChosenToothID() > 0) {
+                eventModels.addAll(mainActivity.getSortedEventsList());
+            } else {
+                eventModels.addAll(mainActivity.getSortedEventsListForAllTeeth());
+            }
+
             adapter.notifyDataSetChanged();
 
             recyclerView.scrollToPosition(0);

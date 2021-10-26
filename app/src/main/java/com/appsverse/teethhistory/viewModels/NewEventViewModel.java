@@ -172,9 +172,9 @@ public class NewEventViewModel extends ViewModel {
             current_id = toothModel.getEventModels().where().max("id").intValue();
 
         if (current_id == 0) {
-            next_id = 1;
+            next_id = 100 + toothModel.getId();
         } else {
-            next_id = current_id + 1;
+            next_id = current_id + 100;
         }
 
         realm.beginTransaction();

@@ -27,7 +27,6 @@
             android:layout_marginBottom="@dimen/fragment_events_list_margin_bottom"
             android:clickable="true"
             android:focusable="true"
-            android:tooltipText="@string/add_new_event"
             android:visibility="@{tooth.id>0 ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_baseline_add_24" />
 

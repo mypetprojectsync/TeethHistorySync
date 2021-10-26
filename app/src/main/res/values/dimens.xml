@@ -26,7 +26,6 @@
     <dimen name="fragment_edit_event_warranty_TIL_width">120dp</dimen>
     <dimen name="fragment_edit_event_warranty_TIL_margin_top">10dp</dimen>
     <dimen name="fragment_edit_event_notes_TIL_margin_top">10dp</dimen>
-    <dimen name="fragment_edit_event_buttons_margin_start">40dp</dimen>
     <dimen name="fragment_edit_event_warranty_slider_value_from">0</dimen>
     <dimen name="fragment_edit_event_warranty_slider_value_to">360</dimen>
 
@@ -40,8 +39,6 @@
     <dimen name="fragment_new_event_warranty_width">120dp</dimen>
     <dimen name="fragment_new_event_warranty_margin_top">10dp</dimen>
     <dimen name="fragment_new_event_notes_margin_top">10dp</dimen>
-    <dimen name="fragment_new_event_buttons_margin_top">10dp</dimen>
-    <dimen name="fragment_new_event_buttons_margin_start">40dp</dimen>
     <dimen name="fragment_new_event_warranty_slider_value_from">0</dimen>
     <dimen name="fragment_new_event_warranty_slider_value_to">360</dimen>
 

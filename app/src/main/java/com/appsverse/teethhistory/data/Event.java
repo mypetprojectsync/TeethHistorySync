@@ -21,7 +21,7 @@ public class Event extends BaseObservable {
 
     private List<String> photosUri;
 
-    public Event(int id, int position, Date date, int action, int warranty, String notes, List<String> photosUri){
+    public Event(int id, int position, Date date, int action, int warranty, String notes, List<String> photosUri) {
         setId(id);
         setPosition(position);
         setDate(date);
@@ -29,8 +29,8 @@ public class Event extends BaseObservable {
         setWarranty(warranty);
         setNotes(notes);
         setPhotosUri(photosUri);
-
     }
+
     @Bindable
     public int getId() {
         return id;
@@ -48,7 +48,7 @@ public class Event extends BaseObservable {
 
     public void setDate(Date date) {
 
-       if (date != null) date = roundToDay(date);
+        if (date != null) date = roundToDay(date);
 
         this.date = date;
 

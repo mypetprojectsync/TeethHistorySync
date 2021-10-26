@@ -120,9 +120,7 @@ public class TeethFormulaFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        if (model.getChosenToothID() > 0) {
-            refillEventsList();
-        }
+        refillEventsList();
 
         return binding.getRoot();
     }
@@ -261,9 +259,6 @@ public class TeethFormulaFragment extends Fragment {
         activityMainBinding.getModel().setChosenToothID(view.getId());
         setTooth();
 
-        String toothDrawableId = "ic_" + tooth.getId() + "g_selected";
-        int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
-        ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
 
         if (mainActivity.binding.getModel().getEditEventFragmentVisibilityData() == View.VISIBLE) {
 
@@ -291,6 +286,10 @@ public class TeethFormulaFragment extends Fragment {
 
     public void setTooth() {
         tooth = model.setTooth(tooth, ((MainActivity) getActivity()));
+
+        String toothDrawableId = "ic_" + tooth.getId() + "g_selected";
+        int id = getResources().getIdentifier(toothDrawableId, "drawable", getActivity().getPackageName());
+        ((ImageView) binding.getRoot().findViewById(tooth.getId())).setImageResource(id);
     }
 
     private void createEventsList() {
@@ -335,7 +334,13 @@ public class TeethFormulaFragment extends Fragment {
                     return false;
                 });
                 popupMenu.show();
+
             } else {
+
+                if (activityMainBinding.getModel().getChosenToothID() == 0) {
+                    activityMainBinding.getModel().setChosenToothID(eventModels.get(position).getId() % 100);
+                    setTooth();
+                }
 
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) setSelection(position);
 
@@ -405,7 +410,11 @@ public class TeethFormulaFragment extends Fragment {
         if (mainActivity.binding.getModel().getEventsListFragmentVisibilityData() == View.GONE
                 || orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            eventModels.addAll(mainActivity.getSortedEventsList());
+            if (activityMainBinding.getModel().getChosenToothID() > 0) {
+                eventModels.addAll(mainActivity.getSortedEventsList());
+            } else {
+                eventModels.addAll(mainActivity.getSortedEventsListForAllTeeth());
+            }
 
             if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
         } else {

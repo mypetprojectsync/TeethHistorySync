@@ -33,6 +33,7 @@ import com.google.android.gms.ads.AdView;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import io.realm.RealmResults;
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(Uri uri) {
                     if (uri != null) {
                         try {
-                            InputStream  inputStream = getContentResolver().openInputStream(uri);
+                            InputStream inputStream = getContentResolver().openInputStream(uri);
 
                             String ret = convertStreamToString(inputStream);
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-    public ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result  -> result.forEach((k, v) -> {
+    public ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> result.forEach((k, v) -> {
         if (v) importFile(mGetContent);
     }));
 
@@ -189,6 +190,10 @@ public class MainActivity extends AppCompatActivity {
         return model.getSortedEventsList();
     }
 
+    public List<EventModel> getSortedEventsListForAllTeeth() {
+        return model.getSortedEventsListForAllTeeth();
+    }
+
     public void deleteEvent(EventModel eventModel) {
         model.deleteEvent(eventModel, this);
     }
@@ -230,8 +235,4 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
-
-
-
-
 

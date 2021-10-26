@@ -49,7 +49,6 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
         return userModel.getToothModels().where().equalTo("id", mainActivityViewModel.getChosenToothID()).findFirst();
     }
 
-
     public Tooth setTooth(Tooth tooth, MainActivity activity) {
         ToothModel toothModel = getToothModel(activity);
 

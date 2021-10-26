@@ -20,7 +20,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -205,6 +208,24 @@ public class MainActivityViewModel extends ViewModel implements Observable {
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         ToothModel toothModel = userModel.getToothModels().where().equalTo("id", chosenToothID).findFirst();
         return toothModel.getEventModels().sort("date", Sort.DESCENDING, "id", Sort.DESCENDING);
+    }
+
+    public List<EventModel> getSortedEventsListForAllTeeth() {
+        UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
+        RealmList<ToothModel> toothModels = userModel.getToothModels();
+
+        List<EventModel> eventModels = new LinkedList<>();
+
+        for (ToothModel toothModel : toothModels) {
+            eventModels.addAll(toothModel.getEventModels());
+        }
+
+        Comparator<EventModel> comparator = Comparator
+                .comparing(EventModel::getDate)
+                .thenComparing(EventModel::getId)
+                .reversed();
+
+        return eventModels.stream().sorted(comparator).collect(Collectors.toList());
     }
 
     public void deleteEvent(EventModel eventModel, MainActivity mainActivity) {
