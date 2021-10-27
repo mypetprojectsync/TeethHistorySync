@@ -5,6 +5,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="android.content.res.Configuration" />
 
         <variable
             name="tooth"
@@ -30,7 +31,6 @@
             android:clickable="true"
             android:focusable="true"
             android:tooltipText="@string/add_new_event"
-            android:visibility="@{tooth.id>0 ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_baseline_add_24" />
 
         <LinearLayout

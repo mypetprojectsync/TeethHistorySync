@@ -74,12 +74,6 @@ public class TeethFormulaFragment extends Fragment {
         model = new ViewModelProvider(this).get(TeethFormulaFragmentViewModel.class);
         binding.setModel(model);
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            EventsListAdapter.selectedPos = model.getEventsListSelectedPosition();
-        } else {
-            EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
-        }
-
         activityMainBinding.getModel().setChosenToothID(model.getChosenToothID());
 
         if (user_id >= 0) {
@@ -91,6 +85,23 @@ public class TeethFormulaFragment extends Fragment {
             tooth = new Tooth(model.getChosenToothID(), model.getChosenToothPosition(), model.getChosenToothState());
 
             binding.setTooth(tooth);
+
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+                EventsListAdapter.selectedPos = model.getEventsListSelectedPosition();
+
+                binding.floatingActionButton.hide();
+
+            } else {
+
+                EventsListAdapter.selectedPos = RecyclerView.NO_POSITION;
+
+                if (tooth.getId() > 0) {
+                    binding.floatingActionButton.show();
+                } else {
+                    binding.floatingActionButton.hide();
+                }
+            }
 
             for (int i = 0; i < 16; i++) {
                 binding.llTeethFirstRow.addView(setToothImage(i));
@@ -270,8 +281,11 @@ public class TeethFormulaFragment extends Fragment {
 
         refillEventsList();
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mainActivity.binding.getEventsListFragment().refillEventsList();
+        } else {
+            binding.floatingActionButton.show();
+        }
 
         mainActivity.binding.getNewEventFragment().setDefaultTextActionACTV();
     }
@@ -358,14 +372,15 @@ public class TeethFormulaFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (dy > 0) {
-                    if (binding.floatingActionButton.isShown())
-                        binding.floatingActionButton.hide();
-                } else {
-                    if (!binding.floatingActionButton.isShown() && tooth.getId() > 0)
-                        if (eventModels.size() > 0) binding.floatingActionButton.show();
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    if (dy > 0) {
+                        if (binding.floatingActionButton.isShown())
+                            binding.floatingActionButton.hide();
+                    } else {
+                        if (!binding.floatingActionButton.isShown() && tooth.getId() > 0)
+                            binding.floatingActionButton.show();
+                    }
                 }
-
             }
         });
     }
@@ -415,10 +430,6 @@ public class TeethFormulaFragment extends Fragment {
             } else {
                 eventModels.addAll(mainActivity.getSortedEventsListForAllTeeth());
             }
-
-            if (!binding.floatingActionButton.isShown()) binding.floatingActionButton.show();
-        } else {
-            if (binding.floatingActionButton.isShown()) binding.floatingActionButton.hide();
         }
 
         recyclerView.scrollToPosition(EventsListAdapter.selectedPos);
