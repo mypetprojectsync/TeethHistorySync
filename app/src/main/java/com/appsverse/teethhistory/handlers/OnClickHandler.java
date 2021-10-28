@@ -45,30 +45,30 @@ public class OnClickHandler {
     @SuppressLint("NonConstantResourceId")
     public void onMainActivityClick(ActivityMainBinding binding, MenuItem item) {
 
-            switch (item.getItemId()) {
-                case R.id.share_database_menu_item:
-                    shareDatabase(binding);
-                    break;
-                case R.id.import_menu_item:
-                    verifyStoragePermissions(binding);
-                    break;
-                case R.id.create_new_user_menu_item:
-                    createNewUserActivityStart(binding);
-                    break;
-                case R.id.choose_user_menu_item:
-                    createChooseUserSubmenu(item, binding);
-                    break;
-                case R.id.edit_user_menu_item:
-                    createEditUserNameDialog(binding);
-                    break;
-                case R.id.delete_user_menu_item:
-                    deleteUser(binding);
-                    break;
-                default:
-                    setChosenUser(item, binding);
-                    restartMainActivity(binding);
-                    break;
-            }
+        switch (item.getItemId()) {
+            case R.id.share_database_menu_item:
+                shareDatabase(binding);
+                break;
+            case R.id.import_menu_item:
+                verifyStoragePermissions(binding);
+                break;
+            case R.id.create_new_user_menu_item:
+                createNewUserActivityStart(binding);
+                break;
+            case R.id.choose_user_menu_item:
+                createChooseUserSubmenu(item, binding);
+                break;
+            case R.id.edit_user_menu_item:
+                createEditUserNameDialog(binding);
+                break;
+            case R.id.delete_user_menu_item:
+                deleteUser(binding);
+                break;
+            default:
+                setChosenUser(item, binding);
+                restartMainActivity(binding);
+                break;
+        }
     }
 
     public void verifyStoragePermissions(ActivityMainBinding binding) {
@@ -93,8 +93,8 @@ public class OnClickHandler {
             e.printStackTrace();
         }
 
-        File tempFile = new File(binding.getRoot().getContext().getFilesDir(),"fileForShare.txt");
-        Uri uri = FileProvider.getUriForFile(binding.getRoot().getContext(),"com.appsverse.teethhistory.fileprovider",tempFile);
+        File tempFile = new File(binding.getRoot().getContext().getFilesDir(), binding.getModel().getUsername() + "_TeethHistory_backup.txt");
+        Uri uri = FileProvider.getUriForFile(binding.getRoot().getContext(), "com.appsverse.teethhistory.fileprovider", tempFile);
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -181,7 +181,7 @@ public class OnClickHandler {
                 if (s.length() > editUsernameBinding.editNameTIL.getCounterMaxLength()) {
                     editUsernameBinding.editNameTIL.setError(activity.getString(R.string.name_error));
                     model.getEditUserDialog().getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-                } else if (s.length() > 0){
+                } else if (s.length() > 0) {
                     editUsernameBinding.editNameTIL.setError(null);
                     model.getEditUserDialog().getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
                 } else {
@@ -196,7 +196,8 @@ public class OnClickHandler {
             ((MainActivity) activity).getSupportActionBar().setTitle(model.getUsername());
         });
 
-        dialog.setNegativeButton(R.string.cancel, (dialog12, which) -> {});
+        dialog.setNegativeButton(R.string.cancel, (dialog12, which) -> {
+        });
 
         dialog.setOnDismissListener(dialog13 -> {
 
