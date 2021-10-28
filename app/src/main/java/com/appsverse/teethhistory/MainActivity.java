@@ -145,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
+            mAdView.destroy();
+            mAdView.setVisibility(View.GONE);
+
             model.setTeethFormulaFragmentVisibility(View.VISIBLE);
             model.setEventFragmentVisibilityData(View.VISIBLE);
 
@@ -154,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
+
             mAdView.loadAd(adRequest);
 
             if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
