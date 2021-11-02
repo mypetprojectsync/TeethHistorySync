@@ -1,5 +1,7 @@
 package com.appsverse.teethhistory.viewModels;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 
 import com.appsverse.teethhistory.MainActivity;
@@ -39,6 +41,7 @@ public class TeethFormulaFragmentViewModel extends ViewModel {
     }
 
     public List<ToothModel> getAllToothModelsForUser(int user_id) {
+        Log.d("myLogs", "All user models: " + realm.where(UserModel.class).findAll());
         UserModel userModel = realm.where(UserModel.class).equalTo("id", user_id).findFirst();
         return userModel.getToothModels();
     }

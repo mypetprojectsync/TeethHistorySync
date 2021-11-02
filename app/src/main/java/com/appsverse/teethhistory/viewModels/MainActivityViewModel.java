@@ -106,6 +106,10 @@ public class MainActivityViewModel extends ViewModel implements Observable {
         return (realm.where(UserModel.class).findFirst() != null);
     }
 
+    public boolean isUserExist(int user_id) {
+        return (realm.where(UserModel.class).equalTo("id", user_id).findFirst() != null);
+    }
+
     public List<UserModel> getAllUsers() {
         return realm.where(UserModel.class).findAll();
     }

@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
+        checkUserInDatabase();
+
         if (user_id >= 0 && model.getUsername() == null) {
             model.setMainActivityViewModelData(user_id);
         }
@@ -119,6 +121,31 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CreateNewUserActivity.class);
             this.startActivity(intent);
         }
+    }
+
+    private void checkUserInDatabase() {
+
+        if (model.getAllUsers().size() > 0) {
+
+            if (!model.isUserExist(user_id)) {
+
+                user_id = model.getFirstUserID();
+
+                setChosenUser();
+            }
+        } else if (user_id != -1) {
+
+            user_id = -1;
+
+            setChosenUser();
+        }
+    }
+
+    private void setChosenUser() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("chosen_user_id", user_id);
+        editor.apply();
     }
 
     private void setBinding() {
@@ -159,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
             mAdView.loadAd(adRequest);
+            mAdView.setVisibility(View.VISIBLE);
 
             if (model.getNewEventFragmentVisibility() == View.VISIBLE || model.getEditEventFragmentVisibilityData() == View.VISIBLE) {
                 model.setTeethFormulaFragmentVisibility(View.GONE);
