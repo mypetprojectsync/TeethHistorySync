@@ -135,13 +135,13 @@
                 android:id="@+id/photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_add_a_photo_24" />
+                android:src="@drawable/ic_baseline_add_a_photo_36" />
 
             <ImageButton
                 android:id="@+id/galleryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_collections_24" />
+                android:src="@drawable/ic_baseline_collections_36" />
 
         </LinearLayout>
 
